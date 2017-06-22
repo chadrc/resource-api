@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,8 @@ public class ResourceController {
         for (Class model : resourceModels) {
             models.add(model.getCanonicalName());
         }
+
+        Method m;
 
         return "Models:\n" + StringUtils.arrayToDelimitedString(models.toArray(), "\n");
     }
