@@ -1,6 +1,8 @@
 package com.chadrc.resourceapi;
 
+import com.chadrc.resourceapi.services.PersistenceService;
 import com.chadrc.resourceapi.services.ReflectionResourceService;
+import com.chadrc.resourceapi.services.RepositoryPersistenceService;
 import com.chadrc.resourceapi.services.ResourceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,4 +19,9 @@ public class ResourceapiApplication {
 	public ResourceService resourceService() {
 		return new ReflectionResourceService();
 	}
+
+	@Bean
+    public PersistenceService persistenceService() {
+	    return new RepositoryPersistenceService();
+    }
 }

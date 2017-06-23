@@ -6,7 +6,7 @@ import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.options.CreateOptions;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Service("reflectionResourceService")
 public class ReflectionResourceService implements ResourceService {
 
     private static Logger log = Logger.getLogger(ReflectionResourceService.class);
@@ -30,6 +29,9 @@ public class ReflectionResourceService implements ResourceService {
             resourcesByName.put(model.getSimpleName(), model);
         }
     }
+
+    @Autowired
+    private PersistenceService persistenceService;
 
     @Override
     public Object create(CreateOptions options) throws ResourceServiceException {
@@ -67,6 +69,7 @@ public class ReflectionResourceService implements ResourceService {
             try {
                 Object obj = selectedConstructor.newInstance(args);
                 log.info("Created: " + obj);
+                persistenceService.persist(obj);
                 return obj;
             } catch (Exception e) {
                 log.error("Failed to create resource.", e);
