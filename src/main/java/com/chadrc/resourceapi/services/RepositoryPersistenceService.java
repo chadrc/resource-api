@@ -3,17 +3,33 @@ package com.chadrc.resourceapi.services;
 import com.chadrc.resourceapi.models.User;
 import com.chadrc.resourceapi.models.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
 public class RepositoryPersistenceService implements PersistenceService {
 
+    private final Map<Class, MongoRepository> repositoryMap = new HashMap<>();
+
     @Autowired
-    private UserRepository userRepository;
+    public RepositoryPersistenceService(UserRepository userRepository) {
+        repositoryMap.put(User.class, userRepository);
+    }
 
     @Override
-    public void saveNew(Object obj) {
+    public void saveNew(Class resourceType, Object obj) {
         if (obj instanceof User) {
             User user = (User) obj;
-            userRepository.save(user);
+            repositoryMap.get(resourceType).save(user);
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Object getById(Class resourceType, String id) {
+        return repositoryMap.get(resourceType).findOne(id);
     }
 }

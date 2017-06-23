@@ -20,8 +20,7 @@ public class ResourceController {
 
     private static Map<String, Class> resourcesByName = new HashMap<>();
 
-    @Autowired
-    private ResourceService resourceService;
+    private final ResourceService resourceService;
 
     static {
         Reflections reflections = new Reflections("com.chadrc.resourceapi");
@@ -31,6 +30,11 @@ public class ResourceController {
             log.info("Registering Model: " + model.getName() + " as " + model.getSimpleName());
             resourcesByName.put(model.getSimpleName(), model);
         }
+    }
+
+    @Autowired
+    public ResourceController(ResourceService resourceService) {
+        this.resourceService = resourceService;
     }
 
     @RequestMapping(method = RequestMethod.OPTIONS)
@@ -55,6 +59,30 @@ public class ResourceController {
 
         try {
             Object obj = resourceService.create(options);
+            return ResponseEntity.ok(obj);
+        } catch (ResourceServiceException resourceException) {
+            return ResponseEntity.badRequest().body(resourceException.getMessage());
+        } catch (Exception exception) {
+            log.info("Error", exception);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> get(@RequestParam String resourceName, @RequestParam String id) {
+        if(StringUtils.isEmpty(resourceName)) {
+            return ResponseEntity.badRequest().body("Param 'resourceName' required.");
+        }
+
+        if (StringUtils.isEmpty(id)) {
+            return ResponseEntity.badRequest().body("Param 'id' required.");
+        }
+
+        try {
+            Object obj = resourceService.getById(resourceName, id);
+            if (obj == null) {
+                return ResponseEntity.notFound().build();
+            }
             return ResponseEntity.ok(obj);
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());

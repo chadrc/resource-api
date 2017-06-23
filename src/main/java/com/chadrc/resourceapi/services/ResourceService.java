@@ -7,5 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ResourceService {
 
-    public Object create(CreateOptions options) throws ResourceServiceException;
+    Object create(CreateOptions options) throws ResourceServiceException;
+
+    Object getById(String resourceName, String id) throws ResourceServiceException;
 }
