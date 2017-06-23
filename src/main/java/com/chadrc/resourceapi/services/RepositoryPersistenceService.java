@@ -2,6 +2,7 @@ package com.chadrc.resourceapi.services;
 
 import com.chadrc.resourceapi.models.User;
 import com.chadrc.resourceapi.models.repositories.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,6 @@ public class RepositoryPersistenceService implements PersistenceService {
     @Override
     @SuppressWarnings("unchecked")
     public Object getById(Class resourceType, String id) {
-        return repositoryMap.get(resourceType).findOne(id);
+        return repositoryMap.get(resourceType).findOne(new ObjectId(id));
     }
 }
