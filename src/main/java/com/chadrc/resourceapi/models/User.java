@@ -9,4 +9,8 @@ public class User {
     public User(String firstName) {
         this.firstName = firstName;
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
 }

@@ -3,13 +3,12 @@ package com.chadrc.resourceapi;
 import com.chadrc.resourceapi.annotations.ResourceModel;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Type;
 import java.util.*;
 
 @RestController("/resource")
@@ -24,7 +23,8 @@ public class ResourceController {
         Set<Class<?>> resourceModels = reflections.getTypesAnnotatedWith(ResourceModel.class);
 
         for (Class model : resourceModels) {
-            resourcesByName.put(model.getName(), model);
+            log.info("Registering Model: " + model.getName() + " as " + model.getSimpleName());
+            resourcesByName.put(model.getSimpleName(), model);
         }
     }
 
@@ -37,5 +37,56 @@ public class ResourceController {
         }
 
         return "Models:\n" + StringUtils.arrayToDelimitedString(models.toArray(), "\n");
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResponseEntity<Object> create(@RequestBody CreateOptions options) {
+        log.info("Attempting to create: " + options.getResourceName());
+        log.info("\tWith arguments: " + options.getArguments());
+
+        if (StringUtils.isEmpty(options.getResourceName())) {
+            return ResponseEntity.badRequest().body("Resource Name Required.");
+        }
+
+        Class c = resourcesByName.get(options.getResourceName());
+        Constructor<?>[] constructors = c.getDeclaredConstructors();
+
+        Constructor<?> selectedConstructor = null;
+        for (Constructor<?> constructor : constructors) {
+            Type[] paramTypes = constructor.getParameterTypes();
+            if (paramTypes.length != options.getArguments().size()) {
+                continue;
+            }
+
+            boolean allMatch = true;
+            for (int i=0; i<paramTypes.length; i++) {
+                if (paramTypes[i] != options.getArguments().get(i).getValue().getClass()) {
+                    allMatch = false;
+                    break;
+                }
+            }
+
+            if (allMatch) {
+                selectedConstructor = constructor;
+                break;
+            }
+        }
+
+        if (selectedConstructor != null) {
+            Object[] args = new Object[options.getArguments().size()];
+            for (int i=0; i<options.getArguments().size(); i++) {
+                args[i] = options.getArguments().get(i).getValue();
+            }
+
+            try {
+                Object obj = selectedConstructor.newInstance(args);
+                log.info("Created: " + obj);
+                return ResponseEntity.ok(obj);
+            } catch (Exception e) {
+                log.error("Failed to create resource.", e);
+            }
+        }
+
+        return ResponseEntity.status(500).body(null);
     }
 }
