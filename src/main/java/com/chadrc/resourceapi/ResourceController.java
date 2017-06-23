@@ -40,7 +40,7 @@ public class ResourceController {
         return "Models:\n" + StringUtils.arrayToDelimitedString(models.toArray(), "\n");
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<Object> create(@RequestBody CreateOptions options) {
         log.info("Attempting to create: " + options.getResourceName());
         log.info("\tWith arguments: " + options.getArguments());
