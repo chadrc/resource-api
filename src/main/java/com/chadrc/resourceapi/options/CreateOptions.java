@@ -1,9 +1,9 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.options;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class CreateOptions {
+public class CreateOptions {
     private String resourceName = null;
     private List<FieldValue> arguments = new ArrayList<>();
 

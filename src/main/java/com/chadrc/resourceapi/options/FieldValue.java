@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.options;
 
 public class FieldValue {
     private String field = null;

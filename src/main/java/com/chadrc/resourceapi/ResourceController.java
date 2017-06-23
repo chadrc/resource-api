@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi;
 
 import com.chadrc.resourceapi.annotations.ResourceModel;
+import com.chadrc.resourceapi.options.CreateOptions;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.http.ResponseEntity;
