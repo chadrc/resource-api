@@ -87,7 +87,7 @@ public class ResourceController {
                 log.error("Failed to create resource.", e);
             }
         } else {
-            return ResponseEntity.badRequest().body("Create action doesn't exist.");
+            return ResponseEntity.badRequest().body("Could not create " + options.getResourceName() + " with given arguments.");
         }
 
         return ResponseEntity.status(500).body(null);
