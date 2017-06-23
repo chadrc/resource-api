@@ -21,10 +21,7 @@ public class RepositoryPersistenceService implements PersistenceService {
 
     @Override
     public void saveNew(Class resourceType, Object obj) {
-        if (obj instanceof User) {
-            User user = (User) obj;
-            repositoryMap.get(resourceType).save(user);
-        }
+        repositoryMap.get(resourceType).save(obj);
     }
 
     @Override
