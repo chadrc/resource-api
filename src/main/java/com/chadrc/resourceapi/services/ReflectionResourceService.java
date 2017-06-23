@@ -69,7 +69,7 @@ public class ReflectionResourceService implements ResourceService {
             try {
                 Object obj = selectedConstructor.newInstance(args);
                 log.info("Created: " + obj);
-                persistenceService.persist(obj);
+                persistenceService.saveNew(obj);
                 return obj;
             } catch (Exception e) {
                 log.error("Failed to create resource.", e);

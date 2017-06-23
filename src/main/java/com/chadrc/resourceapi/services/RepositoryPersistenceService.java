@@ -10,7 +10,7 @@ public class RepositoryPersistenceService implements PersistenceService {
     private UserRepository userRepository;
 
     @Override
-    public void persist(Object obj) {
+    public void saveNew(Object obj) {
         if (obj instanceof User) {
             User user = (User) obj;
             userRepository.save(user);
