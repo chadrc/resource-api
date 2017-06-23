@@ -86,6 +86,8 @@ public class ResourceController {
             } catch (Exception e) {
                 log.error("Failed to create resource.", e);
             }
+        } else {
+            return ResponseEntity.badRequest().body("Create action doesn't exist.");
         }
 
         return ResponseEntity.status(500).body(null);
