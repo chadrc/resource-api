@@ -1,8 +1,7 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.options;
 
 import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
-import com.chadrc.resourceapi.options.CreateOptions;
 import com.chadrc.resourceapi.services.ResourceService;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
@@ -69,17 +68,20 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestParam String resourceName, @RequestParam String id) {
-        if(StringUtils.isEmpty(resourceName)) {
+    public ResponseEntity<Object> get(GetOneOptionsParam param) {
+        GetOneOptions options = param.toImmutable();
+        log.info("Attempting to retrieve resource " + options.getResourceName() + " with id " + options.getId());
+
+        if (StringUtils.isEmpty(options.getResourceName())) {
             return ResponseEntity.badRequest().body("Param 'resourceName' required.");
         }
 
-        if (StringUtils.isEmpty(id)) {
+        if (StringUtils.isEmpty(options.getId())) {
             return ResponseEntity.badRequest().body("Param 'id' required.");
         }
 
         try {
-            Object obj = resourceService.getById(resourceName, id);
+            Object obj = resourceService.getById(options.getResourceName(), options.getId());
             if (obj == null) {
                 return ResponseEntity.notFound().build();
             }
