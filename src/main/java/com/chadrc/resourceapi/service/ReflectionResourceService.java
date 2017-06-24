@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.services;
+package com.chadrc.resourceapi.service;
 
 import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
@@ -6,6 +6,7 @@ import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.exceptions.ResourceTypeDoesNotExist;
 import com.chadrc.resourceapi.controller.FieldValue;
 import com.chadrc.resourceapi.controller.PagingInfo;
+import com.chadrc.resourceapi.store.ResourceStore;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;

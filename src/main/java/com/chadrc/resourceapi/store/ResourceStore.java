@@ -1,6 +1,7 @@
-package com.chadrc.resourceapi.services;
+package com.chadrc.resourceapi.store;
 
 import com.chadrc.resourceapi.controller.PagingInfo;
+import com.chadrc.resourceapi.service.ResourcePage;
 import org.springframework.stereotype.Service;
 
 @Service

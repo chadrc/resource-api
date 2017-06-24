@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.services;
+package com.chadrc.resourceapi.service;
 
 import java.util.List;
 
