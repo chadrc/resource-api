@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.models;
+package com.chadrc.resourceapiexample.models;
 
 import com.chadrc.resourceapi.annotations.ResourceModel;
 import org.springframework.data.annotation.Id;
