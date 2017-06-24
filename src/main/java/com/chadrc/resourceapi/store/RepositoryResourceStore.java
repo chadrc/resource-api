@@ -4,7 +4,6 @@ import com.chadrc.resourceapi.controller.PagingInfo;
 import com.chadrc.resourceapi.controller.PagingSort;
 import com.chadrc.resourceapi.controller.SortDirection;
 import com.chadrc.resourceapi.service.ResourcePage;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,7 +31,7 @@ public class RepositoryResourceStore implements ResourceStore {
     @Override
     @SuppressWarnings("unchecked")
     public Object getById(Class resourceType, String id) {
-        return repositoryProvider.get(resourceType).findOne(new ObjectId(id));
+        return repositoryProvider.get(resourceType).findOne(repositoryProvider.convertId(id));
     }
 
     @Override
