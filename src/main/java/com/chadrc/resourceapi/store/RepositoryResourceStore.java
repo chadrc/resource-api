@@ -9,32 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class RepositoryResourceStore implements ResourceStore {
 
-    private final Map<Class, PagingAndSortingRepository> repositoryMap = new HashMap<>();
+    private final RepositoryProvider repositoryProvider;
 
     @Autowired
-    public RepositoryResourceStore() {
+    public RepositoryResourceStore(RepositoryProvider repositoryProvider) {
+        this.repositoryProvider = repositoryProvider;
     }
 
     @Override
     public void saveNew(Class resourceType, Object obj) {
-        repositoryMap.get(resourceType).save(obj);
+        repositoryProvider.get(resourceType).save(obj);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Object getById(Class resourceType, String id) {
-        return repositoryMap.get(resourceType).findOne(new ObjectId(id));
+        return repositoryProvider.get(resourceType).findOne(new ObjectId(id));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class RepositoryResourceStore implements ResourceStore {
         } else {
             pageRequest = new PageRequest(pagingInfo.getPage(), pagingInfo.getCount());
         }
-        Page page = repositoryMap.get(resourceType).findAll(pageRequest);
+        Page page = repositoryProvider.get(resourceType).findAll(pageRequest);
         return new ResourcePage(page.getContent(), page.getTotalElements(), page.getSize(), page.isFirst(), page.isLast());
     }
 
