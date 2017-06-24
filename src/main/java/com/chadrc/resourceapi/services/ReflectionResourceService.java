@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 @Service
@@ -55,13 +54,46 @@ public class ReflectionResourceService implements ResourceService {
 
     @Override
     public ActionResult action(ActionClause clause) throws ResourceServiceException {
-        return null;
+        Class c = getResourceType(clause.getResourceName());
+        Method[] methods = c.getMethods();
+
+        Method selectedMethod = null;
+        for (Method method : methods) {
+            Type[] paramTypes = method.getParameterTypes();
+            if (paramTypes.length != clause.getArguments().size()) {
+                continue;
+            }
+
+            if (method.getName().equals(clause.getActionName())
+                    && typesMatchFieldValues(paramTypes, clause.getArguments())) {
+                selectedMethod = method;
+                break;
+            }
+        }
+
+        if (selectedMethod != null) {
+            try {
+                Object obj = selectedMethod.invoke(null, collectArgValues(clause.getArguments()));
+                if (obj == null) {
+                    Map<String, Boolean> fillResult = new HashMap<>();
+                    fillResult.put("success", true);
+                    obj = fillResult;
+                }
+                return new ActionResult(obj);
+            } catch (Exception e) {
+                log.error("Failed to perform action: " + clause.getResourceName() + "." + clause.getActionName() );
+            }
+        } else {
+            throw new CouldNotResolveArguments(clause.getResourceName());
+        }
+
+        throw new ResourceServiceException();
     }
 
     @Override
     public CreateResult create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
         Class c = getResourceType(resourceName);
-        Constructor<?>[] constructors = c.getDeclaredConstructors();
+        Constructor<?>[] constructors = c.getConstructors();
 
         Constructor<?> selectedConstructor = null;
         for (Constructor<?> constructor : constructors) {
@@ -70,28 +102,15 @@ public class ReflectionResourceService implements ResourceService {
                 continue;
             }
 
-            boolean allMatch = true;
-            for (int i=0; i<paramTypes.length; i++) {
-                if (paramTypes[i] != arguments.get(i).getValue().getClass()) {
-                    allMatch = false;
-                    break;
-                }
-            }
-
-            if (allMatch) {
+            if (typesMatchFieldValues(paramTypes, arguments)) {
                 selectedConstructor = constructor;
                 break;
             }
         }
 
         if (selectedConstructor != null) {
-            Object[] args = new Object[arguments.size()];
-            for (int i=0; i<arguments.size(); i++) {
-                args[i] = arguments.get(i).getValue();
-            }
-
             try {
-                Object obj = selectedConstructor.newInstance(args);
+                Object obj = selectedConstructor.newInstance(collectArgValues(arguments));
                 log.info("Created: " + obj);
                 resourceStore.saveNew(c, obj);
                 return new CreateResult(obj);
@@ -113,6 +132,23 @@ public class ReflectionResourceService implements ResourceService {
     @Override
     public ListResult getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
         return new ListResult(resourceStore.getList(getResourceType(resourceName), pagingInfo));
+    }
+
+    private Object[] collectArgValues(List<FieldValue> fieldValues) {
+        Object[] args = new Object[fieldValues.size()];
+        for (int i=0; i<fieldValues.size(); i++) {
+            args[i] = fieldValues.get(i).getValue();
+        }
+        return args;
+    }
+
+    private boolean typesMatchFieldValues(Type[] types, List<FieldValue> fieldValues) {
+        for (int i=0; i<types.length; i++) {
+            if (types[i] != fieldValues.get(i).getValue().getClass()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Class getResourceType(String resourceName) throws ResourceServiceException {

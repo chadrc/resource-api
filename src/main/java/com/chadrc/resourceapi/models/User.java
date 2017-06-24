@@ -11,6 +11,8 @@ public class User {
 
     private String firstName;
 
+    private String lastName;
+
     public User(String firstName) {
         this.firstName = firstName;
     }
@@ -21,5 +23,15 @@ public class User {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public static User register(String firstName, String lastName) {
+        User user = new User(firstName);
+        user.lastName = lastName;
+        return user;
     }
 }

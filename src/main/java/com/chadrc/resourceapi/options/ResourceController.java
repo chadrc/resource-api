@@ -28,7 +28,7 @@ public class ResourceController {
 
     @PostMapping
     public ResponseEntity<Object> action(@RequestBody ActionOptions options) {
-        log.info("Attempting to perform action: " + options.getActionName() + " on resource " + options.getResourceName());
+        log.info("Attempting to perform action '" + options.getActionName() + "' on resource '" + options.getResourceName() + "'");
 
         if (StringUtils.isEmpty(options.getResourceName())) {
             return ResponseEntity.badRequest().body("Resource Name Required.");
@@ -53,7 +53,7 @@ public class ResourceController {
 
     @PostMapping(path = "/create")
     public ResponseEntity<Object> create(@RequestBody CreateOptions options) {
-        log.info("Attempting to create: " + options.getResourceName());
+        log.info("Attempting to create '" + options.getResourceName() + "'");
         log.debug("\tWith arguments: " + options.getArguments());
 
         if (StringUtils.isEmpty(options.getResourceName())) {
