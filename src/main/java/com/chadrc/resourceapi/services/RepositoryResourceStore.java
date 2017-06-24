@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RepositoryPersistenceService implements PersistenceService {
+public class RepositoryResourceStore implements ResourceStore {
 
     private final Map<Class, PagingAndSortingRepository> repositoryMap = new HashMap<>();
 
     @Autowired
-    public RepositoryPersistenceService(UserRepository userRepository) {
+    public RepositoryResourceStore(UserRepository userRepository) {
         repositoryMap.put(User.class, userRepository);
     }
 

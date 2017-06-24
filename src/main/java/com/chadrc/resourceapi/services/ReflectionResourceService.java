@@ -32,11 +32,11 @@ public class ReflectionResourceService implements ResourceService {
         }
     }
 
-    private final PersistenceService persistenceService;
+    private final ResourceStore resourceStore;
 
     @Autowired
-    public ReflectionResourceService(PersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
+    public ReflectionResourceService(ResourceStore resourceStore) {
+        this.resourceStore = resourceStore;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ReflectionResourceService implements ResourceService {
             try {
                 Object obj = selectedConstructor.newInstance(args);
                 log.info("Created: " + obj);
-                persistenceService.saveNew(c, obj);
+                resourceStore.saveNew(c, obj);
                 return obj;
             } catch (Exception e) {
                 log.error("Failed to create resource.", e);
@@ -103,12 +103,12 @@ public class ReflectionResourceService implements ResourceService {
     @Override
     public Object getById(String resourceName, String id) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
-        return persistenceService.getById(c, id);
+        return resourceStore.getById(c, id);
     }
 
     @Override
     public Object getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
-        return persistenceService.getList(c, pagingInfo);
+        return resourceStore.getList(c, pagingInfo);
     }
 }

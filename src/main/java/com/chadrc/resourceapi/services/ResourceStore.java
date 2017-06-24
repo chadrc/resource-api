@@ -4,7 +4,7 @@ import com.chadrc.resourceapi.options.PagingInfo;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface PersistenceService {
+public interface ResourceStore {
 
     void saveNew(Class resourceType, Object obj);
 
