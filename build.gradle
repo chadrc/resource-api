@@ -28,13 +28,11 @@ sourceSets {
 }
 
 dependencies {
-	compile('org.reflections:reflections:0.9.11')
 	compile('org.springframework.data:spring-data-commons')
 	compile('org.springframework.boot:spring-boot-starter-web')
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
-    exampleCompile('org.reflections:reflections:0.9.11')
     exampleCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
     exampleCompile('org.springframework.boot:spring-boot-starter-web')
     exampleCompile(sourceSets.main.output)

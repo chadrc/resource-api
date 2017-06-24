@@ -2,15 +2,12 @@ package com.chadrc.resourceapi.service;
 
 import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
-import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.exceptions.ResourceTypeDoesNotExist;
 import com.chadrc.resourceapi.controller.FieldValue;
 import com.chadrc.resourceapi.controller.PagingInfo;
 import com.chadrc.resourceapi.store.ResourceStore;
 import org.apache.log4j.Logger;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -27,15 +24,14 @@ public class ReflectionResourceService implements ResourceService {
     private final ResourceStore resourceStore;
 
     @Autowired
-    public ReflectionResourceService(ResourceStore resourceStore, @Value("${resourceapi.models.package}") String modelsPackage) {
+    public ReflectionResourceService(ResourceStore resourceStore,
+                                     List<ResourceModel> resourceModels) {
         this.resourceStore = resourceStore;
 
-        Reflections reflections = new Reflections(modelsPackage);
-        Set<Class<?>> resourceModels = reflections.getTypesAnnotatedWith(ResourceModel.class);
-
-        for (Class model : resourceModels) {
-            log.info("Registering Model: " + model.getName() + " as " + model.getSimpleName());
-            resourcesByName.put(model.getSimpleName(), model);
+        for (com.chadrc.resourceapi.service.ResourceModel model : resourceModels) {
+            Class c = model.getClass();
+            log.info("Registering Model: " + c.getName() + " as " + c.getSimpleName());
+            resourcesByName.put(c.getSimpleName(), c);
         }
     }
 

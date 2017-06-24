@@ -1,10 +1,11 @@
 package com.chadrc.resourceapiexample.models;
 
-import com.chadrc.resourceapi.annotations.ResourceModel;
+import com.chadrc.resourceapi.service.ResourceModel;
 import org.springframework.data.annotation.Id;
+import org.springframework.stereotype.Component;
 
-@ResourceModel
-public class User {
+@Component
+public class User implements ResourceModel {
 
     @Id
     private String id;
@@ -12,6 +13,8 @@ public class User {
     private String firstName;
 
     private String lastName;
+
+    public User() {}
 
     public User(String firstName) {
         this.firstName = firstName;
