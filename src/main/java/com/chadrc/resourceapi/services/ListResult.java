@@ -1,13 +1,13 @@
 package com.chadrc.resourceapi.services;
 
 public class ListResult {
-    private Object resourceList;
+    private ResourcePage resourceList;
 
-    ListResult(Object resourceList) {
+    ListResult(ResourcePage resourceList) {
         this.resourceList = resourceList;
     }
 
-    public Object getResourceList() {
+    public ResourcePage getResourcePage() {
         return resourceList;
     }
 }

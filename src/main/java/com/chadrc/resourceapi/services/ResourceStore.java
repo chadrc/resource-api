@@ -10,5 +10,5 @@ public interface ResourceStore {
 
     Object getById(Class resourceType, String id);
 
-    Object getList(Class c, PagingInfo pagingInfo);
+    ResourcePage getList(Class c, PagingInfo pagingInfo);
 }

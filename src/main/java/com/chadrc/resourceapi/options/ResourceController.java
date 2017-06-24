@@ -1,14 +1,15 @@
 package com.chadrc.resourceapi.options;
 
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
+import com.chadrc.resourceapi.services.CreateResult;
+import com.chadrc.resourceapi.services.GetResult;
+import com.chadrc.resourceapi.services.ListResult;
 import com.chadrc.resourceapi.services.ResourceService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @RestController()
 @RequestMapping(path = "/resource")
@@ -38,8 +39,8 @@ public class ResourceController {
         }
 
         try {
-            Object obj = resourceService.create(options.getResourceName(), options.getArguments());
-            return ResponseEntity.ok(obj);
+            CreateResult obj = resourceService.create(options.getResourceName(), options.getArguments());
+            return ResponseEntity.ok(obj.getCreatedResource());
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
         } catch (Exception exception) {
@@ -61,11 +62,11 @@ public class ResourceController {
         }
 
         try {
-            Object obj = resourceService.get(options.getResourceName(), options.getId());
+            GetResult obj = resourceService.get(options.getResourceName(), options.getId());
             if (obj == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(obj);
+            return ResponseEntity.ok(obj.getResource());
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
         } catch (Exception exception) {
@@ -83,11 +84,11 @@ public class ResourceController {
         }
 
         try {
-            Object obj = resourceService.getList(options.getResourceName(), options.getPagingInfo());
+            ListResult obj = resourceService.getList(options.getResourceName(), options.getPagingInfo());
             if (obj == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(obj);
+            return ResponseEntity.ok(obj.getResourcePage());
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
         } catch (Exception exception) {

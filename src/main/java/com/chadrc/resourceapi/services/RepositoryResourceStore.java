@@ -7,6 +7,7 @@ import com.chadrc.resourceapi.options.PagingSort;
 import com.chadrc.resourceapi.options.SortDirection;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -39,7 +40,8 @@ public class RepositoryResourceStore implements ResourceStore {
     }
 
     @Override
-    public Object getList(Class resourceType, PagingInfo pagingInfo) {
+    @SuppressWarnings("unchecked")
+    public ResourcePage getList(Class resourceType, PagingInfo pagingInfo) {
         List<Sort.Order> orders = new ArrayList<>();
         for (PagingSort sort : pagingInfo.getSort()) {
             orders.add(new Sort.Order(convertDirection(sort.getDirection()), sort.getField()));
@@ -50,7 +52,8 @@ public class RepositoryResourceStore implements ResourceStore {
         } else {
             pageRequest = new PageRequest(pagingInfo.getPage(), pagingInfo.getCount());
         }
-        return repositoryMap.get(resourceType).findAll(pageRequest);
+        Page page = repositoryMap.get(resourceType).findAll(pageRequest);
+        return new ResourcePage(page.getContent(), page.getTotalElements(), page.getSize(), page.isFirst(), page.isLast());
     }
 
     private Sort.Direction convertDirection(SortDirection sortDirection) {
