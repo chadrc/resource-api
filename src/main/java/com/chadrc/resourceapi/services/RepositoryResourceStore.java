@@ -44,8 +44,12 @@ public class RepositoryResourceStore implements ResourceStore {
         for (PagingSort sort : pagingInfo.getSort()) {
             orders.add(new Sort.Order(convertDirection(sort.getDirection()), sort.getField()));
         }
-        Sort sort = new Sort(orders);
-        PageRequest pageRequest = new PageRequest(pagingInfo.getPage(), pagingInfo.getCount(), sort);
+        PageRequest pageRequest;
+        if (orders.size() > 0) {
+            pageRequest = new PageRequest(pagingInfo.getPage(), pagingInfo.getCount(), new Sort(orders));
+        } else {
+            pageRequest = new PageRequest(pagingInfo.getPage(), pagingInfo.getCount());
+        }
         return repositoryMap.get(resourceType).findAll(pageRequest);
     }
 
