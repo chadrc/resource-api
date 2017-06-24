@@ -53,6 +53,11 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
+    public ActionResult action(ActionClause clause) throws ResourceServiceException {
+        return null;
+    }
+
+    @Override
     public CreateResult create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
 
         Class c = resourcesByName.get(resourceName);

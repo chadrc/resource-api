@@ -1,10 +1,7 @@
 package com.chadrc.resourceapi.options;
 
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
-import com.chadrc.resourceapi.services.CreateResult;
-import com.chadrc.resourceapi.services.GetResult;
-import com.chadrc.resourceapi.services.ListResult;
-import com.chadrc.resourceapi.services.ResourceService;
+import com.chadrc.resourceapi.services.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +26,35 @@ public class ResourceController {
         return ResponseEntity.ok(resourceService.options(resourceName).getOptions());
     }
 
+    @PostMapping
+    public ResponseEntity<Object> action(@RequestBody ActionOptions options) {
+        log.info("Attempting to perform action: " + options.getActionName() + " on resource " + options.getResourceName());
+
+        if (StringUtils.isEmpty(options.getResourceName())) {
+            return ResponseEntity.badRequest().body("Resource Name Required.");
+        }
+
+        if (StringUtils.isEmpty(options.getActionName())) {
+            return ResponseEntity.badRequest().body("Action Name Required.");
+        }
+
+        try {
+            ActionResult obj = resourceService.action(new ActionClause(
+                    options.getActionName(), options.getResourceName(), options.getResourceId(), options.getArguments()
+            ));
+            return ResponseEntity.ok(obj.getResult());
+        } catch (ResourceServiceException resourceException) {
+            return ResponseEntity.badRequest().body(resourceException.getMessage());
+        } catch (Exception exception) {
+            log.info("Error", exception);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
     @PostMapping(path = "/create")
     public ResponseEntity<Object> create(@RequestBody CreateOptions options) {
         log.info("Attempting to create: " + options.getResourceName());
-        log.info("\tWith arguments: " + options.getArguments());
+        log.debug("\tWith arguments: " + options.getArguments());
 
         if (StringUtils.isEmpty(options.getResourceName())) {
             return ResponseEntity.badRequest().body("Resource Name Required.");
