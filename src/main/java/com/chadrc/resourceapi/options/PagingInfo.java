@@ -6,7 +6,7 @@ import java.util.List;
 public class PagingInfo {
     private Integer page = 0;
     private Integer count = 10;
-    private List<PagingSort> sorts = new ArrayList<>();
+    private List<PagingSort> sort = new ArrayList<>();
 
     void setCount(Integer count) {
         this.count = count;
@@ -16,8 +16,8 @@ public class PagingInfo {
         this.page = page;
     }
 
-    void setSorts(List<PagingSort> sorts) {
-        this.sorts = sorts;
+    void setSort(List<PagingSort> sort) {
+        this.sort = sort;
     }
 
     public Integer getCount() {

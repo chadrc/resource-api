@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.options;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.StringUtils;
 
@@ -35,12 +36,14 @@ class ListOptions {
         if (StringUtils.isEmpty(sortJson)) {
             return;
         }
+        String modified = "{\"sort\":" + sortJson + "}";
         ObjectMapper mapper = new ObjectMapper();
-        SortParamShape sortsShape = mapper.readValue(sortJson, SortParamShape.class);
-        pagingInfo.setSorts(sortsShape.sorts);
+        SortParamShape sortsShape = mapper.readValue(modified, SortParamShape.class);
+        pagingInfo.setSort(sortsShape.sort);
     }
 }
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, creatorVisibility = JsonAutoDetect.Visibility.ANY)
 class SortParamShape {
-    List<PagingSort> sorts;
+    List<PagingSort> sort;
 }
