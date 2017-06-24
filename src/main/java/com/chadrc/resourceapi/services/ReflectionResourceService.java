@@ -3,6 +3,7 @@ package com.chadrc.resourceapi.services;
 import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.annotations.ResourceModel;
+import com.chadrc.resourceapi.exceptions.ResourceTypeDoesNotExist;
 import com.chadrc.resourceapi.options.FieldValue;
 import com.chadrc.resourceapi.options.PagingInfo;
 import org.apache.log4j.Logger;
@@ -59,8 +60,7 @@ public class ReflectionResourceService implements ResourceService {
 
     @Override
     public CreateResult create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
-
-        Class c = resourcesByName.get(resourceName);
+        Class c = getResourceType(resourceName);
         Constructor<?>[] constructors = c.getDeclaredConstructors();
 
         Constructor<?> selectedConstructor = null;
@@ -107,13 +107,19 @@ public class ReflectionResourceService implements ResourceService {
 
     @Override
     public GetResult get(String resourceName, String id) throws ResourceServiceException {
-        Class c = resourcesByName.get(resourceName);
-        return new GetResult(resourceStore.getById(c, id));
+        return new GetResult(resourceStore.getById(getResourceType(resourceName), id));
     }
 
     @Override
     public ListResult getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
+        return new ListResult(resourceStore.getList(getResourceType(resourceName), pagingInfo));
+    }
+
+    private Class getResourceType(String resourceName) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
-        return new ListResult(resourceStore.getList(c, pagingInfo));
+        if (c == null) {
+            throw new ResourceTypeDoesNotExist("Resource type with name '" + resourceName + "' does not exist.");
+        }
+        return c;
     }
 }
