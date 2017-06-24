@@ -101,7 +101,7 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
-    public Object getById(String resourceName, String id) throws ResourceServiceException {
+    public Object get(String resourceName, String id) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
         return resourceStore.getById(c, id);
     }
