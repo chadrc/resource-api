@@ -3,7 +3,7 @@ package com.chadrc.resourceapi.options;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateOptions {
+class CreateOptions {
     private String resourceName = null;
     private List<FieldValue> arguments = new ArrayList<>();
 

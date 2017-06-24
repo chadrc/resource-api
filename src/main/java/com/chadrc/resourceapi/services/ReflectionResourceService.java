@@ -3,7 +3,7 @@ package com.chadrc.resourceapi.services;
 import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.annotations.ResourceModel;
-import com.chadrc.resourceapi.options.CreateOptions;
+import com.chadrc.resourceapi.options.FieldValue;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,21 +52,21 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
-    public Object create(CreateOptions options) throws ResourceServiceException {
+    public Object create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
 
-        Class c = resourcesByName.get(options.getResourceName());
+        Class c = resourcesByName.get(resourceName);
         Constructor<?>[] constructors = c.getDeclaredConstructors();
 
         Constructor<?> selectedConstructor = null;
         for (Constructor<?> constructor : constructors) {
             Type[] paramTypes = constructor.getParameterTypes();
-            if (paramTypes.length != options.getArguments().size()) {
+            if (paramTypes.length != arguments.size()) {
                 continue;
             }
 
             boolean allMatch = true;
             for (int i=0; i<paramTypes.length; i++) {
-                if (paramTypes[i] != options.getArguments().get(i).getValue().getClass()) {
+                if (paramTypes[i] != arguments.get(i).getValue().getClass()) {
                     allMatch = false;
                     break;
                 }
@@ -79,9 +79,9 @@ public class ReflectionResourceService implements ResourceService {
         }
 
         if (selectedConstructor != null) {
-            Object[] args = new Object[options.getArguments().size()];
-            for (int i=0; i<options.getArguments().size(); i++) {
-                args[i] = options.getArguments().get(i).getValue();
+            Object[] args = new Object[arguments.size()];
+            for (int i=0; i<arguments.size(); i++) {
+                args[i] = arguments.get(i).getValue();
             }
 
             try {
@@ -93,7 +93,7 @@ public class ReflectionResourceService implements ResourceService {
                 log.error("Failed to create resource.", e);
             }
         } else {
-            throw new CouldNotResolveArguments(options.getResourceName());
+            throw new CouldNotResolveArguments(resourceName);
         }
 
         throw new ResourceServiceException();

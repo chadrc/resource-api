@@ -1,19 +1,22 @@
 package com.chadrc.resourceapi.options;
 
-public class GetOneOptions {
+class GetOptions {
     private String resourceName = null;
     private String id = null;
 
-    GetOneOptions(String resourceName, String id) {
+    public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getResourceName() {
+    String getResourceName() {
         return resourceName;
     }
 
-    public String getId() {
+    String getId() {
         return id;
     }
 }

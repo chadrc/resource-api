@@ -37,7 +37,7 @@ public class ResourceController {
         }
 
         try {
-            Object obj = resourceService.create(options);
+            Object obj = resourceService.create(options.getResourceName(), options.getArguments());
             return ResponseEntity.ok(obj);
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
@@ -48,8 +48,7 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(GetOneOptionsParam param) {
-        GetOneOptions options = param.toImmutable();
+    public ResponseEntity<Object> get(GetOptions options) {
         log.info("Attempting to retrieve resource " + options.getResourceName() + " with id " + options.getId());
 
         if (StringUtils.isEmpty(options.getResourceName())) {
