@@ -1,7 +1,5 @@
 package com.chadrc.resourceapi.store;
 
-import com.chadrc.resourceapi.models.User;
-import com.chadrc.resourceapi.models.repositories.UserRepository;
 import com.chadrc.resourceapi.controller.PagingInfo;
 import com.chadrc.resourceapi.controller.PagingSort;
 import com.chadrc.resourceapi.controller.SortDirection;
@@ -25,8 +23,7 @@ public class RepositoryResourceStore implements ResourceStore {
     private final Map<Class, PagingAndSortingRepository> repositoryMap = new HashMap<>();
 
     @Autowired
-    public RepositoryResourceStore(UserRepository userRepository) {
-        repositoryMap.put(User.class, userRepository);
+    public RepositoryResourceStore() {
     }
 
     @Override
