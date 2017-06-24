@@ -2,6 +2,7 @@ package com.chadrc.resourceapi.services;
 
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.options.FieldValue;
+import com.chadrc.resourceapi.options.PagingInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ResourceService {
     Object create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException;
 
     Object getById(String resourceName, String id) throws ResourceServiceException;
+
+    Object getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException;
 }

@@ -4,6 +4,7 @@ import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.options.FieldValue;
+import com.chadrc.resourceapi.options.PagingInfo;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +104,11 @@ public class ReflectionResourceService implements ResourceService {
     public Object getById(String resourceName, String id) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
         return persistenceService.getById(c, id);
+    }
+
+    @Override
+    public Object getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
+        Class c = resourcesByName.get(resourceName);
+        return persistenceService.getList(c, pagingInfo);
     }
 }

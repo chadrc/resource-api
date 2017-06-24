@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
-@RestController("/resource")
+@RestController()
+@RequestMapping(path = "/resource")
 public class ResourceController {
 
     private static Logger log = Logger.getLogger(ResourceController.class);
@@ -69,6 +70,28 @@ public class ResourceController {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
         } catch (Exception exception) {
             log.info("Error", exception);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @GetMapping(path = "/list")
+    public ResponseEntity<Object> list(ListOptions options) {
+        log.info("Attempting to retrieve list of resource " + options.getResourceName());
+
+        if (StringUtils.isEmpty(options.getResourceName())) {
+            return ResponseEntity.badRequest().body("Param 'resourceName' required.");
+        }
+
+        try {
+            Object obj = resourceService.getList(options.getResourceName(), options.getPagingInfo());
+            if (obj == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(obj);
+        } catch (ResourceServiceException resourceException) {
+            return ResponseEntity.badRequest().body(resourceException.getMessage());
+        } catch (Exception exception) {
+            log.error("Error", exception);
             return ResponseEntity.status(500).body(null);
         }
     }
