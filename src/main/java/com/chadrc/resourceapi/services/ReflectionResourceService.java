@@ -40,7 +40,7 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
-    public Map<String, Object> options(String resourceName) {
+    public OptionsResult options(String resourceName) {
         List<String> models = new ArrayList<>();
 
         for (Class model : resourcesByName.values()) {
@@ -49,11 +49,11 @@ public class ReflectionResourceService implements ResourceService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("models", StringUtils.arrayToDelimitedString(models.toArray(), ","));
-        return map;
+        return new OptionsResult(map);
     }
 
     @Override
-    public Object create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
+    public CreateResult create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException {
 
         Class c = resourcesByName.get(resourceName);
         Constructor<?>[] constructors = c.getDeclaredConstructors();
@@ -89,7 +89,7 @@ public class ReflectionResourceService implements ResourceService {
                 Object obj = selectedConstructor.newInstance(args);
                 log.info("Created: " + obj);
                 resourceStore.saveNew(c, obj);
-                return obj;
+                return new CreateResult(obj);
             } catch (Exception e) {
                 log.error("Failed to create resource.", e);
             }
@@ -101,14 +101,14 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
-    public Object get(String resourceName, String id) throws ResourceServiceException {
+    public GetResult get(String resourceName, String id) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
-        return resourceStore.getById(c, id);
+        return new GetResult(resourceStore.getById(c, id));
     }
 
     @Override
-    public Object getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
+    public ListResult getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
-        return resourceStore.getList(c, pagingInfo);
+        return new ListResult(resourceStore.getList(c, pagingInfo));
     }
 }

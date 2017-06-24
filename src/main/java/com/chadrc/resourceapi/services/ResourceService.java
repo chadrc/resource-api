@@ -6,16 +6,15 @@ import com.chadrc.resourceapi.options.PagingInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface ResourceService {
 
-    Map<String, Object> options(String resourceName);
+    OptionsResult options(String resourceName);
 
-    Object create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException;
+    CreateResult create(String resourceName, List<FieldValue> arguments) throws ResourceServiceException;
 
-    Object get(String resourceName, String id) throws ResourceServiceException;
+    GetResult get(String resourceName, String id) throws ResourceServiceException;
 
-    Object getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException;
+    ListResult getList(String resourceName, PagingInfo pagingInfo) throws ResourceServiceException;
 }
