@@ -10,6 +10,7 @@ import com.chadrc.resourceapi.store.ResourceStore;
 import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,23 +22,21 @@ public class ReflectionResourceService implements ResourceService {
 
     private static Logger log = Logger.getLogger(ReflectionResourceService.class);
 
-    private static Map<String, Class> resourcesByName = new HashMap<>();
+    private Map<String, Class> resourcesByName = new HashMap<>();
 
-    static {
-        Reflections reflections = new Reflections("com.chadrc.resourceapi");
+    private final ResourceStore resourceStore;
+
+    @Autowired
+    public ReflectionResourceService(ResourceStore resourceStore, @Value("${resourceapi.models.package}") String modelsPackage) {
+        this.resourceStore = resourceStore;
+
+        Reflections reflections = new Reflections(modelsPackage);
         Set<Class<?>> resourceModels = reflections.getTypesAnnotatedWith(ResourceModel.class);
 
         for (Class model : resourceModels) {
             log.info("Registering Model: " + model.getName() + " as " + model.getSimpleName());
             resourcesByName.put(model.getSimpleName(), model);
         }
-    }
-
-    private final ResourceStore resourceStore;
-
-    @Autowired
-    public ReflectionResourceService(ResourceStore resourceStore) {
-        this.resourceStore = resourceStore;
     }
 
     @Override
