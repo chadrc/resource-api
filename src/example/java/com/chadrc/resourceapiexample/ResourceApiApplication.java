@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ResourceapiApplication {
+public class ResourceApiApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(ResourceapiApplication.class, args);
+		SpringApplication.run(ResourceApiApplication.class, args);
 	}
 }
