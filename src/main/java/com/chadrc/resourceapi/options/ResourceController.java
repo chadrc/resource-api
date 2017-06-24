@@ -1,10 +1,8 @@
 package com.chadrc.resourceapi.options;
 
-import com.chadrc.resourceapi.annotations.ResourceModel;
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.services.ResourceService;
 import org.apache.log4j.Logger;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -17,19 +15,7 @@ public class ResourceController {
 
     private static Logger log = Logger.getLogger(ResourceController.class);
 
-    private static Map<String, Class> resourcesByName = new HashMap<>();
-
     private final ResourceService resourceService;
-
-    static {
-        Reflections reflections = new Reflections("com.chadrc.resourceapi");
-        Set<Class<?>> resourceModels = reflections.getTypesAnnotatedWith(ResourceModel.class);
-
-        for (Class model : resourceModels) {
-            log.info("Registering Model: " + model.getName() + " as " + model.getSimpleName());
-            resourcesByName.put(model.getSimpleName(), model);
-        }
-    }
 
     @Autowired
     public ResourceController(ResourceService resourceService) {
@@ -37,14 +23,8 @@ public class ResourceController {
     }
 
     @RequestMapping(method = RequestMethod.OPTIONS)
-    public String options(@RequestParam(required = false) String resource) {
-        List<String> models = new ArrayList<>();
-
-        for (Class model : resourcesByName.values()) {
-            models.add(model.getCanonicalName());
-        }
-
-        return "Models:\n" + StringUtils.arrayToDelimitedString(models.toArray(), "\n");
+    public Map<String, Object> options(@RequestParam(required = false) String resourceName) {
+        return resourceService.options(resourceName);
     }
 
     @PutMapping

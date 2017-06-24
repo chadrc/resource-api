@@ -8,12 +8,11 @@ import org.apache.log4j.Logger;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ReflectionResourceService implements ResourceService {
@@ -37,6 +36,19 @@ public class ReflectionResourceService implements ResourceService {
     @Autowired
     public ReflectionResourceService(PersistenceService persistenceService) {
         this.persistenceService = persistenceService;
+    }
+
+    @Override
+    public Map<String, Object> options(String resourceName) {
+        List<String> models = new ArrayList<>();
+
+        for (Class model : resourcesByName.values()) {
+            models.add(model.getCanonicalName());
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("models", StringUtils.arrayToDelimitedString(models.toArray(), ","));
+        return map;
     }
 
     @Override
