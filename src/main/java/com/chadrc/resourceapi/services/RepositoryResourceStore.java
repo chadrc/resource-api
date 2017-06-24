@@ -2,9 +2,9 @@ package com.chadrc.resourceapi.services;
 
 import com.chadrc.resourceapi.models.User;
 import com.chadrc.resourceapi.models.repositories.UserRepository;
-import com.chadrc.resourceapi.options.PagingInfo;
-import com.chadrc.resourceapi.options.PagingSort;
-import com.chadrc.resourceapi.options.SortDirection;
+import com.chadrc.resourceapi.controller.PagingInfo;
+import com.chadrc.resourceapi.controller.PagingSort;
+import com.chadrc.resourceapi.controller.SortDirection;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

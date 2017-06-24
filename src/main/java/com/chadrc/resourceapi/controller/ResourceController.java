@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.options;
+package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
 import com.chadrc.resourceapi.services.*;

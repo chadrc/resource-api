@@ -1,6 +1,6 @@
 package com.chadrc.resourceapi.services;
 
-import com.chadrc.resourceapi.options.FieldValue;
+import com.chadrc.resourceapi.controller.FieldValue;
 
 import java.util.ArrayList;
 import java.util.List;

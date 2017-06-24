@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.options;
+package com.chadrc.resourceapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 

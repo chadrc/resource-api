@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.options;
+package com.chadrc.resourceapi.controller;
 
 class GetOptions {
     private String resourceName = null;

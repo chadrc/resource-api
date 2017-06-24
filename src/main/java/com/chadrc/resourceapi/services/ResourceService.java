@@ -1,8 +1,8 @@
 package com.chadrc.resourceapi.services;
 
 import com.chadrc.resourceapi.exceptions.ResourceServiceException;
-import com.chadrc.resourceapi.options.FieldValue;
-import com.chadrc.resourceapi.options.PagingInfo;
+import com.chadrc.resourceapi.controller.FieldValue;
+import com.chadrc.resourceapi.controller.PagingInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
