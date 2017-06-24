@@ -27,4 +27,8 @@ public class PagingInfo {
     public Integer getPage() {
         return page;
     }
+
+    public List<PagingSort> getSort() {
+        return new ArrayList<>(sort);
+    }
 }
