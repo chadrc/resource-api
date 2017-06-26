@@ -150,7 +150,7 @@ public class ReflectionResourceService implements ResourceService {
     private Class getResourceType(String resourceName) throws ResourceServiceException {
         Class c = resourcesByName.get(resourceName);
         if (c == null) {
-            throw new ResourceTypeDoesNotExist("Resource type with name '" + resourceName + "' does not exist.");
+            throw new ResourceTypeDoesNotExist(resourceName);
         }
         return c;
     }
