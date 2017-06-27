@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.store;
 
+import com.chadrc.resourceapi.annotations.ResourceClass;
 import com.chadrc.resourceapi.controller.PagingInfo;
 import com.chadrc.resourceapi.controller.PagingSort;
 import com.chadrc.resourceapi.controller.SortDirection;
@@ -9,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,29 +23,23 @@ public class RepositoryResourceStore implements ResourceStore {
 
     private static Logger log = Logger.getLogger(RepositoryResourceStore.class);
 
-    private final RepositoryProvider repositoryProvider;
     private final Map<Class, ResourceRepository> repositoryByClass;
 
     @Autowired
-    public RepositoryResourceStore(RepositoryProvider repositoryProvider,
-                                   List<ResourceRepository> resourceRepositories) {
-        this.repositoryProvider = repositoryProvider;
+    public RepositoryResourceStore(List<ResourceRepository> resourceRepositories) {
         this.repositoryByClass = new HashMap<>();
         for (ResourceRepository resourceRepository : resourceRepositories) {
             Class repositoryClass = resourceRepository.getClass();
-            Pair<Type, Type> resourceInterface = findResourceRepositoryClassInClass(repositoryClass);
+            Type[] supers = repositoryClass.getGenericInterfaces();
+            Class firstSuper = ((Class) supers[0]);
+            ResourceClass resourceClass = (ResourceClass) firstSuper.getAnnotation(ResourceClass.class);
 
-            if (resourceInterface == null) {
-                throw new IllegalArgumentException("ResourceRepository bean with out ResourceRepository interface: " + repositoryClass.getCanonicalName());
+            if (resourceClass == null) {
+                throw new IllegalArgumentException("ResourceRepository must have ResourceClass annotation: " + repositoryClass.getCanonicalName());
             }
 
-            Type[] typeArgs = ((ParameterizedType) resourceInterface.getSecond()).getActualTypeArguments();
-            if (typeArgs.length != 2) {
-                throw new IllegalArgumentException("ResourceRepository bean with insufficient type arguments: " + repositoryClass.getCanonicalName());
-            }
-
-            Class modelClass = (Class) typeArgs[0];
-            log.info("Registering " + ((Class) resourceInterface.getFirst()).getCanonicalName() + " as repository for " + modelClass.getCanonicalName());
+            Class modelClass = resourceClass.value();
+            log.info("Registering " + firstSuper.getCanonicalName() + " as repository for " + modelClass.getCanonicalName());
             repositoryByClass.put(modelClass, resourceRepository);
         }
     }
@@ -59,7 +52,8 @@ public class RepositoryResourceStore implements ResourceStore {
     @Override
     @SuppressWarnings("unchecked")
     public Object getById(Class resourceType, String id) {
-        return repositoryByClass.get(resourceType).findOne(repositoryProvider.convertId(id));
+        ResourceRepository resourceRepository = repositoryByClass.get(resourceType);
+        return resourceRepository.findOne(resourceRepository.convertId(id));
     }
 
     @Override
@@ -81,20 +75,5 @@ public class RepositoryResourceStore implements ResourceStore {
 
     private Sort.Direction convertDirection(SortDirection sortDirection) {
         return sortDirection == SortDirection.Acending ? Sort.Direction.ASC : Sort.Direction.DESC;
-    }
-
-    private Pair<Type, Type> findResourceRepositoryClassInClass(Class c) {
-        Type[] interfaces = c.getGenericInterfaces();
-        for (Type i : interfaces) {
-            if (i instanceof ParameterizedType && ((ParameterizedType)i).getRawType() == ResourceRepository.class) {
-                return Pair.of(c, i);
-            } else if (i instanceof Class) {
-                Pair<Type, Type> ic = findResourceRepositoryClassInClass((Class) i);
-                if (ic != null) {
-                    return ic;
-                }
-            }
-        }
-        return null;
     }
 }
