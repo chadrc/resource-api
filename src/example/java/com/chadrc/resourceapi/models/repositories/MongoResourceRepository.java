@@ -1,4 +1,4 @@
-package com.chadrc.resourceapiexample.models.repositories;
+package com.chadrc.resourceapi.models.repositories;
 
 import com.chadrc.resourceapi.store.ResourceRepository;
 import org.bson.types.ObjectId;

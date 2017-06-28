@@ -1,7 +1,7 @@
-package com.chadrc.resourceapiexample.models.repositories;
+package com.chadrc.resourceapi.models.repositories;
 
 import com.chadrc.resourceapi.annotations.ResourceClass;
-import com.chadrc.resourceapiexample.models.User;
+import com.chadrc.resourceapi.models.User;
 import org.bson.types.ObjectId;
 
 @ResourceClass(User.class)

@@ -1,6 +1,6 @@
-package com.chadrc.resourceapiexample.models.repositories;
+package com.chadrc.resourceapi.models.repositories;
 
-import com.chadrc.resourceapiexample.models.Event;
+import com.chadrc.resourceapi.models.Event;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
