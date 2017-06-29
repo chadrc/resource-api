@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
-public class ResourceControllerTests {
+public class CreateResourceControllerTests {
 
     private ResourceController resourceController;
 
