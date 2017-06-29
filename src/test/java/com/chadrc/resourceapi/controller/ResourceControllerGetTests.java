@@ -39,7 +39,7 @@ public class ResourceControllerGetTests {
 
     @Test
     public void getUnknownResourceYields400() {
-        ResponseEntity<Object> responseEntity = resourceController.get(new GetOptions("Animal", "12345"));
+        ResponseEntity<Object> responseEntity = resourceController.get(new GetOptions("Animal", "594dc2f7a249e661727c6b50"));
         assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
     }
 
@@ -47,6 +47,18 @@ public class ResourceControllerGetTests {
     public void getNonExistentUserYields404() {
         ResponseEntity<Object> responseEntity = resourceController.get(new GetOptions("User", "594dc2f7a249e661727c6b50"));
         assert responseEntity.getStatusCode() == HttpStatus.NOT_FOUND;
+    }
+
+    @Test
+    public void getWithNullResourceNameYields400() {
+        ResponseEntity<Object> responseEntity = resourceController.get(new GetOptions(null, "594dc2f7a249e661727c6b50"));
+        assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
+    }
+
+    @Test
+    public void getWithNullIdYields400() {
+        ResponseEntity<Object> responseEntity = resourceController.get(new GetOptions("User", null));
+        assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
     }
 
     private User createUser(String firstName, String lastName) {
