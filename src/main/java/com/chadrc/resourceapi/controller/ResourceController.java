@@ -56,6 +56,7 @@ public class ResourceController {
         log.info("Attempting to create '" + options.getResourceName() + "'");
         log.debug("\tWith arguments: " + options.getArguments());
 
+        options.setDefaults();
         if (StringUtils.isEmpty(options.getResourceName())) {
             return ResponseEntity.badRequest().body("Resource Name Required.");
         }

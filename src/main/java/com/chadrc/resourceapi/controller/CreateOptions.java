@@ -23,4 +23,10 @@ class CreateOptions {
     public List<FieldValue> getArguments() {
         return arguments;
     }
+
+    void setDefaults() {
+        if (arguments == null) {
+            arguments = new ArrayList<>();
+        }
+    }
 }

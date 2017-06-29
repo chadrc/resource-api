@@ -28,8 +28,15 @@ public class ResourceControllerCreateTests {
     }
 
     @Test
-    public void createSucceeds() {
+    public void createDefaultSucceeds() {
         ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", new ArrayList<>()));
+        Object obj = responseEntity.getBody();
+        assert(obj instanceof User);
+    }
+
+    @Test
+    public void createDefaultWithNullArgumentsSucceeds() {
+        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", null));
         Object obj = responseEntity.getBody();
         assert(obj instanceof User);
     }
@@ -55,6 +62,18 @@ public class ResourceControllerCreateTests {
         }};
 
         ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", fieldValues));
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void createWithUnknownResourceYields400() {
+        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("Animal", new ArrayList<>()));
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void createWithNullResourceNameYields400() {
+        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions(null, new ArrayList<>()));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 }
