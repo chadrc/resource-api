@@ -28,9 +28,6 @@ public class ResourceControllerCreateTests {
     }
 
     @Test
-    public void initSuccess() {}
-
-    @Test
     public void createSucceeds() {
         ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", new ArrayList<>()));
         Object obj = responseEntity.getBody();
