@@ -4,6 +4,15 @@ class GetOptions {
     private String resourceName = null;
     private String id = null;
 
+    public GetOptions() {
+
+    }
+
+    GetOptions(String resourceName, String id) {
+        this.resourceName = resourceName;
+        this.id = id;
+    }
+
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
     }
