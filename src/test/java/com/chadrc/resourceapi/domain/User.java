@@ -1,8 +1,8 @@
-package com.chadrc.resourceapi.tests.models;
+package com.chadrc.resourceapi.domain;
 
 import com.chadrc.resourceapi.service.ResourceModel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TestUser implements ResourceModel {
+public class User implements ResourceModel {
 }
