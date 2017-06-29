@@ -85,7 +85,7 @@ public class ResourceController {
 
         try {
             GetResult obj = resourceService.get(options.getResourceName(), options.getId());
-            if (obj == null) {
+            if (obj.getResource() == null) {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(obj.getResource());
