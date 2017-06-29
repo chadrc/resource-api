@@ -2,7 +2,6 @@ package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
 import com.chadrc.resourceapi.domain.User;
-import com.chadrc.resourceapi.service.ResourceService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,29 +13,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
 public class ResourceControllerCreateTests {
 
-    private ResourceController resourceController;
-
     @Autowired
-    public void setResourceController(ResourceService resourceService) {
-        this.resourceController = new ResourceController(resourceService);
-    }
+    private ResourceControllerProxy resourceControllerProxy;
 
     @Test
     public void createDefaultSucceeds() {
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", new ArrayList<>()));
         Object obj = responseEntity.getBody();
         assert(obj instanceof User);
     }
 
     @Test
     public void createDefaultWithNullArgumentsSucceeds() {
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", null));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", null));
         Object obj = responseEntity.getBody();
         assert(obj instanceof User);
     }
@@ -48,7 +43,7 @@ public class ResourceControllerCreateTests {
                 add(new FieldValue("lastName", "Doe"));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
         User user = (User) responseEntity.getBody();
         assertEquals(user.getFirstName(), "John");
         assertEquals(user.getLastName(), "Doe");
@@ -61,19 +56,19 @@ public class ResourceControllerCreateTests {
             add(new FieldValue("lastName", 1000));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void createWithUnknownResourceYields400() {
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("Animal", new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("Animal", new ArrayList<>()));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void createWithNullResourceNameYields400() {
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions(null, new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions(null, new ArrayList<>()));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 }
