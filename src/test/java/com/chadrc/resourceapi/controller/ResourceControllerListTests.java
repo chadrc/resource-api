@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -68,6 +69,13 @@ public class ResourceControllerListTests {
     @After
     public void tearDown() throws Exception {
         userRepository.delete(userList);
+    }
+
+    @Test
+    public void listWithUnknownResourceFails() {
+        ListOptions options = new ListOptions("Animal", null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
