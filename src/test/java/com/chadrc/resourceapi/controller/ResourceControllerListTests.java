@@ -74,7 +74,7 @@ public class ResourceControllerListTests {
     }
 
     @Test
-    public void listUsersWith5PageSizeHas5Resources() {
+    public void listUsersWith5CountHas5Resources() {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setCount(5);
         ListOptions options = new ListOptions("User", pagingInfo);
@@ -85,7 +85,7 @@ public class ResourceControllerListTests {
     }
 
     @Test
-    public void listUsersWithPage2HasSecondSetOfResources() {
+    public void listUsersWithPage1HasSecondSetOfResources() {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setPage(1);
         ListOptions options = new ListOptions("User", pagingInfo);
@@ -95,5 +95,20 @@ public class ResourceControllerListTests {
         List resources = resourcePage.getResources();
         User first = (User) resources.get(0);
         assertEquals(first.getFirstName(), "Kilo");
+    }
+
+    @Test
+    public void listUsersWithCount3Page4StartsWith15Resource() {
+        PagingInfo pagingInfo = new PagingInfo();
+        pagingInfo.setPage(4);
+        pagingInfo.setCount(3);
+        ListOptions options = new ListOptions("User", pagingInfo);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+
+        List resources = resourcePage.getResources();
+        User first = (User) resources.get(0);
+
+        assertEquals(first.getFirstName(), "Mike");
     }
 }
