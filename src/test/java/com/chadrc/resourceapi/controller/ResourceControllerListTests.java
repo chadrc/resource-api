@@ -2,9 +2,10 @@ package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
 import com.chadrc.resourceapi.domain.User;
+import com.chadrc.resourceapi.domain.UserRepository;
 import com.chadrc.resourceapi.service.ResourcePage;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,39 +25,49 @@ public class ResourceControllerListTests {
     @Autowired
     private ResourceControllerProxy resourceControllerProxy;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private List<User> userList = new ArrayList<>();
+
     @Before
     public void setUp() throws Exception {
-        resourceControllerProxy.addUser("Alpha", "Alpha");
-        resourceControllerProxy.addUser("Bravo", "Beta");
-        resourceControllerProxy.addUser("Charlie", "Gamma");
-        resourceControllerProxy.addUser("Delta", "Delta");
-        resourceControllerProxy.addUser("Echo", "Epsilon");
+        userList.add(resourceControllerProxy.addUser("Alpha", "Alpha"));
+        userList.add(resourceControllerProxy.addUser("Bravo", "Beta"));
+        userList.add(resourceControllerProxy.addUser("Charlie", "Gamma"));
+        userList.add(resourceControllerProxy.addUser("Delta", "Delta"));
+        userList.add(resourceControllerProxy.addUser("Echo", "Epsilon"));
 
-        resourceControllerProxy.addUser("Foxtrot", "Zeta");
-        resourceControllerProxy.addUser("Golf", "Eta");
-        resourceControllerProxy.addUser("Hotel", "Theta");
-        resourceControllerProxy.addUser("India", "Iota");
-        resourceControllerProxy.addUser("Juliet", "Kappa");
+        userList.add(resourceControllerProxy.addUser("Foxtrot", "Zeta"));
+        userList.add(resourceControllerProxy.addUser("Golf", "Eta"));
+        userList.add(resourceControllerProxy.addUser("Hotel", "Theta"));
+        userList.add(resourceControllerProxy.addUser("India", "Iota"));
+        userList.add(resourceControllerProxy.addUser("Juliet", "Kappa"));
 
-        resourceControllerProxy.addUser("Kilo", "Lambda");
-        resourceControllerProxy.addUser("Lima", "Mu");
-        resourceControllerProxy.addUser("Mike", "Nu");
-        resourceControllerProxy.addUser("November", "Xi");
-        resourceControllerProxy.addUser("Oscar", "Omicron");
+        userList.add(resourceControllerProxy.addUser("Kilo", "Lambda"));
+        userList.add(resourceControllerProxy.addUser("Lima", "Mu"));
+        userList.add(resourceControllerProxy.addUser("Mike", "Nu"));
+        userList.add(resourceControllerProxy.addUser("November", "Xi"));
+        userList.add(resourceControllerProxy.addUser("Oscar", "Omicron"));
 
-        resourceControllerProxy.addUser("Papa", "Pi");
-        resourceControllerProxy.addUser("Quebec", "Rho");
-        resourceControllerProxy.addUser("Romeo", "Sigma");
-        resourceControllerProxy.addUser("Sierra", "Tau");
-        resourceControllerProxy.addUser("Tango", "Upsilon");
+        userList.add(resourceControllerProxy.addUser("Papa", "Pi"));
+        userList.add(resourceControllerProxy.addUser("Quebec", "Rho"));
+        userList.add(resourceControllerProxy.addUser("Romeo", "Sigma"));
+        userList.add(resourceControllerProxy.addUser("Sierra", "Tau"));
+        userList.add(resourceControllerProxy.addUser("Tango", "Upsilon"));
 
-        resourceControllerProxy.addUser("Uniform", "Phi");
-        resourceControllerProxy.addUser("Victor", "Chi");
-        resourceControllerProxy.addUser("Whiskey", "Psi");
-        resourceControllerProxy.addUser("X-Ray", "Omega");
-        resourceControllerProxy.addUser("Yankee", "Yankee");
+        userList.add(resourceControllerProxy.addUser("Uniform", "Phi"));
+        userList.add(resourceControllerProxy.addUser("Victor", "Chi"));
+        userList.add(resourceControllerProxy.addUser("Whiskey", "Psi"));
+        userList.add(resourceControllerProxy.addUser("X-Ray", "Omega"));
+        userList.add(resourceControllerProxy.addUser("Yankee", "Yankee"));
 
-        resourceControllerProxy.addUser("Zulu", "Zulu");
+        userList.add(resourceControllerProxy.addUser("Zulu", "Zulu"));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        userRepository.delete(userList);
     }
 
     @Test
