@@ -4,6 +4,7 @@ import com.chadrc.resourceapi.ResourceApiApplicationTests;
 import com.chadrc.resourceapi.domain.User;
 import com.chadrc.resourceapi.service.ResourcePage;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class ResourceControllerListTests {
 
     @Autowired
-    ResourceControllerProxy resourceControllerProxy;
+    private ResourceControllerProxy resourceControllerProxy;
 
     @Before
     public void setUp() throws Exception {
@@ -95,7 +96,7 @@ public class ResourceControllerListTests {
 
         List resources = resourcePage.getResources();
         User first = (User) resources.get(0);
-        assertEquals(first.getFirstName(), "Kilo");
+        assertEquals("Kilo", first.getFirstName());
     }
 
     @Test
@@ -110,11 +111,11 @@ public class ResourceControllerListTests {
         List resources = resourcePage.getResources();
         User first = (User) resources.get(0);
 
-        assertEquals(first.getFirstName(), "Mike");
+        assertEquals("Mike", first.getFirstName());
     }
 
     @Test
-    public void listUsersWithSortByLastNameHasDeltaAsThirdResource() {
+    public void listUsersWithSortByLastNameHasChiAsThirdResource() {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setSort(new ArrayList<PagingSort>(){{
             add(new PagingSort("lastName", SortDirection.Acending));
@@ -126,6 +127,6 @@ public class ResourceControllerListTests {
         List resources = resourcePage.getResources();
         User user = (User) resources.get(2);
 
-        assertEquals(user.getLastName(), "Chi");
+        assertEquals("Chi", user.getLastName());
     }
 }
