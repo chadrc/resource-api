@@ -11,6 +11,15 @@ class ListOptions {
     private String resourceName = null;
     private PagingInfo pagingInfo = new PagingInfo();
 
+    public ListOptions() {
+
+    }
+
+    ListOptions(String resourceName, PagingInfo pagingInfo) {
+        this.resourceName = resourceName;
+        this.pagingInfo = pagingInfo == null ? new PagingInfo() : pagingInfo;
+    }
+
     String getResourceName() {
         return resourceName;
     }
