@@ -59,11 +59,22 @@ public class ResourceControllerListTests {
     }
 
     @Test
-    public void listUsersWithNullPagingInfoHasDefaultMax10() {
+    public void listUsersWithNullPagingInfoHas10Resources() {
         ListOptions options = new ListOptions("User", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 
         assertEquals(resourcePage.getResources().size(), 10);
+    }
+
+    @Test
+    public void listUsersWith5PageSizeHas5Resources() {
+        PagingInfo pagingInfo = new PagingInfo();
+        pagingInfo.setCount(5);
+        ListOptions options = new ListOptions("User", pagingInfo);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+
+        assertEquals(resourcePage.getResources().size(), 5);
     }
 }
