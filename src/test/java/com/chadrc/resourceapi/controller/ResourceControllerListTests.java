@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -110,5 +111,21 @@ public class ResourceControllerListTests {
         User first = (User) resources.get(0);
 
         assertEquals(first.getFirstName(), "Mike");
+    }
+
+    @Test
+    public void listUsersWithSortByLastNameHasDeltaAsThirdResource() {
+        PagingInfo pagingInfo = new PagingInfo();
+        pagingInfo.setSort(new ArrayList<PagingSort>(){{
+            add(new PagingSort("lastName", SortDirection.Acending));
+        }});
+        ListOptions options = new ListOptions("User", pagingInfo);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+
+        List resources = resourcePage.getResources();
+        User user = (User) resources.get(2);
+
+        assertEquals(user.getLastName(), "Chi");
     }
 }
