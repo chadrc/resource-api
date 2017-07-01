@@ -80,6 +80,22 @@ public class ResourceControllerActionTests {
     }
 
     @Test
+    public void invokeActionWithoutAnnotationYields400() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "setFirstName",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("firstName", "Charley"));
+                        }}
+                ));
+
+        assertNotEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
     public void actionWithIncorrectArgCountYields400() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
@@ -110,21 +126,5 @@ public class ResourceControllerActionTests {
                 ));
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    @Test
-    public void invokeActionWithoutAnnotationYields400() {
-        User user = resourceControllerProxy.addUser("Charles", "Xavier");
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
-                        "setFirstName",
-                        "User",
-                        user.getId(),
-                        new ArrayList<FieldValue>(){{
-                            add(new FieldValue("firstName", "Charley"));
-                        }}
-                ));
-
-        assertNotEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
