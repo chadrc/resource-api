@@ -77,4 +77,37 @@ public class ResourceControllerActionTests {
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
+
+    @Test
+    public void actionWithIncorrectArgCountYields400() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "changePassword",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("currentPassword", "password"));
+                        }}
+                ));
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void actionWithIncorrectArgValuesYields400() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "changePassword",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("currentPassword", 200));
+                            add(new FieldValue("newPassword", 300));
+                        }}
+                ));
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
 }
