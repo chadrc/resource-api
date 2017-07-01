@@ -15,6 +15,8 @@ public class User implements ResourceModel {
 
     private boolean signedForNewsletter = false;
 
+    private String password = "password";
+
     public User() {
 
     }
@@ -42,5 +44,9 @@ public class User implements ResourceModel {
 
     public void signUpForNewsletter() {
         signedForNewsletter = true;
+    }
+
+    public void changePassword(String oldPassword, String newPassword) {
+        password = newPassword;
     }
 }

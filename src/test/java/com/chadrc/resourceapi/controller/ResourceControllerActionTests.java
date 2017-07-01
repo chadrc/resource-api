@@ -48,7 +48,7 @@ public class ResourceControllerActionTests {
     }
 
     @Test
-    public void actionWithNoArgsSucceeds() {
+    public void actionWithTargetNoArgsSucceeds() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
                 .action(new ActionOptions(
@@ -56,6 +56,23 @@ public class ResourceControllerActionTests {
                         "User",
                         user.getId(),
                         new ArrayList<>()
+                ));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void actionWithTargetAndArgsSucceeds() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "changePassword",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("currentPassword", "password"));
+                            add(new FieldValue("newPassword", "newPassword"));
+                        }}
                 ));
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
