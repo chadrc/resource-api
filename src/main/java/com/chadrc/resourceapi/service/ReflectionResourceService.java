@@ -58,7 +58,8 @@ public class ReflectionResourceService implements ResourceService {
                 continue;
             }
 
-            if (method.getName().equals(clause.getActionName())
+            if (method.getAnnotation(Action.class) != null
+                    && method.getName().equals(clause.getActionName())
                     && typesMatchFieldValues(paramTypes, clause.getArguments())) {
                 selectedMethod = method;
                 break;

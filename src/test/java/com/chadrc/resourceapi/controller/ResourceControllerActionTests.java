@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
@@ -109,5 +110,21 @@ public class ResourceControllerActionTests {
                 ));
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void invokeActionWithoutAnnotationYields400() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "setFirstName",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("firstName", "Charley"));
+                        }}
+                ));
+
+        assertNotEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
