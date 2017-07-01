@@ -1,8 +1,6 @@
 package com.chadrc.resourceapi.service;
 
-import com.chadrc.resourceapi.exceptions.CouldNotResolveArguments;
-import com.chadrc.resourceapi.exceptions.ResourceServiceException;
-import com.chadrc.resourceapi.exceptions.ResourceTypeDoesNotExist;
+import com.chadrc.resourceapi.exceptions.*;
 import com.chadrc.resourceapi.controller.FieldValue;
 import com.chadrc.resourceapi.controller.PagingInfo;
 import com.chadrc.resourceapi.store.ResourceStore;
@@ -69,7 +67,17 @@ public class ReflectionResourceService implements ResourceService {
 
         if (selectedMethod != null) {
             try {
-                Object obj = selectedMethod.invoke(null, collectArgValues(clause.getArguments()));
+                Object target = null;
+                if (!StringUtils.isEmpty(clause.getResourceId())) {
+                    target = resourceStore.getById(c, clause.getResourceId());
+                    if (target == null) {
+                        throw new TargetResourceNotFound(clause.getResourceId());
+                    }
+                } else if (!Modifier.isStatic(selectedMethod.getModifiers())) {
+                    throw new CannotInvokeActionWithoutResource(clause.getActionName());
+                }
+
+                Object obj = selectedMethod.invoke(target, collectArgValues(clause.getArguments()));
                 if (obj == null) {
                     Map<String, Boolean> fillResult = new HashMap<>();
                     fillResult.put("success", true);

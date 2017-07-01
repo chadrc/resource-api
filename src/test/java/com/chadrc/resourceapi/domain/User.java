@@ -13,6 +13,8 @@ public class User implements ResourceModel {
     private String firstName;
     private String lastName;
 
+    private boolean signedForNewsletter = false;
+
     public User() {
 
     }
@@ -32,5 +34,13 @@ public class User implements ResourceModel {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public boolean getSignedForNewletter() {
+        return signedForNewsletter;
+    }
+
+    public void signUpForNewsletter() {
+        signedForNewsletter = true;
     }
 }

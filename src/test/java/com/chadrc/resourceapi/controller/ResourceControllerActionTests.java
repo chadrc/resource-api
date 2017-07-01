@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
+import com.chadrc.resourceapi.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,19 @@ public class ResourceControllerActionTests {
                 ));
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void actionWithNoArgsSucceeds() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "signUpForNewsletter",
+                        "User",
+                        user.getId(),
+                        new ArrayList<>()
+                ));
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     }
 }
