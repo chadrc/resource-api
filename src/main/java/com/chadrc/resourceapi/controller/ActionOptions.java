@@ -12,6 +12,13 @@ class ActionOptions {
     private String resourceId = null;
     private List<FieldValue> arguments = new ArrayList<>();
 
+    ActionOptions(String actionName, String resourceName, String resourceId, List<FieldValue> arguments) {
+        this.actionName = actionName;
+        this.resourceName = resourceName;
+        this.resourceId = resourceId;
+        this.arguments = arguments;
+    }
+
     String getActionName() {
         return actionName;
     }
