@@ -6,6 +6,7 @@ import com.chadrc.resourceapi.domain.UserRepository;
 import com.chadrc.resourceapi.service.ResourcePage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class ResourceControllerListTests {
 
     @Before
     public void setUp() throws Exception {
+        userRepository.delete(userRepository.findAll());
+
         userList.add(resourceControllerProxy.addUser("Alpha", "Alpha"));
         userList.add(resourceControllerProxy.addUser("Bravo", "Beta"));
         userList.add(resourceControllerProxy.addUser("Charlie", "Gamma"));
