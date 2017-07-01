@@ -127,4 +127,21 @@ public class ResourceControllerActionTests {
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
+
+    @Test
+    public void errorDuringActionYields400() {
+        User user = resourceControllerProxy.addUser("Charles", "Xavier");
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "changePassword",
+                        "User",
+                        user.getId(),
+                        new ArrayList<FieldValue>(){{
+                            add(new FieldValue("currentPassword", "notPassword"));
+                            add(new FieldValue("newPassword", "newPassword"));
+                        }}
+                ));
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
 }

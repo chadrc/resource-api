@@ -4,6 +4,7 @@ import com.chadrc.resourceapi.service.Action;
 import com.chadrc.resourceapi.service.ResourceModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class User implements ResourceModel {
@@ -53,7 +54,10 @@ public class User implements ResourceModel {
     }
 
     @Action
-    public void changePassword(String oldPassword, String newPassword) {
+    public void changePassword(String oldPassword, String newPassword) throws Exception {
+        if (!password.equals(oldPassword)) {
+            throw new InvalidPassword();
+        }
         password = newPassword;
     }
 }
