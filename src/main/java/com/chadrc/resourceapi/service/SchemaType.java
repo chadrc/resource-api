@@ -1,10 +1,10 @@
 package com.chadrc.resourceapi.service;
 
-public class Parameter {
+public class SchemaType {
 
     private final Class type;
 
-    public Parameter(Class type) {
+    public SchemaType(Class type) {
         this.type = type;
     }
 

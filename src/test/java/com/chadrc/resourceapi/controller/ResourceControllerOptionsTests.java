@@ -3,7 +3,7 @@ package com.chadrc.resourceapi.controller;
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
 import com.chadrc.resourceapi.service.CreateOption;
 import com.chadrc.resourceapi.service.OptionsResult;
-import com.chadrc.resourceapi.service.Parameter;
+import com.chadrc.resourceapi.service.SchemaType;
 import com.chadrc.resourceapi.service.ResourceOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
@@ -51,24 +51,36 @@ public class ResourceControllerOptionsTests {
     }
 
     @Test
-    public void createOptionsParametersMatchUserConstructors() {
+    public void hasZeroParameterCreateOption() {
         ResourceOptions userOptions = getUserResourceOptions();
         List<CreateOption> createOptions = userOptions.getCreateOptions();
+        boolean success = false;
         for (CreateOption createOption : createOptions) {
-            List<Parameter> parameters = createOption.getParameters();
-            if (parameters.size() != 0) {
-                if (parameters.size() == 2) {
-                    Parameter parameter1 = parameters.get(0);
-                    Parameter parameter2 = parameters.get(1);
-
-                    if (parameter1.getType() != String.class || parameter2.getType() != String.class) {
-                        fail();
-                    }
-                } else {
-                    fail();
-                }
+            success = createOption.getSchemaTypes().size() == 0;
+            if (success) {
+                break;
             }
         }
+
+        assertTrue(success);
+    }
+
+    @Test
+    public void hasStringStringParameterCreateOption() {
+        ResourceOptions userOptions = getUserResourceOptions();
+        List<CreateOption> createOptions = userOptions.getCreateOptions();
+        boolean success = false;
+        for (CreateOption createOption : createOptions) {
+            List<SchemaType> schemaTypes = createOption.getSchemaTypes();
+            success = createOption.getSchemaTypes().size() == 2
+                    && schemaTypes.get(0).getType() == String.class
+                    && schemaTypes.get(1).getType() == String.class;
+            if (success) {
+                break;
+            }
+        }
+
+        assertTrue(success);
     }
 
     private OptionsResult getOptions() {
