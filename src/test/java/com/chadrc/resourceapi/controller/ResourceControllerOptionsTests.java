@@ -109,6 +109,13 @@ public class ResourceControllerOptionsTests {
         assertEquals(2, actionOption.getParameters().size());
     }
 
+    @Test
+    public void changePasswordActionParametersAreBothOfStringType() {
+        ActionOption actionOption = getUserAction("changePassword");
+        assertEquals(String.class, actionOption.getParameters().get(0).getType());
+        assertEquals(String.class, actionOption.getParameters().get(1).getType());
+    }
+
     private ActionOption getUserAction(String actionName) {
         ResourceOptions userOptions = getUserResourceOptions();
         List<ActionOption> actionOptions = userOptions.getActionOptions();
