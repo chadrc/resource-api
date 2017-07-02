@@ -16,7 +16,7 @@ public class CreateOption {
         }
     }
 
-    public List<SchemaType> getSchemaTypes() {
+    public List<SchemaType> getParameters() {
         return schemaTypes;
     }
 }

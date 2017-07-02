@@ -18,7 +18,7 @@ public class ResourceOptions {
         Method[] methods = c.getMethods();
         for (Method method : methods) {
             if (method.getAnnotation(Action.class) != null) {
-                actionOptions.add(new ActionOption());
+                actionOptions.add(new ActionOption(method));
             }
         }
     }

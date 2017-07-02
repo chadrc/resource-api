@@ -53,7 +53,7 @@ public class ResourceControllerOptionsTests {
         List<CreateOption> createOptions = userOptions.getCreateOptions();
         boolean success = false;
         for (CreateOption createOption : createOptions) {
-            success = createOption.getSchemaTypes().size() == 0;
+            success = createOption.getParameters().size() == 0;
             if (success) {
                 break;
             }
@@ -68,15 +68,14 @@ public class ResourceControllerOptionsTests {
         List<CreateOption> createOptions = userOptions.getCreateOptions();
         boolean success = false;
         for (CreateOption createOption : createOptions) {
-            List<SchemaType> schemaTypes = createOption.getSchemaTypes();
-            success = createOption.getSchemaTypes().size() == 2
-                    && schemaTypes.get(0).getType() == String.class
-                    && schemaTypes.get(1).getType() == String.class;
+            List<SchemaType> parameters = createOption.getParameters();
+            success = createOption.getParameters().size() == 2
+                    && parameters.get(0).getType() == String.class
+                    && parameters.get(1).getType() == String.class;
             if (success) {
                 break;
             }
         }
-
         assertTrue(success);
     }
 
@@ -85,6 +84,34 @@ public class ResourceControllerOptionsTests {
         ResourceOptions userOptions = getUserResourceOptions();
         List<ActionOption> actionOptions = userOptions.getActionOptions();
         assertEquals(2, actionOptions.size());
+    }
+
+    @Test
+    public void userEntryHasSignUpForNewsletterAction() {
+        ResourceOptions userOptions = getUserResourceOptions();
+        List<ActionOption> actionOptions = userOptions.getActionOptions();
+        boolean success = false;
+        for (ActionOption actionOption : actionOptions) {
+            if ("signUpForNewsletter".equals(actionOption.getName())) {
+                success = true;
+                break;
+            }
+        }
+        assertTrue(success);
+    }
+
+    @Test
+    public void userEntryHasChangePasswordAction() {
+        ResourceOptions userOptions = getUserResourceOptions();
+        List<ActionOption> actionOptions = userOptions.getActionOptions();
+        boolean success = false;
+        for (ActionOption actionOption : actionOptions) {
+            if ("changePassword".equals(actionOption.getName())) {
+                success = true;
+                break;
+            }
+        }
+        assertTrue(success);
     }
 
     private OptionsResult getOptions() {
