@@ -10,10 +10,15 @@ public class ActionOption {
     private List<SchemaType> parameters = new ArrayList<>();
     private String name;
     private boolean targetRequired;
+    private SchemaType returnType;
 
     public ActionOption(Method method) {
         name = method.getName();
         targetRequired = !Modifier.isStatic(method.getModifiers());
+        returnType = new SchemaType(method.getReturnType());
+        if (returnType.getType() == void.class) {
+            returnType = new SchemaType(null);
+        }
         for (Parameter parameter : method.getParameters()) {
             parameters.add(new SchemaType(parameter.getType()));
         }
@@ -29,5 +34,9 @@ public class ActionOption {
 
     public boolean getTargetRequired() {
         return targetRequired;
+    }
+
+    public SchemaType getReturnType() {
+        return returnType;
     }
 }
