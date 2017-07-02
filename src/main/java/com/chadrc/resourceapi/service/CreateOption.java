@@ -7,16 +7,16 @@ import java.util.List;
 
 public class CreateOption {
 
-    private List<Parameter> parameters = new ArrayList<>();
+    private List<SchemaType> schemaTypes = new ArrayList<>();
 
     CreateOption(Constructor constructor) {
         Type[] params = constructor.getParameterTypes();
         for (Type type : params) {
-            parameters.add(new Parameter((Class) type));
+            schemaTypes.add(new SchemaType((Class) type));
         }
     }
 
-    public List<Parameter> getParameters() {
-        return parameters;
+    public List<SchemaType> getSchemaTypes() {
+        return schemaTypes;
     }
 }
