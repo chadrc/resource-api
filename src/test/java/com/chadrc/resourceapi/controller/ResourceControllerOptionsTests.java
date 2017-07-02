@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
+import com.chadrc.resourceapi.service.CreateOption;
 import com.chadrc.resourceapi.service.OptionsResult;
 import com.chadrc.resourceapi.service.ResourceOptions;
 import org.junit.Test;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,6 +44,8 @@ public class ResourceControllerOptionsTests {
     @Test
     public void userEntryHas2CreateOptions() {
         ResourceOptions userOptions = getUserResourceOptions();
+        List<CreateOption> createOptions = userOptions.getCreateOptions();
+        assertEquals(2, createOptions.size());
     }
 
     private OptionsResult getOptions() {

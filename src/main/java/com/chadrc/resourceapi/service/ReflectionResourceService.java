@@ -37,7 +37,7 @@ public class ReflectionResourceService implements ResourceService {
     public OptionsResult options() {
         Map<String, ResourceOptions> map = new HashMap<>();
         for (Class model : resourcesByName.values()) {
-            map.put(model.getSimpleName(), new ResourceOptions());
+            map.put(model.getSimpleName(), new ResourceOptions(model));
         }
 
         return new OptionsResult(map);
