@@ -4,13 +4,13 @@ import java.util.Map;
 
 public class OptionsResult {
 
-    private Map<String, Object> options;
+    private Map<String, ResourceOptions> options;
 
-    OptionsResult(Map<String, Object> options) {
+    OptionsResult(Map<String, ResourceOptions> options) {
         this.options = options;
     }
 
-    public Map<String, Object> getOptions() {
+    public Map<String, ResourceOptions> getOptions() {
         return options;
     }
 }

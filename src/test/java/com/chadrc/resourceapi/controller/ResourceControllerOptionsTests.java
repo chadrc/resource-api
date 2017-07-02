@@ -2,6 +2,7 @@ package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
 import com.chadrc.resourceapi.service.OptionsResult;
+import com.chadrc.resourceapi.service.ResourceOptions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,16 @@ public class ResourceControllerOptionsTests {
         assert optionsResult.getOptions().containsKey("User");
     }
 
+    @Test
+    public void userEntryHas2CreateOptions() {
+        ResourceOptions userOptions = getUserResourceOptions();
+    }
+
     private OptionsResult getOptions() {
         return (OptionsResult) resourceControllerProxy.getResourceController().options().getBody();
+    }
+
+    private ResourceOptions getUserResourceOptions() {
+        return getOptions().getOptions().get("User");
     }
 }
