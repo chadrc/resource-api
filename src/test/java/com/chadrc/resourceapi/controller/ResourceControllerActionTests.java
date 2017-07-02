@@ -23,6 +23,32 @@ public class ResourceControllerActionTests {
     private ResourceControllerProxy resourceControllerProxy;
 
     @Test
+    public void actionWithNullResourceNameYields400() {
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        "fakeAction",
+                        null,
+                        "594dc2f7a249e661727c6b50",
+                        new ArrayList<>()
+                ));
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void actionWithNullActionNameYields400() {
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
+                .action(new ActionOptions(
+                        null,
+                        "Animal",
+                        "594dc2f7a249e661727c6b50",
+                        new ArrayList<>()
+                ));
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
     public void actionWithUnknownResourceYields400() {
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
                 .action(new ActionOptions(

@@ -75,6 +75,13 @@ public class ResourceControllerListTests {
     }
 
     @Test
+    public void listWithNullResourceNameYields400() {
+        ListOptions options = new ListOptions(null, null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     public void listWithUnknownResourceFails() {
         ListOptions options = new ListOptions("Animal", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
