@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
@@ -88,30 +89,12 @@ public class ResourceControllerOptionsTests {
 
     @Test
     public void userEntryHasSignUpForNewsletterAction() {
-        ResourceOptions userOptions = getUserResourceOptions();
-        List<ActionOption> actionOptions = userOptions.getActionOptions();
-        boolean success = false;
-        for (ActionOption actionOption : actionOptions) {
-            if ("signUpForNewsletter".equals(actionOption.getName())) {
-                success = true;
-                break;
-            }
-        }
-        assertTrue(success);
+        assertNotNull(getUserAction("signUpForNewsletter"));
     }
 
     @Test
     public void userEntryHasChangePasswordAction() {
-        ResourceOptions userOptions = getUserResourceOptions();
-        List<ActionOption> actionOptions = userOptions.getActionOptions();
-        boolean success = false;
-        for (ActionOption actionOption : actionOptions) {
-            if ("changePassword".equals(actionOption.getName())) {
-                success = true;
-                break;
-            }
-        }
-        assertTrue(success);
+        assertNotNull(getUserAction("changePassword"));
     }
 
     @Test
