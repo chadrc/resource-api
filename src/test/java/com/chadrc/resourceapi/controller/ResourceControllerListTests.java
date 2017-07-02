@@ -6,7 +6,6 @@ import com.chadrc.resourceapi.domain.UserRepository;
 import com.chadrc.resourceapi.service.ResourcePage;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,28 +75,28 @@ public class ResourceControllerListTests {
 
     @Test
     public void listWithNullResourceNameYields400() {
-        ListOptions options = new ListOptions(null, null);
+        ListRequest options = new ListRequest(null, null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void listWithUnknownResourceFails() {
-        ListOptions options = new ListOptions("Animal", null);
+        ListRequest options = new ListRequest("Animal", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void listUsersWithNullPagingInfoSucceeds() {
-        ListOptions options = new ListOptions("User", null);
+        ListRequest options = new ListRequest("User", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         assert responseEntity.getBody() instanceof ResourcePage;
     }
 
     @Test
     public void listUsersWithNullPagingInfoHas10Resources() {
-        ListOptions options = new ListOptions("User", null);
+        ListRequest options = new ListRequest("User", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 
@@ -108,7 +107,7 @@ public class ResourceControllerListTests {
     public void listUsersWith5CountHas5Resources() {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setCount(5);
-        ListOptions options = new ListOptions("User", pagingInfo);
+        ListRequest options = new ListRequest("User", pagingInfo);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 
@@ -119,7 +118,7 @@ public class ResourceControllerListTests {
     public void listUsersWithPage1HasSecondSetOfResources() {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setPage(1);
-        ListOptions options = new ListOptions("User", pagingInfo);
+        ListRequest options = new ListRequest("User", pagingInfo);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 
@@ -133,7 +132,7 @@ public class ResourceControllerListTests {
         PagingInfo pagingInfo = new PagingInfo();
         pagingInfo.setPage(4);
         pagingInfo.setCount(3);
-        ListOptions options = new ListOptions("User", pagingInfo);
+        ListRequest options = new ListRequest("User", pagingInfo);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 
@@ -149,7 +148,7 @@ public class ResourceControllerListTests {
         pagingInfo.setSort(new ArrayList<PagingSort>(){{
             add(new PagingSort("lastName", SortDirection.Acending));
         }});
-        ListOptions options = new ListOptions("User", pagingInfo);
+        ListRequest options = new ListRequest("User", pagingInfo);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
 

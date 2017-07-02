@@ -27,7 +27,7 @@ public class ResourceController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> action(@RequestBody ActionOptions options) {
+    public ResponseEntity<Object> action(@RequestBody ActionRequest options) {
         log.info("Attempting to perform action '" + options.getActionName() + "' on resource '" + options.getResourceName() + "'");
 
         if (StringUtils.isEmpty(options.getResourceName())) {
@@ -52,7 +52,7 @@ public class ResourceController {
     }
 
     @PostMapping(path = "/create")
-    public ResponseEntity<Object> create(@RequestBody CreateOptions options) {
+    public ResponseEntity<Object> create(@RequestBody CreateRequest options) {
         log.info("Attempting to create '" + options.getResourceName() + "'");
         log.debug("\tWith arguments: " + options.getArguments());
 
@@ -73,7 +73,7 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(GetOptions options) {
+    public ResponseEntity<Object> get(GetRequest options) {
         log.info("Attempting to retrieve resource " + options.getResourceName() + " with id " + options.getId());
 
         if (StringUtils.isEmpty(options.getResourceName())) {
@@ -99,7 +99,7 @@ public class ResourceController {
     }
 
     @GetMapping(path = "/list")
-    public ResponseEntity<Object> list(ListOptions options) {
+    public ResponseEntity<Object> list(ListRequest options) {
         log.info("Attempting to retrieve list of resource " + options.getResourceName());
 
         if (StringUtils.isEmpty(options.getResourceName())) {

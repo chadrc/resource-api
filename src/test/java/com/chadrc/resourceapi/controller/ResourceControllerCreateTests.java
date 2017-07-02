@@ -25,14 +25,14 @@ public class ResourceControllerCreateTests {
 
     @Test
     public void createDefaultSucceeds() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("User", new ArrayList<>()));
         Object obj = responseEntity.getBody();
         assert(obj instanceof User);
     }
 
     @Test
     public void createDefaultWithNullArgumentsSucceeds() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", null));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("User", null));
         Object obj = responseEntity.getBody();
         assert(obj instanceof User);
     }
@@ -44,7 +44,7 @@ public class ResourceControllerCreateTests {
                 add(new FieldValue("lastName", "Doe"));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("User", fieldValues));
         User user = (User) responseEntity.getBody();
         assertEquals(user.getFirstName(), "John");
         assertEquals(user.getLastName(), "Doe");
@@ -57,7 +57,7 @@ public class ResourceControllerCreateTests {
             add(new FieldValue("lastName", "Name"));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("User", fieldValues));
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
@@ -68,19 +68,19 @@ public class ResourceControllerCreateTests {
             add(new FieldValue("lastName", 1000));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("User", fieldValues));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void createWithUnknownResourceYields400() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("Animal", new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest("Animal", new ArrayList<>()));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void createWithNullResourceNameYields400() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions(null, new ArrayList<>()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateRequest(null, new ArrayList<>()));
         assertEquals(responseEntity.getStatusCode(), HttpStatus.BAD_REQUEST);
     }
 }

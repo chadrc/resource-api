@@ -25,7 +25,7 @@ public class ResourceControllerActionTests {
     @Test
     public void actionWithNullResourceNameYields400() {
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "fakeAction",
                         null,
                         "594dc2f7a249e661727c6b50",
@@ -38,7 +38,7 @@ public class ResourceControllerActionTests {
     @Test
     public void actionWithNullActionNameYields400() {
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         null,
                         "Animal",
                         "594dc2f7a249e661727c6b50",
@@ -51,7 +51,7 @@ public class ResourceControllerActionTests {
     @Test
     public void actionWithUnknownResourceYields400() {
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "fakeAction",
                         "Animal",
                         "594dc2f7a249e661727c6b50",
@@ -64,7 +64,7 @@ public class ResourceControllerActionTests {
     @Test
     public void actionWithUnknownActionYields400() {
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "fakeAction",
                         "User",
                         "594dc2f7a249e661727c6b50",
@@ -78,7 +78,7 @@ public class ResourceControllerActionTests {
     public void actionWithTargetNoArgsSucceeds() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "signUpForNewsletter",
                         "User",
                         user.getId(),
@@ -92,7 +92,7 @@ public class ResourceControllerActionTests {
     public void actionWithTargetAndArgsSucceeds() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         user.getId(),
@@ -109,7 +109,7 @@ public class ResourceControllerActionTests {
     public void invokeActionWithoutAnnotationYields400() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "setFirstName",
                         "User",
                         user.getId(),
@@ -125,7 +125,7 @@ public class ResourceControllerActionTests {
     public void actionWithIncorrectArgCountYields400() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         user.getId(),
@@ -141,7 +141,7 @@ public class ResourceControllerActionTests {
     public void actionWithIncorrectArgValuesYields400() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         user.getId(),
@@ -158,7 +158,7 @@ public class ResourceControllerActionTests {
     public void errorDuringActionYields400() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         user.getId(),
@@ -175,7 +175,7 @@ public class ResourceControllerActionTests {
     public void actionWithIncorrectResourceId() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         "594dc2f7a249e661727c6b50",
@@ -192,7 +192,7 @@ public class ResourceControllerActionTests {
     public void actionWithNullResourceId() {
         User user = resourceControllerProxy.addUser("Charles", "Xavier");
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController()
-                .action(new ActionOptions(
+                .action(new ActionRequest(
                         "changePassword",
                         "User",
                         null,

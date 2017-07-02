@@ -22,7 +22,7 @@ public class ResourceControllerGetTests {
     @Test
     public void getUserSucceeds() {
         User john = resourceControllerProxy.addUser("John", "Doe");
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetOptions("User", john.getId()));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetRequest("User", john.getId()));
         Object obj = responseEntity.getBody();
         assert obj instanceof User;
         User user = (User) obj;
@@ -31,25 +31,25 @@ public class ResourceControllerGetTests {
 
     @Test
     public void getUnknownResourceYields400() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetOptions("Animal", "594dc2f7a249e661727c6b50"));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetRequest("Animal", "594dc2f7a249e661727c6b50"));
         assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
     }
 
     @Test
     public void getNonExistentUserYields404() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetOptions("User", "594dc2f7a249e661727c6b50"));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetRequest("User", "594dc2f7a249e661727c6b50"));
         assert responseEntity.getStatusCode() == HttpStatus.NOT_FOUND;
     }
 
     @Test
     public void getWithNullResourceNameYields400() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetOptions(null, "594dc2f7a249e661727c6b50"));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetRequest(null, "594dc2f7a249e661727c6b50"));
         assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
     }
 
     @Test
     public void getWithNullIdYields400() {
-        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetOptions("User", null));
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().get(new GetRequest("User", null));
         assert responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST;
     }
 }

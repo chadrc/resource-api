@@ -1,14 +1,14 @@
 package com.chadrc.resourceapi.controller;
 
-class GetOptions {
+class GetRequest {
     private String resourceName = null;
     private String id = null;
 
-    public GetOptions() {
+    public GetRequest() {
 
     }
 
-    GetOptions(String resourceName, String id) {
+    GetRequest(String resourceName, String id) {
         this.resourceName = resourceName;
         this.id = id;
     }

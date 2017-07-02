@@ -3,15 +3,15 @@ package com.chadrc.resourceapi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-class CreateOptions {
+class CreateRequest {
     private String resourceName = null;
     private List<FieldValue> arguments = new ArrayList<>();
 
-    public CreateOptions() {
+    public CreateRequest() {
 
     }
 
-    CreateOptions(String resourceName, List<FieldValue> arguments) {
+    CreateRequest(String resourceName, List<FieldValue> arguments) {
         this.resourceName = resourceName;
         this.arguments = arguments;
     }

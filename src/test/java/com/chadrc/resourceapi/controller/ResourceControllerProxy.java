@@ -29,7 +29,7 @@ public class ResourceControllerProxy {
             add(new FieldValue("lastName", lastName));
         }};
 
-        ResponseEntity<Object> responseEntity = resourceController.create(new CreateOptions("User", fieldValues));
+        ResponseEntity<Object> responseEntity = resourceController.create(new CreateRequest("User", fieldValues));
         return (User) responseEntity.getBody();
     }
 }

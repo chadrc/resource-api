@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-class ActionOptions {
+class ActionRequest {
     private String actionName = null;
     private String resourceName = null;
     private String resourceId = null;
     private List<FieldValue> arguments = new ArrayList<>();
 
-    ActionOptions(String actionName, String resourceName, String resourceId, List<FieldValue> arguments) {
+    ActionRequest(String actionName, String resourceName, String resourceId, List<FieldValue> arguments) {
         this.actionName = actionName;
         this.resourceName = resourceName;
         this.resourceId = resourceId;

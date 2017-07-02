@@ -7,15 +7,15 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.util.List;
 
-class ListOptions {
+class ListRequest {
     private String resourceName = null;
     private PagingInfo pagingInfo = new PagingInfo();
 
-    public ListOptions() {
+    public ListRequest() {
 
     }
 
-    ListOptions(String resourceName, PagingInfo pagingInfo) {
+    ListRequest(String resourceName, PagingInfo pagingInfo) {
         this.resourceName = resourceName;
         this.pagingInfo = pagingInfo == null ? new PagingInfo() : pagingInfo;
     }
