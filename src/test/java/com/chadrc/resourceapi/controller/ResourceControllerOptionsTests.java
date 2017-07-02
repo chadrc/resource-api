@@ -1,10 +1,7 @@
 package com.chadrc.resourceapi.controller;
 
 import com.chadrc.resourceapi.ResourceApiApplicationTests;
-import com.chadrc.resourceapi.service.CreateOption;
-import com.chadrc.resourceapi.service.OptionsResult;
-import com.chadrc.resourceapi.service.SchemaType;
-import com.chadrc.resourceapi.service.ResourceOptions;
+import com.chadrc.resourceapi.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +78,13 @@ public class ResourceControllerOptionsTests {
         }
 
         assertTrue(success);
+    }
+
+    @Test
+    public void userEntryHas2ActionOptions() {
+        ResourceOptions userOptions = getUserResourceOptions();
+        List<ActionOption> actionOptions = userOptions.getActionOptions();
+        assertEquals(2, actionOptions.size());
     }
 
     private OptionsResult getOptions() {
