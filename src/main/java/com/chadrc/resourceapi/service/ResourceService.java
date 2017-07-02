@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface ResourceService {
 
-    OptionsResult options(String resourceName);
+    OptionsResult options();
 
     ActionResult action(ActionClause clause) throws ResourceServiceException;
 

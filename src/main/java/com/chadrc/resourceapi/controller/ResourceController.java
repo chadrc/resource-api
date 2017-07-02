@@ -22,8 +22,8 @@ public class ResourceController {
     }
 
     @RequestMapping(method = RequestMethod.OPTIONS)
-    public ResponseEntity<Object> options(@RequestParam(required = false) String resourceName) {
-        return ResponseEntity.ok(resourceService.options(resourceName).getOptions());
+    public ResponseEntity<Object> options() {
+        return ResponseEntity.ok(resourceService.options());
     }
 
     @PostMapping

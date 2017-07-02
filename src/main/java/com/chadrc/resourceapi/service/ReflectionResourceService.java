@@ -34,15 +34,12 @@ public class ReflectionResourceService implements ResourceService {
     }
 
     @Override
-    public OptionsResult options(String resourceName) {
-        List<String> models = new ArrayList<>();
-
+    public OptionsResult options() {
+        Map<String, Object> map = new HashMap<>();
         for (Class model : resourcesByName.values()) {
-            models.add(model.getCanonicalName());
+            map.put(model.getSimpleName(), "");
         }
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("models", StringUtils.arrayToDelimitedString(models.toArray(), ","));
         return new OptionsResult(map);
     }
 
