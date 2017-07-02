@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
@@ -92,6 +94,38 @@ public class ResourceControllerListTests {
         ListRequest options = new ListRequest("User", null);
         ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
         assert responseEntity.getBody() instanceof ResourcePage;
+    }
+
+    @Test
+    public void defaultListHas26AsTotal() {
+        ListRequest options = new ListRequest("User", null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+        assertEquals(26, resourcePage.getTotal());
+    }
+
+    @Test
+    public void defaultListIsFirst() {
+        ListRequest options = new ListRequest("User", null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+        assertTrue(resourcePage.isFirst());
+    }
+
+    @Test
+    public void defaultListIsNotLast() {
+        ListRequest options = new ListRequest("User", null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+        assertFalse(resourcePage.isLast());
+    }
+
+    @Test
+    public void defaultListHas10PageSize() {
+        ListRequest options = new ListRequest("User", null);
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().list(options);
+        ResourcePage resourcePage = (ResourcePage) responseEntity.getBody();
+        assertEquals(10, resourcePage.getPageSize());
     }
 
     @Test
