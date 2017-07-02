@@ -108,9 +108,6 @@ public class ResourceController {
 
         try {
             ListResult obj = resourceService.getList(options.getResourceName(), options.getPagingInfo());
-            if (obj == null) {
-                return ResponseEntity.notFound().build();
-            }
             return ResponseEntity.ok(obj.getResourcePage());
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());

@@ -23,7 +23,10 @@ public class User implements ResourceModel {
 
     }
 
-    public User(String firstName, String lastName) {
+    public User(String firstName, String lastName) throws Exception {
+        if ("Invalid".equals(firstName) && "Name".equals(lastName)) {
+            throw new InvalidName();
+        }
         this.firstName = firstName;
         this.lastName = lastName;
     }

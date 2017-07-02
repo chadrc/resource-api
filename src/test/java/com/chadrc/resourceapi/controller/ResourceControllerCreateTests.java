@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ResourceApiApplicationTests.class)
@@ -47,6 +48,17 @@ public class ResourceControllerCreateTests {
         User user = (User) responseEntity.getBody();
         assertEquals(user.getFirstName(), "John");
         assertEquals(user.getLastName(), "Doe");
+    }
+
+    @Test
+    public void errorDuringConstructorCallYields400() {
+        List<FieldValue> fieldValues = new ArrayList<FieldValue>(){{
+            add(new FieldValue("firstName", "Invalid"));
+            add(new FieldValue("lastName", "Name"));
+        }};
+
+        ResponseEntity<Object> responseEntity = resourceControllerProxy.getResourceController().create(new CreateOptions("User", fieldValues));
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
