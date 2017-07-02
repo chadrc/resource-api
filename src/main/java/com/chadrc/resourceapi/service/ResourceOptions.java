@@ -7,10 +7,10 @@ import java.util.List;
 public class ResourceOptions {
     private List<CreateOption> createOptions = new ArrayList<>();
 
-    public ResourceOptions(Class c) {
+    ResourceOptions(Class c) {
         Constructor[] constructors = c.getConstructors();
         for (Constructor constructor : constructors) {
-            createOptions.add(new CreateOption());
+            createOptions.add(new CreateOption(constructor));
         }
     }
 
