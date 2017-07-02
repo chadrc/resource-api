@@ -116,6 +116,16 @@ public class ResourceControllerOptionsTests {
         assertEquals(String.class, actionOption.getParameters().get(1).getType());
     }
 
+    @Test
+    public void signUpForNewsletterActionRequiresTarget() {
+        assertTrue(getUserAction("signUpForNewsletter").getTargetRequired());
+    }
+
+    @Test
+    public void changePasswordActionRequiresTarget() {
+        assertTrue(getUserAction("changePassword").getTargetRequired());
+    }
+
     private ActionOption getUserAction(String actionName) {
         ResourceOptions userOptions = getUserResourceOptions();
         List<ActionOption> actionOptions = userOptions.getActionOptions();
