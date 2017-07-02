@@ -114,6 +114,30 @@ public class ResourceControllerOptionsTests {
         assertTrue(success);
     }
 
+    @Test
+    public void signUpForNewsletterActionHasZeroParameters() {
+        ActionOption actionOption = getUserAction("signUpForNewsletter");
+        assertEquals(0, actionOption.getParameters().size());
+    }
+
+    @Test
+    public void changePasswordActionHasTwoParameters() {
+        ActionOption actionOption = getUserAction("changePassword");
+        assertEquals(2, actionOption.getParameters().size());
+    }
+
+    private ActionOption getUserAction(String actionName) {
+        ResourceOptions userOptions = getUserResourceOptions();
+        List<ActionOption> actionOptions = userOptions.getActionOptions();
+        ActionOption selected = null;
+        for (ActionOption actionOption : actionOptions) {
+            if (actionName.equals(actionOption.getName())) {
+                selected = actionOption;
+            }
+        }
+        return selected;
+    }
+
     private OptionsResult getOptions() {
         return (OptionsResult) resourceControllerProxy.getResourceController().options().getBody();
     }
