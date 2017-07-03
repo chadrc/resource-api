@@ -23,7 +23,7 @@ public class ResourceController {
 
     @RequestMapping(method = RequestMethod.OPTIONS)
     public ResponseEntity<Object> options() {
-        return ResponseEntity.ok(resourceService.options());
+        return wrap(() -> ResponseEntity.ok(resourceService.options()));
     }
 
     @PostMapping
