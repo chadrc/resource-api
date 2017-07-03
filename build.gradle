@@ -25,6 +25,12 @@ sourceSets {
     example {
 
     }
+	core {
+
+	}
+	coreTest {
+
+	}
 }
 
 dependencies {
@@ -38,4 +44,10 @@ dependencies {
     exampleCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
     exampleCompile('org.springframework.boot:spring-boot-starter-web')
     exampleCompile(sourceSets.main.output)
+
+	coreCompile('org.springframework.boot:spring-boot-starter-web')
+
+	coreTestCompile('org.springframework.boot:spring-boot-starter-test')
+	coreTestCompile(sourceSets.core.output)
+	coreTestCompile('commons-logging:commons-logging')
 }
