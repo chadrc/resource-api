@@ -38,17 +38,12 @@ public class ResourceController {
             return ResponseEntity.badRequest().body("Action Name Required.");
         }
 
-        try {
+        return wrap(() -> {
             ActionResult obj = resourceService.action(new ActionClause(
                     options.getActionName(), options.getResourceName(), options.getResourceId(), options.getArguments()
             ));
             return ResponseEntity.ok(obj.getResult());
-        } catch (ResourceServiceException resourceException) {
-            return ResponseEntity.badRequest().body(resourceException.getMessage());
-        } catch (Exception exception) {
-            log.info("Error", exception);
-            return ResponseEntity.status(500).body(null);
-        }
+        });
     }
 
     @PostMapping(path = "/create")
@@ -61,15 +56,10 @@ public class ResourceController {
             return ResponseEntity.badRequest().body("Resource Name Required.");
         }
 
-        try {
+        return wrap(() -> {
             CreateResult obj = resourceService.create(options.getResourceName(), options.getArguments());
             return ResponseEntity.ok(obj.getCreatedResource());
-        } catch (ResourceServiceException resourceException) {
-            return ResponseEntity.badRequest().body(resourceException.getMessage());
-        } catch (Exception exception) {
-            log.info("Error", exception);
-            return ResponseEntity.status(500).body(null);
-        }
+        });
     }
 
     @GetMapping
@@ -84,18 +74,13 @@ public class ResourceController {
             return ResponseEntity.badRequest().body("Param 'id' required.");
         }
 
-        try {
+        return wrap(() -> {
             GetResult obj = resourceService.get(options.getResourceName(), options.getId());
             if (obj.getResource() == null) {
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(obj.getResource());
-        } catch (ResourceServiceException resourceException) {
-            return ResponseEntity.badRequest().body(resourceException.getMessage());
-        } catch (Exception exception) {
-            log.info("Error", exception);
-            return ResponseEntity.status(500).body(null);
-        }
+        });
     }
 
     @GetMapping(path = "/list")
@@ -106,14 +91,24 @@ public class ResourceController {
             return ResponseEntity.badRequest().body("Param 'resourceName' required.");
         }
 
-        try {
+        return wrap(() -> {
             ListResult obj = resourceService.getList(options.getResourceName(), options.getPagingInfo());
             return ResponseEntity.ok(obj.getResourcePage());
+        });
+    }
+
+    private ResponseEntity<Object> wrap(ResourceResultSupplier method) {
+        try {
+            return method.get();
         } catch (ResourceServiceException resourceException) {
             return ResponseEntity.badRequest().body(resourceException.getMessage());
         } catch (Exception exception) {
             log.error("Error", exception);
             return ResponseEntity.status(500).body(null);
         }
+    }
+
+    private interface ResourceResultSupplier {
+        ResponseEntity<Object> get() throws Exception;
     }
 }
