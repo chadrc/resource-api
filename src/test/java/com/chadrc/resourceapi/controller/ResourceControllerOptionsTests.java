@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -132,6 +133,13 @@ public class ResourceControllerOptionsTests {
     @Test
     public void changePasswordActionHasNullReturnType() {
         assertNull(getUserAction("changePassword").getReturnType().getType());
+    }
+
+    @Test
+    public void userEntryHas4Fields() {
+        ResourceOptions userOptions = getUserResourceOptions();
+        Map<String, SchemaType> fields = userOptions.getFields();
+        assertEquals(4, fields.size());
     }
 
     private ActionOption getUserAction(String actionName) {
