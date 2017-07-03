@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.models;
 
+import com.chadrc.resourceapi.service.Action;
 import com.chadrc.resourceapi.service.ResourceModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class User implements ResourceModel {
         return lastName;
     }
 
+    @Action
     public static User register(String firstName, String lastName) {
         User user = new User(firstName);
         user.lastName = lastName;

@@ -16,11 +16,19 @@ class CreateRequest {
         this.arguments = arguments;
     }
 
-    public String getResourceName() {
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public void setArguments(List<FieldValue> arguments) {
+        this.arguments = arguments;
+    }
+
+    String getResourceName() {
         return resourceName;
     }
 
-    public List<FieldValue> getArguments() {
+    List<FieldValue> getArguments() {
         return arguments;
     }
 
