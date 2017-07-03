@@ -47,7 +47,8 @@ dependencies {
 
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
-	coreTestCompile('org.springframework.boot:spring-boot-starter-web');
+	coreTestCompile('org.springframework.boot:spring-boot-starter-web')
+	coreTestCompile('com.jayway.jsonpath:json-path')
 	coreTestCompile('org.springframework.boot:spring-boot-starter-test')
 	coreTestCompile(sourceSets.core.output)
 	coreTestCompile('commons-logging:commons-logging')
