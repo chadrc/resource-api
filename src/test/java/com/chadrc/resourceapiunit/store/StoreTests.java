@@ -1,5 +1,7 @@
-package com.chadrc.resourceapi.store;
+package com.chadrc.resourceapiunit.store;
 
+import com.chadrc.resourceapi.store.RepositoryResourceStore;
+import com.chadrc.resourceapi.store.ResourceRepository;
 import org.junit.Test;
 
 import java.util.ArrayList;

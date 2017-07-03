@@ -1,6 +1,7 @@
-package com.chadrc.resourceapi.store;
+package com.chadrc.resourceapiunit.store;
 
 import com.chadrc.resourceapi.domain.User;
+import com.chadrc.resourceapi.store.ResourceRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

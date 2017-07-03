@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.store;
+package com.chadrc.resourceapiunit.store;
 
 import com.chadrc.resourceapi.service.ResourceModel;
 

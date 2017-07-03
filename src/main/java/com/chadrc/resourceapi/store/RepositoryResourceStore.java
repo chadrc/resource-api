@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +32,13 @@ public class RepositoryResourceStore implements ResourceStore {
         for (ResourceRepository resourceRepository : resourceRepositories) {
             Class repositoryClass = resourceRepository.getClass();
             Type[] supers = repositoryClass.getGenericInterfaces();
-            Class firstSuper = ((Class) supers[0]);
+            Type firstType = supers[0];
+            Class firstSuper;
+            if (firstType instanceof ParameterizedType) {
+                firstSuper = (Class) ((ParameterizedType) firstType).getRawType();
+            } else {
+                firstSuper = ((Class) supers[0]);
+            }
             ResourceClass resourceClass = (ResourceClass) firstSuper.getAnnotation(ResourceClass.class);
 
             if (resourceClass == null) {
