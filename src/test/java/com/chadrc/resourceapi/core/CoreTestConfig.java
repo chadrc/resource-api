@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.core;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

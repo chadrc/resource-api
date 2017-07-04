@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.core;
 
 public class GetRequest {
     private String value;

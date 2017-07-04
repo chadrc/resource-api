@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.core;
 
 import org.junit.Before;
 import org.junit.Test;

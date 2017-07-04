@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi;
+package com.chadrc.resourceapi.core;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

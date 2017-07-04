@@ -11,6 +11,7 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
@@ -28,18 +29,15 @@ sourceSets {
 	core {
 
 	}
-	coreTest {
-
-	}
 }
 
 dependencies {
-	compile('org.springframework.data:spring-data-commons')
-	compile('org.springframework.boot:spring-boot-starter-web')
+//	compile('org.springframework.data:spring-data-commons')
+//	compile('org.springframework.boot:spring-boot-starter-web')
 
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
-    testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+//	testCompile('org.springframework.boot:spring-boot-starter-test')
+//    testCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
+//    testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
 
     exampleCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
     exampleCompile('org.springframework.boot:spring-boot-starter-web')
@@ -47,9 +45,9 @@ dependencies {
 
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
-	coreTestCompile('org.springframework.boot:spring-boot-starter-web')
-	coreTestCompile('com.jayway.jsonpath:json-path')
-	coreTestCompile('org.springframework.boot:spring-boot-starter-test')
-	coreTestCompile(sourceSets.core.output)
-	coreTestCompile('commons-logging:commons-logging')
+	testCompile('org.springframework.boot:spring-boot-starter-web')
+	testCompile('com.jayway.jsonpath:json-path')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile(sourceSets.core.output)
+	testCompile('commons-logging:commons-logging')
 }
