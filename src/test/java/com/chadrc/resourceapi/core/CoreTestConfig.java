@@ -15,9 +15,4 @@ public class CoreTestConfig {
     public HttpMessageConverter getHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
     }
-
-    @Bean
-    public ResourceService getResourceService() {
-        return new MockGetResourceService();
-    }
 }

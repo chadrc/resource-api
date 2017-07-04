@@ -4,14 +4,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MockGetResourceService implements ResourceService {
+public class MockPostResourceService implements ResourceService {
     @Override
     public Result fulfill() {
-        return new Result("Get Result");
+        return new Result("Post Result");
     }
 
     @Override
     public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
+        return HttpMethod.POST;
     }
 }

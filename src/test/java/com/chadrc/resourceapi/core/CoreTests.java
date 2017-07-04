@@ -83,6 +83,13 @@ public class CoreTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void callToPostMockServiceReturnsValue() throws Exception {
+        mockMvc.perform(post("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Post Result")));
+    }
+
     @SuppressWarnings("unchecked")
     private String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
