@@ -162,6 +162,27 @@ public class CoreTests {
                 .andExpect(jsonPath("$.data", is("Post Result")));
     }
 
+    @Test
+    public void callToPutMockServiceReturnsValue() throws Exception {
+        mockMvc.perform(put("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Put Result")));
+    }
+
+    @Test
+    public void callToPatchMockServiceReturnsValue() throws Exception {
+        mockMvc.perform(patch("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Patch Result")));
+    }
+
+    @Test
+    public void callToDeleteMockServiceReturnsValue() throws Exception {
+        mockMvc.perform(delete("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Delete Result")));
+    }
+
     @SuppressWarnings("unchecked")
     private String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

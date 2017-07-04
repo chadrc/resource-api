@@ -41,6 +41,9 @@ public class MockGetResourceService implements ResourceService {
 
     @Override
     public Result fulfill(GetRequest request) {
+        if (request == null || request.getResourceName() == null || request.getId() == null) {
+            return null;
+        }
         switch (request.getResourceName()) {
             case "Book":
                 return new Result(books.get(Integer.parseInt(request.getId())));
