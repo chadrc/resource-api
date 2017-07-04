@@ -139,6 +139,23 @@ public class CoreTests {
     }
 
     @Test
+    public void getSagaRecord() throws Exception {
+        mockMvc.perform(get("/")
+                .contentType(contentType)
+                .param("resourceName", "Saga")
+                .param("id", "2"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.name", is("A Song of Ice and Fire")))
+                .andExpect(jsonPath("$.data.books[0]", is(11)))
+                .andExpect(jsonPath("$.data.books[1]", is(12)))
+                .andExpect(jsonPath("$.data.books[2]", is(13)))
+                .andExpect(jsonPath("$.data.books[3]", is(14)))
+                .andExpect(jsonPath("$.data.books[4]", is(15)))
+                .andExpect(jsonPath("$.data.books[5]", is(16)))
+                .andExpect(jsonPath("$.data.books[6]", is(17)));
+    }
+
+    @Test
     public void callToPostMockServiceReturnsValue() throws Exception {
         mockMvc.perform(post("/"))
                 .andExpect(status().isOk())

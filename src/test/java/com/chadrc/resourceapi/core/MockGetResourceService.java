@@ -4,6 +4,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,9 +33,21 @@ public class MockGetResourceService implements ResourceService {
         add(new Book("A Dream of Spring", "George R. Martin"));
     }};
 
+    private List<Saga> sagas = new ArrayList<Saga>() {{
+        add(new Saga("Harry Potter", Arrays.asList(0, 1, 2, 3, 4, 5, 6)));
+        add(new Saga("Lord of the Rings", Arrays.asList(8, 9, 10)));
+        add(new Saga("A Song of Ice and Fire", Arrays.asList(11, 12, 13, 14, 15, 16, 17)));
+    }};
+
     @Override
     public Result fulfill(GetRequest request) {
-        return new Result(books.get(Integer.parseInt(request.getId())));
+        switch (request.getResourceName()) {
+            case "Book":
+                return new Result(books.get(Integer.parseInt(request.getId())));
+            case "Saga":
+                return new Result(sagas.get(Integer.parseInt(request.getId())));
+        }
+        return null;
     }
 
     @Override
