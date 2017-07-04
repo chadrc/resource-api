@@ -1,6 +1,5 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class MockGetResourceService implements ResourceService {
+public class MockGetResourceService implements GetResourceService {
 
     private List<Book> books = new ArrayList<Book>() {{
         add(new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling"));
@@ -51,10 +50,5 @@ public class MockGetResourceService implements ResourceService {
                 return new Result(sagas.get(Integer.parseInt(request.getId())));
         }
         return null;
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.GET;
     }
 }

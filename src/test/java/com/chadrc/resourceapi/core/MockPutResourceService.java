@@ -1,17 +1,11 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MockPutResourceService implements ResourceService {
+public class MockPutResourceService implements PutResourceService {
     @Override
     public Result fulfill(GetRequest request) {
         return new Result("Put Result");
-    }
-
-    @Override
-    public HttpMethod getHttpMethod() {
-        return HttpMethod.PUT;
     }
 }
