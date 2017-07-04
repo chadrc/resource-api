@@ -3,9 +3,9 @@ package com.chadrc.resourceapi.core;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MockDeleteResourceService implements DeleteResourceService<GetRequest> {
+public class MockDeleteResourceService implements DeleteResourceService<DeleteRequest> {
     @Override
-    public Result fulfill(GetRequest request) {
+    public Result fulfill(DeleteRequest request) {
         return new Result("Delete Result");
     }
 }

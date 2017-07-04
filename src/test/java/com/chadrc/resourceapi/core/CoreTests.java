@@ -88,19 +88,24 @@ public class CoreTests {
 
     @Test
     public void callWithPatchMethodSucceeds() throws Exception {
-        mockMvc.perform(patch("/"))
+        mockMvc.perform(patch("/")
+                .contentType(contentType)
+                .content(json(new PatchRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithPutMethodSucceeds() throws Exception {
-        mockMvc.perform(put("/"))
+        mockMvc.perform(put("/")
+                .contentType(contentType)
+                .content(json(new PutRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithDeleteMethodSucceeds() throws Exception {
-        mockMvc.perform(delete("/"))
+        mockMvc.perform(delete("/")
+                .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk());
     }
 
@@ -180,21 +185,27 @@ public class CoreTests {
 
     @Test
     public void callToPutMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(put("/"))
+        mockMvc.perform(put("/")
+                .contentType(contentType)
+                .content(json(new PutRequest())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", is("Put Result")));
     }
 
     @Test
     public void callToPatchMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(patch("/"))
+        mockMvc.perform(patch("/")
+                .contentType(contentType)
+                .content(json(new PatchRequest())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", is("Patch Result")));
     }
 
     @Test
     public void callToDeleteMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(delete("/"))
+        mockMvc.perform(delete("/")
+                .contentType(contentType)
+                .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", is("Delete Result")));
     }
