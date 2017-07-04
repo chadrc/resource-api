@@ -50,24 +50,24 @@ public class ResourceController {
         return getResponseForMethod(HttpMethod.GET, data, servletRequest);
     }
 
-    @PostMapping
+    @PostMapping(path = "/*")
     public ResponseEntity<Result> post(@RequestBody String body, HttpServletRequest servletRequest) {
         return getResponseForMethod(HttpMethod.POST, body, servletRequest);
     }
 
-    @PutMapping
-    public ResponseEntity<Result> put(HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.PUT, null, servletRequest);
+    @PutMapping(path = "/*")
+    public ResponseEntity<Result> put(@RequestBody String body, HttpServletRequest servletRequest) {
+        return getResponseForMethod(HttpMethod.PUT, body, servletRequest);
     }
 
-    @PatchMapping
-    public ResponseEntity<Result> patch(HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.PATCH, null, servletRequest);
+    @PatchMapping(path = "/*")
+    public ResponseEntity<Result> patch(@RequestBody String body, HttpServletRequest servletRequest) {
+        return getResponseForMethod(HttpMethod.PATCH, body, servletRequest);
     }
 
-    @DeleteMapping
-    public ResponseEntity<Result> delete(HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.DELETE, null, servletRequest);
+    @DeleteMapping(path = "/*")
+    public ResponseEntity<Result> delete(@RequestParam String data, HttpServletRequest servletRequest) {
+        return getResponseForMethod(HttpMethod.DELETE, data, servletRequest);
     }
 
     private ResponseEntity<Result> getResponseForMethod(HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
