@@ -74,7 +74,7 @@ public class CoreTests {
     @Test
     public void callWithGetMethodSucceeds() throws Exception {
         mockMvc.perform(get("/")
-                .param("request", json(new GetRequest())))
+                .param("data", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
@@ -113,7 +113,7 @@ public class CoreTests {
     @Test
     public void callWithHeadMethodSucceeds() throws Exception {
         mockMvc.perform(head("/")
-                .param("request", json(new GetRequest())))
+                .param("data", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
@@ -129,6 +129,13 @@ public class CoreTests {
                 .andExpect(status().isMethodNotAllowed());
     }
 
+    @Test
+    public void callWithGetAndCustomEndpointSucceeds() throws Exception {
+        mockMvc.perform(get("/multi")
+                .param("data", json(new GetMultiRequest())))
+                .andExpect(status().isOk());
+    }
+
     /*
      * Data Tests
      */
@@ -137,7 +144,7 @@ public class CoreTests {
     public void getBookRecord() throws Exception {
         mockMvc.perform(get("/")
                 .contentType(contentType)
-                .param("request", json(new GetRequest("Book", "0"))))
+                .param("data", json(new GetRequest("Book", "0"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", is("Harry Potter and the Philosopher's Stone")))
                 .andExpect(jsonPath("$.data.author", is("J.K. Rowling")));
@@ -147,7 +154,7 @@ public class CoreTests {
     public void getSagaRecord() throws Exception {
         mockMvc.perform(get("/")
                 .contentType(contentType)
-                .param("request", json(new GetRequest("Saga", "2"))))
+                .param("data", json(new GetRequest("Saga", "2"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.name", is("A Song of Ice and Fire")))
                 .andExpect(jsonPath("$.data.books[0]", is(11)))
