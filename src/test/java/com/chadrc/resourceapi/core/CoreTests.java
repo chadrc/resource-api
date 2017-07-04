@@ -65,6 +65,10 @@ public class CoreTests {
     public void contextLoads() {
     }
 
+    /*
+     * Ping Tests
+     */
+
     @Test
     public void callWithGetMethodSucceeds() throws Exception {
         mockMvc.perform(get("/"))
@@ -72,23 +76,9 @@ public class CoreTests {
     }
 
     @Test
-    public void callToGetMockReturnsValue() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", is("Get Result")));
-    }
-
-    @Test
     public void callWithPostMethodSucceeds() throws Exception {
         mockMvc.perform(post("/"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void callToPostMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(post("/"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", is("Post Result")));
     }
 
     @Test
@@ -131,6 +121,24 @@ public class CoreTests {
     public void callWithUnknownMethodYields405() throws Exception {
         mockMvc.perform(request("NOTSUPPORTED", URI.create("/")))
                 .andExpect(status().isMethodNotAllowed());
+    }
+
+    /*
+     * Data Tests
+     */
+
+    @Test
+    public void callToGetMockReturnsValue() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Get Result")));
+    }
+
+    @Test
+    public void callToPostMockServiceReturnsValue() throws Exception {
+        mockMvc.perform(post("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Post Result")));
     }
 
     @SuppressWarnings("unchecked")
