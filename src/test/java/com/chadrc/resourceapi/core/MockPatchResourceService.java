@@ -9,9 +9,4 @@ public class MockPatchResourceService implements PatchResourceService<GetRequest
     public Result fulfill(GetRequest request) {
         return new Result("Patch Result");
     }
-
-    @Override
-    public Class getRequestClass() {
-        return GetRequest.class;
-    }
 }

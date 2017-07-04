@@ -51,9 +51,4 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
         }
         return null;
     }
-
-    @Override
-    public Class getRequestClass() {
-        return GetRequest.class;
-    }
 }

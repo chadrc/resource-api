@@ -8,9 +8,4 @@ public class MockDeleteResourceService implements DeleteResourceService<GetReque
     public Result fulfill(GetRequest request) {
         return new Result("Delete Result");
     }
-
-    @Override
-    public Class getRequestClass() {
-        return GetRequest.class;
-    }
 }

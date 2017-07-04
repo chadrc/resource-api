@@ -8,9 +8,4 @@ public class MockPutResourceService implements PutResourceService<GetRequest> {
     public Result fulfill(GetRequest request) {
         return new Result("Put Result");
     }
-
-    @Override
-    public Class getRequestClass() {
-        return GetRequest.class;
-    }
 }

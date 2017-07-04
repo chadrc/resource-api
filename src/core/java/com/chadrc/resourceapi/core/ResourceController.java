@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,12 +19,16 @@ import java.util.Map;
 public class ResourceController {
     private static Logger log = Logger.getLogger(ResourceController.class);
 
-    private Map<HttpMethod, ResourceService> resourceServiceMap = new HashMap<>();
+    private Map<HttpMethod, ServiceInfo> serviceInfoMap = new HashMap<>();
 
     @Autowired
     public void setResourceServiceMap(List<ResourceService> resourceServices) {
         for (ResourceService resourceService : resourceServices) {
-            resourceServiceMap.put(resourceService.getHttpMethod(), resourceService);
+            Class c = resourceService.getClass();
+            Type onlyInterface = c.getGenericInterfaces()[0];
+            Class requestClass = (Class) ((ParameterizedType) onlyInterface).getActualTypeArguments()[0];
+            ServiceInfo serviceInfo = new ServiceInfo(resourceService, resourceService.getHttpMethod(), requestClass);
+            serviceInfoMap.put(resourceService.getHttpMethod(), serviceInfo);
         }
     }
 
@@ -52,7 +58,8 @@ public class ResourceController {
     }
 
     private ResponseEntity<Result> getResponseForMethod(HttpMethod method, String requestObject) {
-        ResourceService resourceService = resourceServiceMap.get(method);
+        ServiceInfo serviceInfo = serviceInfoMap.get(method);
+        ResourceService resourceService = serviceInfo.resourceService;
         if (resourceService == null) {
             return ResponseEntity.status(405).body(null);
         }
@@ -61,12 +68,24 @@ public class ResourceController {
         try {
             Object requestData = null;
             if (!StringUtils.isEmpty(requestObject)) {
-                requestData = mapper.readValue(requestObject, resourceService.getRequestClass());
+                requestData = mapper.readValue(requestObject, serviceInfo.requestClass);
             }
             return ResponseEntity.ok(resourceService.fulfill(requestData));
         } catch (IOException exception) {
             log.error("Could not deserialize request data.", exception);
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    private class ServiceInfo {
+        ResourceService resourceService;
+        HttpMethod httpMethod;
+        Class requestClass;
+
+        ServiceInfo(ResourceService resourceService, HttpMethod httpMethod, Class requestClass) {
+            this.resourceService = resourceService;
+            this.httpMethod = httpMethod;
+            this.requestClass = requestClass;
         }
     }
 }

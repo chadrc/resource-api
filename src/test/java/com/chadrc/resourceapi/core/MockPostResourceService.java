@@ -23,9 +23,4 @@ public class MockPostResourceService implements PostResourceService<PostRequest>
         result.put("id", books.size() - 1);
         return new Result(result);
     }
-
-    @Override
-    public Class getRequestClass() {
-        return PostRequest.class;
-    }
 }

@@ -8,6 +8,4 @@ interface ResourceService<T> {
     Result fulfill(T request);
 
     HttpMethod getHttpMethod();
-
-    Class getRequestClass();
 }
