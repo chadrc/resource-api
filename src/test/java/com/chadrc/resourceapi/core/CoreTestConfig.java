@@ -18,6 +18,6 @@ public class CoreTestConfig {
 
     @Bean
     public ResourceService getResourceService() {
-        return new MockResourceService();
+        return new MockGetResourceService();
     }
 }
