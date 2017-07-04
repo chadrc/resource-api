@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -19,8 +20,7 @@ import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -65,7 +65,7 @@ public class CoreTests {
     }
 
     @Test
-    public void callToGetMockServiceSucceeds() throws Exception {
+    public void callWithGetMethodSucceeds() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
@@ -78,7 +78,7 @@ public class CoreTests {
     }
 
     @Test
-    public void callToPostMockServiceSucceeds() throws Exception {
+    public void callWithPostMethodSucceeds() throws Exception {
         mockMvc.perform(post("/"))
                 .andExpect(status().isOk());
     }
@@ -88,6 +88,42 @@ public class CoreTests {
         mockMvc.perform(post("/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", is("Post Result")));
+    }
+
+    @Test
+    public void callWithPatchMethodSucceeds() throws Exception {
+        mockMvc.perform(patch("/"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithPutMethodSucceeds() throws Exception {
+        mockMvc.perform(put("/"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithDeleteMethodSucceeds() throws Exception {
+        mockMvc.perform(delete("/"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithOptionsMethodSucceeds() throws Exception {
+        mockMvc.perform(options("/"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithHeadMethodSucceeds() throws Exception {
+        mockMvc.perform(head("/"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithTraceMethodSucceeds() throws Exception {
+        mockMvc.perform(request(HttpMethod.TRACE, "/"))
+                .andExpect(status().isOk());
     }
 
     @SuppressWarnings("unchecked")
