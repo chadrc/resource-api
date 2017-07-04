@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -65,6 +66,15 @@ public class CoreTests {
     public void callToGetMockServiceSucceeds() throws Exception {
         GetRequest request = new GetRequest("SuccessValue");
         mockMvc.perform(get("/")
+                .contentType(contentType)
+                .content(this.json(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callToPostMockServiceSucceeds() throws Exception {
+        PostRequest request = new PostRequest("SuccessValue");
+        mockMvc.perform(post("/")
                 .contentType(contentType)
                 .content(this.json(request)))
                 .andExpect(status().isOk());
