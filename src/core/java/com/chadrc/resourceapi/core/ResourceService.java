@@ -4,8 +4,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 @Service
-interface ResourceService {
-    Result fulfill(GetRequest request);
+interface ResourceService<T> {
+    Result fulfill(T request);
 
     HttpMethod getHttpMethod();
+
+    Class getRequestClass();
 }

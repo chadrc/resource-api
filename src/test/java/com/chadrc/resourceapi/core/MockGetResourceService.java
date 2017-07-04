@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class MockGetResourceService implements GetResourceService {
+public class MockGetResourceService implements GetResourceService<GetRequest> {
 
     private List<Book> books = new ArrayList<Book>() {{
         add(new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling"));
@@ -50,5 +50,10 @@ public class MockGetResourceService implements GetResourceService {
                 return new Result(sagas.get(Integer.parseInt(request.getId())));
         }
         return null;
+    }
+
+    @Override
+    public Class getRequestClass() {
+        return GetRequest.class;
     }
 }

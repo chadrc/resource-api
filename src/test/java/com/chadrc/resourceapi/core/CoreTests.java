@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
@@ -71,13 +73,16 @@ public class CoreTests {
 
     @Test
     public void callWithGetMethodSucceeds() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/")
+                .param("request", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithPostMethodSucceeds() throws Exception {
-        mockMvc.perform(post("/"))
+        mockMvc.perform(post("/")
+                .contentType(contentType)
+                .content(json(new PostRequest())))
                 .andExpect(status().isOk());
     }
 
@@ -107,7 +112,8 @@ public class CoreTests {
 
     @Test
     public void callWithHeadMethodSucceeds() throws Exception {
-        mockMvc.perform(head("/"))
+        mockMvc.perform(head("/")
+                .param("request", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
@@ -131,8 +137,7 @@ public class CoreTests {
     public void getBookRecord() throws Exception {
         mockMvc.perform(get("/")
                 .contentType(contentType)
-                .param("resourceName", "Book")
-                .param("id", "0"))
+                .param("request", json(new GetRequest("Book", "0"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", is("Harry Potter and the Philosopher's Stone")))
                 .andExpect(jsonPath("$.data.author", is("J.K. Rowling")));
@@ -142,8 +147,7 @@ public class CoreTests {
     public void getSagaRecord() throws Exception {
         mockMvc.perform(get("/")
                 .contentType(contentType)
-                .param("resourceName", "Saga")
-                .param("id", "2"))
+                .param("request", json(new GetRequest("Saga", "2"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.name", is("A Song of Ice and Fire")))
                 .andExpect(jsonPath("$.data.books[0]", is(11)))
@@ -157,9 +161,14 @@ public class CoreTests {
 
     @Test
     public void callToPostMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(post("/"))
+        Map<String, Object> values = new HashMap<>();
+        values.put("title", "The Bad Beginning");
+        values.put("author", "Lemony Snicket");
+        mockMvc.perform(post("/")
+                .contentType(contentType)
+                .content(json(new PostRequest("Book", values))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", is("Post Result")));
+                .andExpect(jsonPath("$.data.id", is(0)));
     }
 
     @Test
