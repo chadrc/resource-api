@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -124,6 +125,12 @@ public class CoreTests {
     public void callWithTraceMethodSucceeds() throws Exception {
         mockMvc.perform(request(HttpMethod.TRACE, "/"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void callWithUnknownMethodYields405() throws Exception {
+        mockMvc.perform(request("NOTSUPPORTED", URI.create("/")))
+                .andExpect(status().isMethodNotAllowed());
     }
 
     @SuppressWarnings("unchecked")
