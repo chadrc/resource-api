@@ -128,10 +128,14 @@ public class CoreTests {
      */
 
     @Test
-    public void callToGetMockReturnsValue() throws Exception {
-        mockMvc.perform(get("/"))
+    public void getBookRecord() throws Exception {
+        mockMvc.perform(get("/")
+                .contentType(contentType)
+                .param("resourceName", "Book")
+                .param("id", "0"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data", is("Get Result")));
+                .andExpect(jsonPath("$.data.title", is("Harry Potter and the Philosopher's Stone")))
+                .andExpect(jsonPath("$.data.author", is("J.K. Rowling")));
     }
 
     @Test

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ResourceService {
-    Result fulfill();
+    Result fulfill(GetRequest request);
 
     HttpMethod getHttpMethod();
 }

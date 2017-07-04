@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MockDeleteResourceService implements ResourceService {
     @Override
-    public Result fulfill() {
+    public Result fulfill(GetRequest request) {
         return new Result("Delete Result");
     }
 

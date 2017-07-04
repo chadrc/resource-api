@@ -24,35 +24,35 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<Result> get() {
-        return getResponseForMethod(HttpMethod.GET);
+    public ResponseEntity<Result> get(GetRequest request) {
+        return getResponseForMethod(HttpMethod.GET, request);
     }
 
     @PostMapping
     public ResponseEntity<Result> post() {
-        return getResponseForMethod(HttpMethod.POST);
+        return getResponseForMethod(HttpMethod.POST, null);
     }
 
     @PutMapping
     public ResponseEntity<Result> put() {
-        return getResponseForMethod(HttpMethod.PUT);
+        return getResponseForMethod(HttpMethod.PUT, null);
     }
 
     @PatchMapping
     public ResponseEntity<Result> patch() {
-        return getResponseForMethod(HttpMethod.PATCH);
+        return getResponseForMethod(HttpMethod.PATCH, null);
     }
 
     @DeleteMapping
     public ResponseEntity<Result> delete() {
-        return getResponseForMethod(HttpMethod.DELETE);
+        return getResponseForMethod(HttpMethod.DELETE, null);
     }
 
-    private ResponseEntity<Result> getResponseForMethod(HttpMethod method) {
+    private ResponseEntity<Result> getResponseForMethod(HttpMethod method, GetRequest request) {
         ResourceService resourceService = resourceServiceMap.get(method);
         if (resourceService == null) {
             return ResponseEntity.status(405).body(null);
         }
-        return ResponseEntity.ok(resourceService.fulfill());
+        return ResponseEntity.ok(resourceService.fulfill(request));
     }
 }
