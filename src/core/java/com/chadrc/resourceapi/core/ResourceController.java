@@ -25,43 +25,31 @@ public class ResourceController {
 
     @GetMapping
     public ResponseEntity<Result> get() {
-        ResourceService resourceService = resourceServiceMap.get(HttpMethod.GET);
-        if (resourceService == null) {
-            return ResponseEntity.status(405).body(null);
-        }
-        return ResponseEntity.ok(resourceService.fulfill());
+        return getResponseForMethod(HttpMethod.GET);
     }
 
     @PostMapping
     public ResponseEntity<Result> post() {
-        ResourceService resourceService = resourceServiceMap.get(HttpMethod.POST);
-        if (resourceService == null) {
-            return ResponseEntity.status(405).body(null);
-        }
-        return ResponseEntity.ok(resourceService.fulfill());
+        return getResponseForMethod(HttpMethod.POST);
     }
 
     @PutMapping
     public ResponseEntity<Result> put() {
-        ResourceService resourceService = resourceServiceMap.get(HttpMethod.PUT);
-        if (resourceService == null) {
-            return ResponseEntity.status(405).body(null);
-        }
-        return ResponseEntity.ok(resourceService.fulfill());
+        return getResponseForMethod(HttpMethod.PUT);
     }
 
     @PatchMapping
     public ResponseEntity<Result> patch() {
-        ResourceService resourceService = resourceServiceMap.get(HttpMethod.PATCH);
-        if (resourceService == null) {
-            return ResponseEntity.status(405).body(null);
-        }
-        return ResponseEntity.ok(resourceService.fulfill());
+        return getResponseForMethod(HttpMethod.PATCH);
     }
 
     @DeleteMapping
     public ResponseEntity<Result> delete() {
-        ResourceService resourceService = resourceServiceMap.get(HttpMethod.DELETE);
+        return getResponseForMethod(HttpMethod.DELETE);
+    }
+
+    private ResponseEntity<Result> getResponseForMethod(HttpMethod method) {
+        ResourceService resourceService = resourceServiceMap.get(method);
         if (resourceService == null) {
             return ResponseEntity.status(405).body(null);
         }
