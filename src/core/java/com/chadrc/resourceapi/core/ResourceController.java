@@ -19,12 +19,12 @@ public class ResourceController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> get(GetRequest request) {
-        return ResponseEntity.ok(request.getValue());
+    public ResponseEntity<Result> get() {
+        return ResponseEntity.ok(resourceService.fulfill());
     }
 
     @PostMapping
-    public ResponseEntity<Object> post(PostRequest request) {
-        return ResponseEntity.ok(request.getValue());
+    public ResponseEntity<Result> post() {
+        return ResponseEntity.ok(resourceService.fulfill());
     }
 }

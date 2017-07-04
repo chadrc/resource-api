@@ -17,9 +17,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -64,19 +66,20 @@ public class CoreTests {
 
     @Test
     public void callToGetMockServiceSucceeds() throws Exception {
-        GetRequest request = new GetRequest("SuccessValue");
-        mockMvc.perform(get("/")
-                .contentType(contentType)
-                .content(this.json(request)))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk());
     }
 
     @Test
+    public void callToGetMockReturnsValue() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", is("Get Result")));
+    }
+
+    @Test
     public void callToPostMockServiceSucceeds() throws Exception {
-        PostRequest request = new PostRequest("SuccessValue");
-        mockMvc.perform(post("/")
-                .contentType(contentType)
-                .content(this.json(request)))
+        mockMvc.perform(post("/"))
                 .andExpect(status().isOk());
     }
 
