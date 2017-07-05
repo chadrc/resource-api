@@ -77,7 +77,7 @@ public class ResourceController {
         }
         ServiceInfo serviceInfo = serviceInfoPaths.get(servletRequest.getRequestURI());
         if (serviceInfo == null) {
-            return ResponseEntity.status(405).body(null);
+            return ResponseEntity.notFound().build();
         }
 
         ObjectMapper mapper = new ObjectMapper();

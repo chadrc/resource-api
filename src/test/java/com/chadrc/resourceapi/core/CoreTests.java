@@ -141,6 +141,13 @@ public class CoreTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void callWithUnknownCustomEndpointYields405() throws Exception {
+        mockMvc.perform(get("/unknown")
+                .param("data", json(new GetRequest())))
+                .andExpect(status().isNotFound());
+    }
+
     /*
      * Data Tests
      */
