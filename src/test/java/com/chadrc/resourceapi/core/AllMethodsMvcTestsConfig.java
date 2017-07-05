@@ -13,7 +13,7 @@ import java.util.List;
 @ComponentScan(basePackages = "com.chadrc.resourceapi")
 @EnableWebMvc
 @WebAppConfiguration
-public class CoreTestConfig {
+public class AllMethodsMvcTestsConfig {
     @Bean
     public HttpMessageConverter getHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
