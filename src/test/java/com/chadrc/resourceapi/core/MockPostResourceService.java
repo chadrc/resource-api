@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class MockPostResourceService implements PostResourceService<PostRequest> {
     private List<Book> books = new ArrayList<>();
 

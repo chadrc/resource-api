@@ -7,6 +7,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ComponentScan(basePackages = "com.chadrc.resourceapi")
 @EnableWebMvc
 @WebAppConfiguration
@@ -14,5 +17,17 @@ public class CoreTestConfig {
     @Bean
     public HttpMessageConverter getHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
+    }
+
+    @Bean
+    public List<ResourceService> getResourceServices() {
+        return new ArrayList<ResourceService>() {{
+            add(new MockDeleteResourceService());
+            add(new MockGetResourceService());
+            add(new MockPatchResourceService());
+            add(new MockPostResourceService());
+            add(new MockPutResourceService());
+            add(new MockGetMultiResourceService());
+        }};
     }
 }
