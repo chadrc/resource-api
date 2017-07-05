@@ -148,6 +148,13 @@ public class CoreTests {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    public void callWithInvalidJsonYields400() throws Exception {
+        mockMvc.perform(get("/")
+                .param("data", "{not valid JSON}"))
+                .andExpect(status().isBadRequest());
+    }
+
     /*
      * Data Tests
      */
