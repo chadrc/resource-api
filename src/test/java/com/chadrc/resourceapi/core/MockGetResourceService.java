@@ -1,7 +1,5 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,14 +36,14 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
     }};
 
     @Override
-    public Result fulfill(GetRequest request) {
-        if (request == null || request.getResourceName() == null || request.getId() == null) {
+    public Result fulfill(String resourceName, GetRequest request) {
+        if (request == null || request.getId() == null) {
             return null;
         }
-        switch (request.getResourceName()) {
-            case "Book":
+        switch (resourceName) {
+            case "book":
                 return new Result(books.get(Integer.parseInt(request.getId())));
-            case "Saga":
+            case "saga":
                 return new Result(sagas.get(Integer.parseInt(request.getId())));
         }
         return null;

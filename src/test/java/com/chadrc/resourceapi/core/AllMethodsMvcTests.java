@@ -73,14 +73,14 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callWithGetMethodSucceeds() throws Exception {
-        mockMvc.perform(get("/")
+        mockMvc.perform(get("/book")
                 .param("data", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithPostMethodSucceeds() throws Exception {
-        mockMvc.perform(post("/")
+        mockMvc.perform(post("/book")
                 .contentType(contentType)
                 .content(json(new PostRequest())))
                 .andExpect(status().isOk());
@@ -88,7 +88,7 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callWithPatchMethodSucceeds() throws Exception {
-        mockMvc.perform(patch("/")
+        mockMvc.perform(patch("/book")
                 .contentType(contentType)
                 .content(json(new PatchRequest())))
                 .andExpect(status().isOk());
@@ -96,7 +96,7 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callWithPutMethodSucceeds() throws Exception {
-        mockMvc.perform(put("/")
+        mockMvc.perform(put("/book")
                 .contentType(contentType)
                 .content(json(new PutRequest())))
                 .andExpect(status().isOk());
@@ -104,53 +104,53 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callWithDeleteMethodSucceeds() throws Exception {
-        mockMvc.perform(delete("/")
+        mockMvc.perform(delete("/book")
                 .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithOptionsMethodSucceeds() throws Exception {
-        mockMvc.perform(options("/"))
+        mockMvc.perform(options("/book"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithHeadMethodSucceeds() throws Exception {
-        mockMvc.perform(head("/")
+        mockMvc.perform(head("/book")
                 .param("data", json(new GetRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithTraceMethodSucceeds() throws Exception {
-        mockMvc.perform(request(HttpMethod.TRACE, "/"))
+        mockMvc.perform(request(HttpMethod.TRACE, "/book"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithUnknownMethodYields405() throws Exception {
-        mockMvc.perform(request("NOTSUPPORTED", URI.create("/")))
+        mockMvc.perform(request("NOTSUPPORTED", URI.create("/book")))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     public void callWithGetAndCustomEndpointSucceeds() throws Exception {
-        mockMvc.perform(get("/multi")
+        mockMvc.perform(get("/book/multi")
                 .param("data", json(new GetMultiRequest())))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void callWithUnknownCustomEndpointYields405() throws Exception {
-        mockMvc.perform(get("/unknown")
+        mockMvc.perform(get("/book/unknown")
                 .param("data", json(new GetRequest())))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void callWithInvalidJsonYields400() throws Exception {
-        mockMvc.perform(get("/")
+        mockMvc.perform(get("/book")
                 .param("data", "{not valid JSON}"))
                 .andExpect(status().isBadRequest());
     }
@@ -161,9 +161,9 @@ public class AllMethodsMvcTests {
 
     @Test
     public void getBookRecord() throws Exception {
-        mockMvc.perform(get("/")
+        mockMvc.perform(get("/book")
                 .contentType(contentType)
-                .param("data", json(new GetRequest("Book", "0"))))
+                .param("data", json(new GetRequest("0"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", is("Harry Potter and the Philosopher's Stone")))
                 .andExpect(jsonPath("$.data.author", is("J.K. Rowling")));
@@ -171,9 +171,9 @@ public class AllMethodsMvcTests {
 
     @Test
     public void getSagaRecord() throws Exception {
-        mockMvc.perform(get("/")
+        mockMvc.perform(get("/saga")
                 .contentType(contentType)
-                .param("data", json(new GetRequest("Saga", "2"))))
+                .param("data", json(new GetRequest("2"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.name", is("A Song of Ice and Fire")))
                 .andExpect(jsonPath("$.data.books[0]", is(11)))
@@ -190,16 +190,16 @@ public class AllMethodsMvcTests {
         Map<String, Object> values = new HashMap<>();
         values.put("title", "The Bad Beginning");
         values.put("author", "Lemony Snicket");
-        mockMvc.perform(post("/")
+        mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new PostRequest("Book", values))))
+                .content(json(new PostRequest(values))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.id", is(0)));
     }
 
     @Test
     public void callToPutMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(put("/")
+        mockMvc.perform(put("/book")
                 .contentType(contentType)
                 .content(json(new PutRequest())))
                 .andExpect(status().isOk())
@@ -208,7 +208,7 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callToPatchMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(patch("/")
+        mockMvc.perform(patch("/book")
                 .contentType(contentType)
                 .content(json(new PatchRequest())))
                 .andExpect(status().isOk())
@@ -217,7 +217,7 @@ public class AllMethodsMvcTests {
 
     @Test
     public void callToDeleteMockServiceReturnsValue() throws Exception {
-        mockMvc.perform(delete("/")
+        mockMvc.perform(delete("/book")
                 .contentType(contentType)
                 .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk())

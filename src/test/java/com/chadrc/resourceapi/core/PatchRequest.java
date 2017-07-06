@@ -1,17 +1,16 @@
 package com.chadrc.resourceapi.core;
 
 public class PatchRequest {
-    private String resourceName;
-
+    private String info = "";
     public PatchRequest() {
 
     }
 
-    public String getResourceName() {
-        return resourceName;
+    public String getInfo() {
+        return info;
     }
 
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

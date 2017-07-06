@@ -45,37 +45,41 @@ public class ResourceController {
         }
     }
 
-    @GetMapping(path = "/*")
-    public ResponseEntity<Result> get(@RequestParam String data, HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.GET, data, servletRequest);
+    @GetMapping(path = {"/{resourceName}", "/{resourceName}/*"})
+    public ResponseEntity<Result> get(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
+        return getResponseForMethod(resourceName, HttpMethod.GET, data, servletRequest);
     }
 
-    @PostMapping(path = "/*")
-    public ResponseEntity<Result> post(@RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.POST, body, servletRequest);
+    @PostMapping(path = {"/{resourceName}*"})
+    public ResponseEntity<Result> post(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+        return getResponseForMethod(resourceName, HttpMethod.POST, body, servletRequest);
     }
 
-    @PutMapping(path = "/*")
-    public ResponseEntity<Result> put(@RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.PUT, body, servletRequest);
+    @PutMapping(path = {"/{resourceName}*"})
+    public ResponseEntity<Result> put(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+        return getResponseForMethod(resourceName, HttpMethod.PUT, body, servletRequest);
     }
 
-    @PatchMapping(path = "/*")
-    public ResponseEntity<Result> patch(@RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.PATCH, body, servletRequest);
+    @PatchMapping(path = {"/{resourceName}*"})
+    public ResponseEntity<Result> patch(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+        return getResponseForMethod(resourceName, HttpMethod.PATCH, body, servletRequest);
     }
 
-    @DeleteMapping(path = "/*")
-    public ResponseEntity<Result> delete(@RequestParam String data, HttpServletRequest servletRequest) {
-        return getResponseForMethod(HttpMethod.DELETE, data, servletRequest);
+    @DeleteMapping(path = {"/{resourceName}*"})
+    public ResponseEntity<Result> delete(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
+        return getResponseForMethod(resourceName, HttpMethod.DELETE, data, servletRequest);
     }
 
-    private ResponseEntity<Result> getResponseForMethod(HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
+    private ResponseEntity<Result> getResponseForMethod(String resourceName, HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
         Map<String, ServiceInfo> serviceInfoPaths = serviceInfoMap.get(method);
         if (serviceInfoPaths == null) {
             return ResponseEntity.status(405).body(null);
         }
-        ServiceInfo serviceInfo = serviceInfoPaths.get(servletRequest.getRequestURI());
+        String path = servletRequest.getRequestURI().replace("/" + resourceName, "");
+        if (StringUtils.isEmpty(path)) {
+            path = "/";
+        }
+        ServiceInfo serviceInfo = serviceInfoPaths.get(path);
         if (serviceInfo == null) {
             return ResponseEntity.notFound().build();
         }
@@ -86,7 +90,7 @@ public class ResourceController {
             if (!StringUtils.isEmpty(requestObject)) {
                 requestData = mapper.readValue(requestObject, serviceInfo.requestClass);
             }
-            return ResponseEntity.ok(serviceInfo.resourceService.fulfill(requestData));
+            return ResponseEntity.ok(serviceInfo.resourceService.fulfill(resourceName, requestData));
         } catch (IOException exception) {
             log.error("Could not deserialize request data.", exception);
             return ResponseEntity.badRequest().body(null);

@@ -1,11 +1,9 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.stereotype.Service;
-
 public class MockPatchResourceService implements PatchResourceService<PatchRequest> {
 
     @Override
-    public Result fulfill(PatchRequest request) {
+    public Result fulfill(String resourceName, PatchRequest request) {
         return new Result("Patch Result");
     }
 }

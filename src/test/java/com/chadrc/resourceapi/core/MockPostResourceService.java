@@ -1,7 +1,5 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +9,8 @@ public class MockPostResourceService implements PostResourceService<PostRequest>
     private List<Book> books = new ArrayList<>();
 
     @Override
-    public Result fulfill(PostRequest request) {
-        if (request == null || request.getResourceName() == null || request.getFieldValues() == null) {
+    public Result fulfill(String resourceName, PostRequest request) {
+        if (request == null || request.getFieldValues() == null) {
             return new Result(null);
         }
         String title = (String) request.getFieldValues().get("title");
