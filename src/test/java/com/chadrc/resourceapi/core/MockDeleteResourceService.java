@@ -2,7 +2,7 @@ package com.chadrc.resourceapi.core;
 
 public class MockDeleteResourceService implements DeleteResourceService<DeleteRequest> {
     @Override
-    public Result fulfill(String resourceName, DeleteRequest request) {
-        return new Result("Delete Result");
+    public Object fulfill(String resourceName, DeleteRequest request) {
+        return new DataResponse("Delete Result");
     }
 }

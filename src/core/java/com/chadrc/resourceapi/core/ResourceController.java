@@ -46,31 +46,31 @@ public class ResourceController {
     }
 
     @GetMapping(path = {"/{resourceName}", "/{resourceName}/*"})
-    public ResponseEntity<Result> get(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> get(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
         return getResponseForMethod(resourceName, HttpMethod.GET, data, servletRequest);
     }
 
     @PostMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Result> post(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> post(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
         return getResponseForMethod(resourceName, HttpMethod.POST, body, servletRequest);
     }
 
     @PutMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Result> put(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> put(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
         return getResponseForMethod(resourceName, HttpMethod.PUT, body, servletRequest);
     }
 
     @PatchMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Result> patch(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> patch(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
         return getResponseForMethod(resourceName, HttpMethod.PATCH, body, servletRequest);
     }
 
     @DeleteMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Result> delete(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> delete(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
         return getResponseForMethod(resourceName, HttpMethod.DELETE, data, servletRequest);
     }
 
-    private ResponseEntity<Result> getResponseForMethod(String resourceName, HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
+    private ResponseEntity<Object> getResponseForMethod(String resourceName, HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
         Map<String, ServiceInfo> serviceInfoPaths = serviceInfoMap.get(method);
         if (serviceInfoPaths == null) {
             return ResponseEntity.status(405).body(null);

@@ -165,8 +165,8 @@ public class AllMethodsMvcTests {
                 .contentType(contentType)
                 .param("data", json(new GetRequest("0"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.title", is("Harry Potter and the Philosopher's Stone")))
-                .andExpect(jsonPath("$.data.author", is("J.K. Rowling")));
+                .andExpect(jsonPath("$.title", is("Harry Potter and the Philosopher's Stone")))
+                .andExpect(jsonPath("$.author", is("J.K. Rowling")));
     }
 
     @Test
@@ -175,14 +175,14 @@ public class AllMethodsMvcTests {
                 .contentType(contentType)
                 .param("data", json(new GetRequest("2"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.name", is("A Song of Ice and Fire")))
-                .andExpect(jsonPath("$.data.books[0]", is(11)))
-                .andExpect(jsonPath("$.data.books[1]", is(12)))
-                .andExpect(jsonPath("$.data.books[2]", is(13)))
-                .andExpect(jsonPath("$.data.books[3]", is(14)))
-                .andExpect(jsonPath("$.data.books[4]", is(15)))
-                .andExpect(jsonPath("$.data.books[5]", is(16)))
-                .andExpect(jsonPath("$.data.books[6]", is(17)));
+                .andExpect(jsonPath("$.name", is("A Song of Ice and Fire")))
+                .andExpect(jsonPath("$.books[0]", is(11)))
+                .andExpect(jsonPath("$.books[1]", is(12)))
+                .andExpect(jsonPath("$.books[2]", is(13)))
+                .andExpect(jsonPath("$.books[3]", is(14)))
+                .andExpect(jsonPath("$.books[4]", is(15)))
+                .andExpect(jsonPath("$.books[5]", is(16)))
+                .andExpect(jsonPath("$.books[6]", is(17)));
     }
 
     @Test
@@ -194,7 +194,7 @@ public class AllMethodsMvcTests {
                 .contentType(contentType)
                 .content(json(new PostRequest(values))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.id", is(0)));
+                .andExpect(jsonPath("$.id", is(0)));
     }
 
     @Test

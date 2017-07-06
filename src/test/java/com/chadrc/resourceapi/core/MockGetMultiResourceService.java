@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/multi")
 public class MockGetMultiResourceService implements GetResourceService<GetMultiRequest> {
     @Override
-    public Result fulfill(String resourceName, GetMultiRequest request) {
-        return new Result("Get Multi Result");
+    public Object fulfill(String resourceName, GetMultiRequest request) {
+        return new DataResponse("Get Multi Result");
     }
 }
