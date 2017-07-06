@@ -20,7 +20,7 @@ import java.util.Map;
 public class ResourceController {
     private static Logger log = Logger.getLogger(ResourceController.class);
 
-    private Map<HttpMethod, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
+    private Map<RequestMethod, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
 
     @Autowired
     public void setResourceServiceMap(List<ResourceService> resourceServices) {
@@ -28,10 +28,10 @@ public class ResourceController {
             Class c = resourceService.getClass();
             Type onlyInterface = c.getGenericInterfaces()[0];
             Class requestClass = (Class) ((ParameterizedType) onlyInterface).getActualTypeArguments()[0];
-            ServiceInfo serviceInfo = new ServiceInfo(resourceService, resourceService.getHttpMethod(), requestClass);
+            ServiceInfo serviceInfo = new ServiceInfo(resourceService, resourceService.getRequestMethod(), requestClass);
             RequestMapping requestMapping = (RequestMapping) c.getAnnotation(RequestMapping.class);
             Map<String, ServiceInfo> serviceInfoPathMap = serviceInfoMap.computeIfAbsent(
-                    resourceService.getHttpMethod(), k -> new HashMap<>()
+                    resourceService.getRequestMethod(), k -> new HashMap<>()
             );
             String[] paths;
             if (requestMapping == null) {
@@ -45,35 +45,33 @@ public class ResourceController {
         }
     }
 
-    @GetMapping(path = {"/{resourceName}", "/{resourceName}/*"})
-    public ResponseEntity<Object> get(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
-        return getResponseForMethod(resourceName, HttpMethod.GET, data, servletRequest);
-    }
+    @RequestMapping(path = {"/{resourceName}", "/{resourceName}/*"})
+    public ResponseEntity<Object> resource(@PathVariable String resourceName,
+                                           @RequestParam(required = false) String data,
+                                           @RequestBody(required = false) String  body,
+                                           HttpServletRequest servletRequest) {
+        RequestMethod method;
+        try {
+            method = RequestMethod.valueOf(servletRequest.getMethod());
+        } catch (IllegalArgumentException | NullPointerException exception) {
+            return ResponseEntity.status(405).build();
+        }
 
-    @PostMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Object> post(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(resourceName, HttpMethod.POST, body, servletRequest);
-    }
+        String requestObject = body;
+        if (method == RequestMethod.GET || method == RequestMethod.HEAD) {
+            requestObject = data;
+        }
 
-    @PutMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Object> put(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(resourceName, HttpMethod.PUT, body, servletRequest);
-    }
-
-    @PatchMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Object> patch(@PathVariable String resourceName, @RequestBody String body, HttpServletRequest servletRequest) {
-        return getResponseForMethod(resourceName, HttpMethod.PATCH, body, servletRequest);
-    }
-
-    @DeleteMapping(path = {"/{resourceName}*"})
-    public ResponseEntity<Object> delete(@PathVariable String resourceName, @RequestParam String data, HttpServletRequest servletRequest) {
-        return getResponseForMethod(resourceName, HttpMethod.DELETE, data, servletRequest);
-    }
-
-    private ResponseEntity<Object> getResponseForMethod(String resourceName, HttpMethod method, String requestObject, HttpServletRequest servletRequest) {
         Map<String, ServiceInfo> serviceInfoPaths = serviceInfoMap.get(method);
         if (serviceInfoPaths == null) {
-            return ResponseEntity.status(405).body(null);
+            if (method == RequestMethod.HEAD) {
+                serviceInfoPaths = serviceInfoMap.get(RequestMethod.GET);
+                if (serviceInfoPaths == null) {
+                    return ResponseEntity.status(405).build();
+                }
+            } else {
+                return ResponseEntity.status(405).build();
+            }
         }
         String path = servletRequest.getRequestURI().replace("/" + resourceName, "");
         if (StringUtils.isEmpty(path)) {
@@ -93,17 +91,17 @@ public class ResourceController {
             return ResponseEntity.ok(serviceInfo.resourceService.fulfill(resourceName, requestData));
         } catch (IOException exception) {
             log.error("Could not deserialize request data.", exception);
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     private class ServiceInfo {
         ResourceService resourceService;
-        HttpMethod httpMethod;
+        RequestMethod httpMethod;
         Class requestClass;
         RequestMapping requestMapping;
 
-        ServiceInfo(ResourceService resourceService, HttpMethod httpMethod, Class requestClass) {
+        ServiceInfo(ResourceService resourceService, RequestMethod httpMethod, Class requestClass) {
             this.resourceService = resourceService;
             this.httpMethod = httpMethod;
             this.requestClass = requestClass;

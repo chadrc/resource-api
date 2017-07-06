@@ -1,11 +1,11 @@
 package com.chadrc.resourceapi.core;
 
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Service
 interface ResourceService<T> {
     Object fulfill(String resourceName, T request);
 
-    HttpMethod getHttpMethod();
+    RequestMethod getRequestMethod();
 }
