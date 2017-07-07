@@ -1,4 +1,6 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
+
+import com.chadrc.resourceapi.core.PatchResourceService;
 
 public class MockPatchResourceService implements PatchResourceService<PatchRequest> {
 

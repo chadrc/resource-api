@@ -1,4 +1,6 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
+
+import com.chadrc.resourceapi.core.PutResourceService;
 
 public class MockPutResourceService implements PutResourceService<PutRequest> {
     @Override

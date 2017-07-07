@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
 
 public class DataResponse {
     private Object data;

@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
 
 public class GetRequest {
     private String id;

@@ -1,5 +1,6 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
 
+import com.chadrc.resourceapi.core.GetResourceService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(path = "/multi")

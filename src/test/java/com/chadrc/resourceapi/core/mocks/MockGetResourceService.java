@@ -1,4 +1,8 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
+
+import com.chadrc.resourceapi.core.Book;
+import com.chadrc.resourceapi.core.GetResourceService;
+import com.chadrc.resourceapi.core.Saga;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,6 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
+
+import com.chadrc.resourceapi.core.DeleteResourceService;
 
 public class MockDeleteResourceService implements DeleteResourceService<DeleteRequest> {
     @Override

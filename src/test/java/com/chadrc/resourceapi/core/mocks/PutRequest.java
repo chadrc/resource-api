@@ -1,8 +1,9 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.mocks;
 
-public class PatchRequest {
+public class PutRequest {
     private String info = "";
-    public PatchRequest() {
+
+    public PutRequest() {
 
     }
 
