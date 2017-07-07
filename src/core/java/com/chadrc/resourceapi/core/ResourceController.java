@@ -3,6 +3,7 @@ package com.chadrc.resourceapi.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -16,11 +17,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController("/")
+@RestController
+@RequestMapping("/${baseResourceUri:}")
 public class ResourceController {
     private static Logger log = Logger.getLogger(ResourceController.class);
 
     private Map<RequestMethod, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
+
+    @Value("${baseResourceUri}")
+    private String baseResourceUri;
 
     @Autowired
     public void setResourceServiceMap(List<ResourceService> resourceServices) {
@@ -74,6 +79,9 @@ public class ResourceController {
             }
         }
         String path = servletRequest.getRequestURI().replace("/" + resourceName, "");
+        if (!StringUtils.isEmpty(baseResourceUri)) {
+            path = path.replace("/" + baseResourceUri, "");
+        }
         if (StringUtils.isEmpty(path)) {
             path = "/";
         }
