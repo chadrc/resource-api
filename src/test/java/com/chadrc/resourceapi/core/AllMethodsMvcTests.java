@@ -61,7 +61,7 @@ public class AllMethodsMvcTests extends BaseTests {
     public void callWithPatchMethodSucceeds() throws Exception {
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
-                .content(json(new PatchRequest())))
+                .content(json(new PatchRequest("info"))))
                 .andExpect(status().isOk());
     }
 
@@ -194,9 +194,18 @@ public class AllMethodsMvcTests extends BaseTests {
     public void callToPatchMockServiceReturnsValue() throws Exception {
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
-                .content(json(new PatchRequest())))
+                .content(json(new PatchRequest("info"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", is("Patch Result")));
+    }
+
+    @Test
+    public void callToPutWithEmptyInfoYields400WithError() throws Exception {
+        mockMvc.perform(patch("/book")
+                .contentType(contentType)
+                .content(json(new PatchRequest())))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.info", is("Cannot be empty.")));
     }
 
     @Test

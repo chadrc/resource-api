@@ -1,6 +1,8 @@
 package com.chadrc.resourceapi.core;
 
-public class Resource {
+public final class Resource {
+
+    private Resource() {}
 
     public static Result result(Object result) {
         return new Result(result);
