@@ -11,6 +11,6 @@ public class Resource {
     }
 
     public static ResourceServiceThrowable notFound() {
-        return new ResourceNotFound();
+        return new ResourceServiceThrowable(404);
     }
 }
