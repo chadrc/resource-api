@@ -1,18 +1,14 @@
 package com.chadrc.resourceapi.core;
 
 public class ResourceServiceThrowable extends Throwable {
-    private Object errorObject = null;
-    private int status = 400;
+    private Object errorObject;
+    private int status;
 
-    ResourceServiceThrowable() {
-
-    }
-
-    ResourceServiceThrowable(int status) {
+    protected ResourceServiceThrowable(int status) {
         this.status = status;
     }
 
-    ResourceServiceThrowable(int status, Object errorObject) {
+    protected ResourceServiceThrowable(int status, Object errorObject) {
         this.status = status;
         this.errorObject = errorObject;
     }
