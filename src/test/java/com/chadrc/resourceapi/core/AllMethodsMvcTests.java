@@ -143,7 +143,7 @@ public class AllMethodsMvcTests {
     }
 
     @Test
-    public void callWithUnknownCustomEndpointYields405() throws Exception {
+    public void callWithUnknownCustomEndpointYields404() throws Exception {
         mockMvc.perform(get("/book/unknown")
                 .param("data", json(new GetRequest())))
                 .andExpect(status().isNotFound());
