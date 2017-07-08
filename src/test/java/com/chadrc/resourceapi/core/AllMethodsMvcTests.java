@@ -147,6 +147,13 @@ public class AllMethodsMvcTests extends BaseTests {
     }
 
     @Test
+    public void errorInServiceYields500() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("data", json(new GetRequest("-1"))))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     public void getSagaRecord() throws Exception {
         mockMvc.perform(get("/saga")
                 .contentType(contentType)

@@ -103,6 +103,9 @@ public class ResourceController {
             return ResponseEntity.badRequest().build();
         } catch (ResourceServiceThrowable throwable) {
             return ResponseEntity.status(throwable.getStatus()).body(throwable.getErrorObject());
+        } catch (Exception exception) {
+            log.error("Error during request:", exception);
+            return ResponseEntity.status(500).build();
         }
     }
 

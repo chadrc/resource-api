@@ -47,7 +47,7 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
             return null;
         }
         int index = Integer.parseInt(request.getId());
-        if (index < 0 || index >= books.size()) {
+        if (index >= books.size()) {
             throw new ResourceNotFound();
         }
         switch (resourceName) {
