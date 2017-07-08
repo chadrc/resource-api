@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.models;
 
 public class Book {
     private String title = "";

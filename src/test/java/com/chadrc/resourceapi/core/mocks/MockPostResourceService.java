@@ -1,6 +1,6 @@
 package com.chadrc.resourceapi.core.mocks;
 
-import com.chadrc.resourceapi.core.Book;
+import com.chadrc.resourceapi.core.models.Book;
 import com.chadrc.resourceapi.core.PostResourceService;
 
 import java.util.ArrayList;

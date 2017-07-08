@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi.core.models;
 
 import java.util.ArrayList;
 import java.util.List;
