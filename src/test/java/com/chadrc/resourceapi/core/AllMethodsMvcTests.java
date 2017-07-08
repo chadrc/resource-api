@@ -191,6 +191,14 @@ public class AllMethodsMvcTests extends BaseTests {
     }
 
     @Test
+    public void callToPutForcingNullReturnYields500() throws Exception {
+        mockMvc.perform(put("/book")
+                .contentType(contentType)
+                .content(json(new PutRequest("return null"))))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
     public void callToPatchMockServiceReturnsValue() throws Exception {
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
