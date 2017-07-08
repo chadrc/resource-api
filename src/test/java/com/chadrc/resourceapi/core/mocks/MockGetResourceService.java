@@ -1,5 +1,7 @@
 package com.chadrc.resourceapi.core.mocks;
 
+import com.chadrc.resourceapi.core.Resource;
+import com.chadrc.resourceapi.core.Result;
 import com.chadrc.resourceapi.core.exceptions.ResourceNotFound;
 import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.models.Book;
@@ -42,9 +44,9 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
     }};
 
     @Override
-    public Object fulfill(String resourceName, GetRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(String resourceName, GetRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getId() == null) {
-            return null;
+            return Resource.emptyResult();
         }
         int index = Integer.parseInt(request.getId());
         if (index >= books.size()) {
@@ -52,10 +54,10 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
         }
         switch (resourceName) {
             case "book":
-                return books.get(Integer.parseInt(request.getId()));
+                return Resource.result(books.get(Integer.parseInt(request.getId())));
             case "saga":
-                return sagas.get(Integer.parseInt(request.getId()));
+                return Resource.result(sagas.get(Integer.parseInt(request.getId())));
         }
-        return null;
+        return Resource.emptyResult();
     }
 }

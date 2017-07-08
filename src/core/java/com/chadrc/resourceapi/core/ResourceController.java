@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.core;
 
 import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
+import com.chadrc.resourceapi.core.exceptions.ServiceMustReturnResultException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class ResourceController {
     }
 
     @RequestMapping(path = {"/{resourceName}", "/{resourceName}/*"})
+    @SuppressWarnings("unchecked")
     public ResponseEntity<Object> resource(@PathVariable String resourceName,
                                            @RequestParam(required = false) String data,
                                            @RequestBody(required = false) String  body,
@@ -97,7 +99,11 @@ public class ResourceController {
             if (!StringUtils.isEmpty(requestObject)) {
                 requestData = mapper.readValue(requestObject, serviceInfo.requestClass);
             }
-            return ResponseEntity.ok(serviceInfo.resourceService.fulfill(resourceName, requestData));
+            Result result = serviceInfo.resourceService.fulfill(resourceName, requestData);
+            if (result == null) {
+                throw new ServiceMustReturnResultException();
+            }
+            return ResponseEntity.ok(result.getResult());
         } catch (IOException exception) {
             log.error("Could not deserialize request data.", exception);
             return ResponseEntity.badRequest().build();
