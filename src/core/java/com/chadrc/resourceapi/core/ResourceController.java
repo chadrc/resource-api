@@ -1,12 +1,9 @@
 package com.chadrc.resourceapi.core;
 
-import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
-import com.chadrc.resourceapi.core.exceptions.ServiceMustReturnResultException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;

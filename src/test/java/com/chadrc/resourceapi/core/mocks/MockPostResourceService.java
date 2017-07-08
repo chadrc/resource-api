@@ -2,7 +2,7 @@ package com.chadrc.resourceapi.core.mocks;
 
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.Result;
-import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
+import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.models.Book;
 import com.chadrc.resourceapi.core.PostResourceService;
 

@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core.exceptions;
+package com.chadrc.resourceapi.core;
 
 public abstract class ResourceServiceThrowable extends Throwable {
     private Object errorObject = null;

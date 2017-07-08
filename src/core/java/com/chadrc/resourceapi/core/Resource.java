@@ -9,4 +9,8 @@ public class Resource {
     public static Result emptyResult() {
         return new Result(null);
     }
+
+    public static ResourceServiceThrowable notFound() {
+        return new ResourceNotFound();
+    }
 }
