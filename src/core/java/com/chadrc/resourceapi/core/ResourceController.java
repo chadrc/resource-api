@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.core;
 
+import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,8 @@ public class ResourceController {
         } catch (IOException exception) {
             log.error("Could not deserialize request data.", exception);
             return ResponseEntity.badRequest().build();
+        } catch (ResourceServiceThrowable throwable) {
+            return ResponseEntity.status(throwable.getStatus()).body(throwable.getErrorObject());
         }
     }
 

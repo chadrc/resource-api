@@ -1,5 +1,7 @@
 package com.chadrc.resourceapi.core.mocks;
 
+import com.chadrc.resourceapi.core.exceptions.ResourceNotFound;
+import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.models.Book;
 import com.chadrc.resourceapi.core.GetResourceService;
 import com.chadrc.resourceapi.core.models.Saga;
@@ -40,9 +42,13 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
     }};
 
     @Override
-    public Object fulfill(String resourceName, GetRequest request) {
+    public Object fulfill(String resourceName, GetRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getId() == null) {
             return null;
+        }
+        int index = Integer.parseInt(request.getId());
+        if (index < 0 || index >= books.size()) {
+            throw new ResourceNotFound();
         }
         switch (resourceName) {
             case "book":

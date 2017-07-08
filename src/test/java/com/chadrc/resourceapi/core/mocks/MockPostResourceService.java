@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.core.mocks;
 
+import com.chadrc.resourceapi.core.exceptions.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.models.Book;
 import com.chadrc.resourceapi.core.PostResourceService;
 
@@ -12,7 +13,7 @@ public class MockPostResourceService implements PostResourceService<PostRequest>
     private List<Book> books = new ArrayList<>();
 
     @Override
-    public Object fulfill(String resourceName, PostRequest request) {
+    public Object fulfill(String resourceName, PostRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getFieldValues() == null) {
             return new DataResponse(null);
         }

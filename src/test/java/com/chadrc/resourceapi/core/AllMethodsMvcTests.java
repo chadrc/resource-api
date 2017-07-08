@@ -35,6 +35,7 @@ public class AllMethodsMvcTests extends BaseTests {
 
     @Test
     public void contextLoads() {
+
     }
 
     /*
@@ -132,11 +133,17 @@ public class AllMethodsMvcTests extends BaseTests {
     @Test
     public void getBookRecord() throws Exception {
         mockMvc.perform(get("/book")
-                .contentType(contentType)
                 .param("data", json(new GetRequest("0"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Harry Potter and the Philosopher's Stone")))
                 .andExpect(jsonPath("$.author", is("J.K. Rowling")));
+    }
+
+    @Test
+    public void getUnknownBookYields404() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("data", json(new GetRequest("100"))))
+                .andExpect(status().isNotFound());
     }
 
     @Test
