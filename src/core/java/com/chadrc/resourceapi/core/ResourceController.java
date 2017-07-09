@@ -35,10 +35,7 @@ public class ResourceController {
     }
 
     @Autowired
-    public void setResourceServiceMap(List<ResourceService> resourceServices) {
-        for (ResourceModel resourceModel : resourceModels) {
-            options.put(resourceModel.getClass().getSimpleName().toLowerCase(), new HashMap<>());
-        }
+    public void setResourceServiceMap(List<ResourceService> resourceServices, List<ResourceOptionsProvider> resourceOptionsProviders) {
         for (ResourceService resourceService : resourceServices) {
             Class c = resourceService.getClass();
             Type onlyInterface = c.getGenericInterfaces()[0];
@@ -57,16 +54,18 @@ public class ResourceController {
             for (String path : paths) {
                 serviceInfoPathMap.put(path, serviceInfo);
             }
+        }
 
-            if (resourceService instanceof OptionsProvider) {
-                OptionsProvider optionsProvider = (OptionsProvider) resourceService;
+        for (ResourceModel resourceModel : resourceModels) {
+            options.put(resourceModel.getClass().getSimpleName().toLowerCase(), new HashMap<>());
+        }
 
-                for (ResourceModel resourceModel : resourceModels) {
-                    Map<String, Object> serviceOptions = optionsProvider.getOptions(resourceModel.getClass());
-                    Map<String, Object> resourceOptions = options.get(resourceModel.getClass().getSimpleName().toLowerCase());
-                    for (String key : serviceOptions.keySet()) {
-                        resourceOptions.put(key, serviceOptions.get(key));
-                    }
+        for (ResourceOptionsProvider resourceOptionsProvider : resourceOptionsProviders) {
+            for (ResourceModel resourceModel : resourceModels) {
+                Map<String, Object> serviceOptions = resourceOptionsProvider.getOptions(resourceModel.getClass());
+                Map<String, Object> resourceOptions = options.get(resourceModel.getClass().getSimpleName().toLowerCase());
+                for (String key : serviceOptions.keySet()) {
+                    resourceOptions.put(key, serviceOptions.get(key));
                 }
             }
         }

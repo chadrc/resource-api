@@ -223,9 +223,6 @@ public class AllMethodsMvcTests extends BaseTests {
                 .contentType(contentType)
                 .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk())
-                .andDo(result -> {
-                    result.getResponse().getContentAsString();
-                })
                 .andExpect(jsonPath("$.data", is("Delete Result")));
     }
 

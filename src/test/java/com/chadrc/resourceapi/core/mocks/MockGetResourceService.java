@@ -6,7 +6,7 @@ import com.chadrc.resourceapi.core.models.Saga;
 
 import java.util.*;
 
-public class MockGetResourceService implements GetResourceService<GetRequest>, OptionsProvider {
+public class MockGetResourceService implements GetResourceService<GetRequest> {
 
     private List<Book> books = new ArrayList<Book>() {{
         add(new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling"));
@@ -53,12 +53,5 @@ public class MockGetResourceService implements GetResourceService<GetRequest>, O
                 return Resource.result(sagas.get(Integer.parseInt(request.getId())));
         }
         return Resource.emptyResult();
-    }
-
-    @Override
-    public Map<String, Object> getOptions(Class resourceType) {
-        Map<String, Object> options = new HashMap<>();
-        options.put("get", true);
-        return options;
     }
 }
