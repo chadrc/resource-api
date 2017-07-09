@@ -21,8 +21,10 @@ public class ResourceOptions {
 
         for (ResourceOptionsProvider resourceOptionsProvider : resourceOptionsProviders) {
             for (ResourceModel resourceModel : models) {
-                Map<String, Object> serviceOptions = resourceOptionsProvider.getOptions(resourceModel.getClass());
+                ResourceOptionsSection section = resourceOptionsProvider.getOptions(resourceModel.getClass());
+                Map<String, Object> serviceOptions = section.getOptions();
                 Map<String, Object> resourceOptions = options.get(convertResourceName(resourceModel));
+
                 for (String key : serviceOptions.keySet()) {
                     resourceOptions.put(key, serviceOptions.get(key));
                 }

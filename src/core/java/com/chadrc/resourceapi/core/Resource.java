@@ -4,6 +4,10 @@ public final class Resource {
 
     private Resource() {}
 
+    public static ResourceOptionsSection options() {
+        return new ResourceOptionsSection();
+    }
+
     public static Result result(Object result) {
         return new Result(result);
     }
