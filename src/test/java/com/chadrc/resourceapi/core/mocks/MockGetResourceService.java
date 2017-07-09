@@ -1,17 +1,12 @@
 package com.chadrc.resourceapi.core.mocks;
 
-import com.chadrc.resourceapi.core.Resource;
-import com.chadrc.resourceapi.core.Result;
-import com.chadrc.resourceapi.core.ResourceServiceThrowable;
+import com.chadrc.resourceapi.core.*;
 import com.chadrc.resourceapi.core.models.Book;
-import com.chadrc.resourceapi.core.GetResourceService;
 import com.chadrc.resourceapi.core.models.Saga;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class MockGetResourceService implements GetResourceService<GetRequest> {
+public class MockGetResourceService implements GetResourceService<GetRequest>, OptionsProvider {
 
     private List<Book> books = new ArrayList<Book>() {{
         add(new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling"));
@@ -58,5 +53,12 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
                 return Resource.result(sagas.get(Integer.parseInt(request.getId())));
         }
         return Resource.emptyResult();
+    }
+
+    @Override
+    public Map<String, Object> getOptions(Class resourceType) {
+        Map<String, Object> options = new HashMap<>();
+        options.put("get", true);
+        return options;
     }
 }

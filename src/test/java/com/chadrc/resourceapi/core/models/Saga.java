@@ -1,9 +1,13 @@
 package com.chadrc.resourceapi.core.models;
 
+import com.chadrc.resourceapi.core.ResourceModel;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Saga {
+@Component
+public class Saga implements ResourceModel {
     private String name = "";
     private List<Integer> books = new ArrayList<>();
 

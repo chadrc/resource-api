@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AllMethodsMvcTestsConfig.class)
+@SpringBootTest(classes = AllMethodsMvcTestsConfig.class, properties = {"spring.mvc.dispatch-options-request=true"})
 public class AllMethodsMvcTests extends BaseTests {
 
     @Test
@@ -222,6 +223,19 @@ public class AllMethodsMvcTests extends BaseTests {
                 .contentType(contentType)
                 .param("data", json(new DeleteRequest())))
                 .andExpect(status().isOk())
+                .andDo(result -> {
+                    result.getResponse().getContentAsString();
+                })
                 .andExpect(jsonPath("$.data", is("Delete Result")));
+    }
+
+    @Test
+    public void optionsForBook() throws Exception {
+        mockMvc.perform(options("/")
+                .contentType(contentType))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.book", notNullValue()))
+                .andExpect(jsonPath("$.book.get", is(true)))
+                .andExpect(jsonPath("$.book.delete", is(true)));
     }
 }
