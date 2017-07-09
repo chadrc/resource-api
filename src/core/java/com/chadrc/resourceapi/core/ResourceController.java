@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,16 +21,14 @@ import java.util.Map;
 public class ResourceController {
     private static Logger log = Logger.getLogger(ResourceController.class);
 
+    private ResourceOptions resourceOptions;
     private Map<RequestMethod, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
-    private List<ResourceModel> resourceModels = new ArrayList<>();
-    private Map<String, Map<String, Object>> options = new HashMap<>();
-
     @Value("${baseResourceUri}")
     private String baseResourceUri;
 
     @Autowired
-    public void setResourceModels(List<ResourceModel> models) {
-        this.resourceModels = models;
+    public void setResourceOptions(ResourceOptions resourceOptions) {
+        this.resourceOptions = resourceOptions;
     }
 
     @Autowired
@@ -55,25 +52,11 @@ public class ResourceController {
                 serviceInfoPathMap.put(path, serviceInfo);
             }
         }
-
-        for (ResourceModel resourceModel : resourceModels) {
-            options.put(resourceModel.getClass().getSimpleName().toLowerCase(), new HashMap<>());
-        }
-
-        for (ResourceOptionsProvider resourceOptionsProvider : resourceOptionsProviders) {
-            for (ResourceModel resourceModel : resourceModels) {
-                Map<String, Object> serviceOptions = resourceOptionsProvider.getOptions(resourceModel.getClass());
-                Map<String, Object> resourceOptions = options.get(resourceModel.getClass().getSimpleName().toLowerCase());
-                for (String key : serviceOptions.keySet()) {
-                    resourceOptions.put(key, serviceOptions.get(key));
-                }
-            }
-        }
     }
 
     @RequestMapping(path = "/", method = RequestMethod.OPTIONS)
     public ResponseEntity<Object> options() {
-        return ResponseEntity.ok(options);
+        return ResponseEntity.ok(resourceOptions.getOptions());
     }
 
     @RequestMapping(path = {"/{resourceName}", "/{resourceName}/*"})
