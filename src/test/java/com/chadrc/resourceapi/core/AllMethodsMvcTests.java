@@ -107,6 +107,13 @@ public class AllMethodsMvcTests extends BaseTests {
     }
 
     @Test
+    public void callWithUnknownResourceNameYields404() throws Exception {
+        mockMvc.perform(get("/author")
+                .param("data", json(new GetRequest())))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void callWithGetAndCustomEndpointSucceeds() throws Exception {
         mockMvc.perform(get("/book/multi")
                 .param("data", json(new GetMultiRequest())))

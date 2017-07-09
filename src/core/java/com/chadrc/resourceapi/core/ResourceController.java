@@ -88,6 +88,12 @@ public class ResourceController {
                 return ResponseEntity.status(405).build();
             }
         }
+
+        Class targetResource = resourceOptions.getResource(resourceName);
+        if (targetResource == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         String path = servletRequest.getRequestURI().replace("/" + resourceName, "");
         if (!StringUtils.isEmpty(baseResourceUri)) {
             path = path.replace("/" + baseResourceUri, "");
