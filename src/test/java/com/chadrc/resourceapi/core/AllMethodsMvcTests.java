@@ -240,6 +240,7 @@ public class AllMethodsMvcTests extends BaseTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.book", notNullValue()))
                 .andExpect(jsonPath("$.book.get", is(true)))
-                .andExpect(jsonPath("$.book.delete", is(true)));
+                .andExpect(jsonPath("$.book.delete", is(true)))
+                .andExpect(jsonPath("$.saga.delete", is(false)));
     }
 }
