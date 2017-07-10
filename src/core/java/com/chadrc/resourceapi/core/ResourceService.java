@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Service
 public interface ResourceService<T> {
-    Result fulfill(String resourceName, T request) throws ResourceServiceThrowable;
+    Result fulfill(Class resourceType, T request) throws ResourceServiceThrowable;
 
     RequestMethod getRequestMethod();
 }

@@ -15,7 +15,7 @@ public class MockPostResourceService implements PostResourceService<PostRequest>
     private List<Book> books = new ArrayList<>();
 
     @Override
-    public Result fulfill(String resourceName, PostRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, PostRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getFieldValues() == null) {
             return Resource.result(new DataResponse(null));
         }

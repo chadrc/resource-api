@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/multi")
 public class MockGetMultiResourceService implements GetResourceService<GetMultiRequest> {
     @Override
-    public Result fulfill(String resourceName, GetMultiRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, GetMultiRequest request) throws ResourceServiceThrowable {
         return Resource.result(new DataResponse("Get Multi Result"));
     }
 }

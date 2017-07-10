@@ -112,7 +112,7 @@ public class ResourceController {
             if (!StringUtils.isEmpty(requestObject)) {
                 requestData = mapper.readValue(requestObject, serviceInfo.requestClass);
             }
-            Result result = serviceInfo.resourceService.fulfill(resourceName, requestData);
+            Result result = serviceInfo.resourceService.fulfill(resourceOptions.getResource(resourceName), requestData);
             if (result == null) {
                 throw new ServiceMustReturnResultException();
             }

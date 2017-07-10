@@ -12,7 +12,7 @@ import java.util.Map;
 public class MockPatchResourceService implements PatchResourceService<PatchRequest> {
 
     @Override
-    public Result fulfill(String resourceName, PatchRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, PatchRequest request) throws ResourceServiceThrowable {
         if (StringUtils.isEmpty(request.getInfo())) {
             Map<String, String> errors = new HashMap<>();
             errors.put("info", "Cannot be empty.");

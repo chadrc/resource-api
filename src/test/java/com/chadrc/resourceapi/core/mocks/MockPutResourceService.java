@@ -7,7 +7,7 @@ import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 
 public class MockPutResourceService implements PutResourceService<PutRequest> {
     @Override
-    public Result fulfill(String resourceName, PutRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, PutRequest request) throws ResourceServiceThrowable {
         if ("return null".equals(request.getInfo())) {
             return null;
         }

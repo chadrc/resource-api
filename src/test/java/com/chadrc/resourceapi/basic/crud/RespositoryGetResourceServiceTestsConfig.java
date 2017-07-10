@@ -24,7 +24,7 @@ public class RespositoryGetResourceServiceTestsConfig {
     @Bean
     public List<ResourceService> getResourceServices() {
         return new ArrayList<ResourceService>() {{
-            add(new RepositoryGetResourceSerivce());
+            add(new RepositoryGetResourceService());
         }};
     }
 }

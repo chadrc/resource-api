@@ -6,7 +6,7 @@ import com.chadrc.resourceapi.core.Result;
 
 public class RepositoryGetResourceService implements GetResourceService<GetRequest> {
     @Override
-    public Result fulfill(String resourceName, GetRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         return null;
     }
 }

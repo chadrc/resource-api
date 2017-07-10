@@ -38,7 +38,7 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
     }};
 
     @Override
-    public Result fulfill(String resourceName, GetRequest request) throws ResourceServiceThrowable {
+    public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getId() == null) {
             return Resource.emptyResult();
         }
@@ -46,10 +46,10 @@ public class MockGetResourceService implements GetResourceService<GetRequest> {
         if (index >= books.size()) {
             throw Resource.notFound();
         }
-        switch (resourceName) {
-            case "book":
+        switch (resourceType.getSimpleName()) {
+            case "Book":
                 return Resource.result(books.get(Integer.parseInt(request.getId())));
-            case "saga":
+            case "Saga":
                 return Resource.result(sagas.get(Integer.parseInt(request.getId())));
         }
         return Resource.emptyResult();
