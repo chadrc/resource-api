@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.basic.crud;
 
 import com.chadrc.resourceapi.core.ResourceService;
+import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -14,6 +15,7 @@ import java.util.List;
 @ComponentScan(basePackages = "com.chadrc.resourceapi")
 @EnableWebMvc
 @WebAppConfiguration
+@AutoConfigureDataMongo
 public class RespositoryGetResourceServiceTestsConfig {
 
     @Bean
