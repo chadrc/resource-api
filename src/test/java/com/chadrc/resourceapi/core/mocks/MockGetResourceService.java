@@ -1,8 +1,8 @@
 package com.chadrc.resourceapi.core.mocks;
 
 import com.chadrc.resourceapi.core.*;
-import com.chadrc.resourceapi.core.models.Book;
-import com.chadrc.resourceapi.core.models.Saga;
+import com.chadrc.resourceapi.models.Book;
+import com.chadrc.resourceapi.models.Saga;
 
 import java.util.*;
 

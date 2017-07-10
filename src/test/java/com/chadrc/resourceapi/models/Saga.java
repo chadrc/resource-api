@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.core.models;
+package com.chadrc.resourceapi.models;
 
 import com.chadrc.resourceapi.core.ResourceModel;
 import org.springframework.stereotype.Component;
