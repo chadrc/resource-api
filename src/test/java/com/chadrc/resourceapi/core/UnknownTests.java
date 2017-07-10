@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.core;
 
+import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.core.mocks.DeleteRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;

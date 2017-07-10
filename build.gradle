@@ -29,25 +29,27 @@ sourceSets {
 	core {
 
 	}
+	basicGetService {
+
+	}
 }
 
 dependencies {
-//	compile('org.springframework.data:spring-data-commons')
-//	compile('org.springframework.boot:spring-boot-starter-web')
-
-//	testCompile('org.springframework.boot:spring-boot-starter-test')
-//    testCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
-//    testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
-
     exampleCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
     exampleCompile('org.springframework.boot:spring-boot-starter-web')
     exampleCompile(sourceSets.main.output)
 
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
+	basicGetServiceCompile(sourceSets.core.output)
+
 	testCompile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('com.jayway.jsonpath:json-path')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile(sourceSets.core.output)
 	testCompile('commons-logging:commons-logging')
+    testCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+
+	testCompile(sourceSets.core.output)
+	testCompile(sourceSets.basicGetService.output)
 }

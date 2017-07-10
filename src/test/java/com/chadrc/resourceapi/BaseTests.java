@@ -1,5 +1,6 @@
-package com.chadrc.resourceapi.core;
+package com.chadrc.resourceapi;
 
+import com.chadrc.resourceapi.core.ResourceController;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
