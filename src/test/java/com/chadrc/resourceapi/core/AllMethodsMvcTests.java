@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AllMethodsMvcTestsConfig.class, properties = {"spring.mvc.dispatch-options-request=true"})
+@SpringBootTest(classes = AllMethodsMvcTestsConfig.class)
 public class AllMethodsMvcTests extends BaseTests {
 
     @Test
