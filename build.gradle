@@ -41,6 +41,7 @@ dependencies {
 
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
+    basicGetServiceCompile('org.springframework.boot:spring-boot-starter-web')
 	basicGetServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
 	basicGetServiceCompile(sourceSets.core.output)
 

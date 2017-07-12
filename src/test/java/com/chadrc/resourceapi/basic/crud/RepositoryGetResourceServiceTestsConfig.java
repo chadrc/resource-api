@@ -16,17 +16,10 @@ import java.util.List;
 @EnableWebMvc
 @WebAppConfiguration
 @AutoConfigureDataMongo
-public class RespositoryGetResourceServiceTestsConfig {
+public class RepositoryGetResourceServiceTestsConfig {
 
     @Bean
     public HttpMessageConverter getHttpMessageConverter() {
         return new MappingJackson2HttpMessageConverter();
-    }
-
-    @Bean
-    public List<ResourceService> getResourceServices() {
-        return new ArrayList<ResourceService>() {{
-            add(new RepositoryGetResourceService());
-        }};
     }
 }
