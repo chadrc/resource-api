@@ -18,6 +18,7 @@ public class Book implements ResourceModel {
     }
 
     public Book(String title, String author) {
+        this.id = new ObjectId();
         this.title = title;
         this.author = author;
     }

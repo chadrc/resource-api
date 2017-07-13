@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class RepositoryGetResourceService implements GetResourceService<GetRequest> {
 
     private List<ResourceRepository> resourceRepositories;
