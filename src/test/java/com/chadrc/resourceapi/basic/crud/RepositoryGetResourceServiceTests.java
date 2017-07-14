@@ -57,7 +57,7 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     @Test
     public void getBookRecord() throws Exception {
         mockMvc.perform(get("/book")
-                .param("ids", books.get(0).getId()))
+                .param("id", books.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Book 1")))
                 .andExpect(jsonPath("$.author", is("Test Author")));
