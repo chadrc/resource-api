@@ -5,6 +5,7 @@ import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

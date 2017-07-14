@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends MongoRepository<Book, ObjectId>, ResourceRepository<Book, ObjectId> {
-    Book findByTitle(String s);
 }
