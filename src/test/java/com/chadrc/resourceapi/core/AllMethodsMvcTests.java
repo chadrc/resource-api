@@ -34,8 +34,7 @@ public class AllMethodsMvcTests extends BaseTests {
 
     @Test
     public void callWithGetMethodSucceeds() throws Exception {
-        mockMvc.perform(get("/book")
-                .param("data", json(new GetRequest())))
+        mockMvc.perform(get("/book"))
                 .andExpect(status().isOk());
     }
 
@@ -118,8 +117,9 @@ public class AllMethodsMvcTests extends BaseTests {
 
     @Test
     public void callWithInvalidJsonYields400() throws Exception {
-        mockMvc.perform(get("/book")
-                .param("data", "{not valid JSON}"))
+        mockMvc.perform(post("/book")
+                .contentType(contentType)
+                .content("{not valid JSON}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -130,7 +130,7 @@ public class AllMethodsMvcTests extends BaseTests {
     @Test
     public void getBookRecord() throws Exception {
         mockMvc.perform(get("/book")
-                .param("data", json(new GetRequest("0"))))
+                .param("id", "0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Harry Potter and the Philosopher's Stone")))
                 .andExpect(jsonPath("$.author", is("J.K. Rowling")));
@@ -139,14 +139,14 @@ public class AllMethodsMvcTests extends BaseTests {
     @Test
     public void getUnknownBookYields404() throws Exception {
         mockMvc.perform(get("/book")
-                .param("data", json(new GetRequest("100"))))
+                .param("id", "100"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void errorInServiceYields500() throws Exception {
         mockMvc.perform(get("/book")
-                .param("data", json(new GetRequest("-1"))))
+                .param("id","-1"))
                 .andExpect(status().isInternalServerError());
     }
 
@@ -154,7 +154,7 @@ public class AllMethodsMvcTests extends BaseTests {
     public void getSagaRecord() throws Exception {
         mockMvc.perform(get("/saga")
                 .contentType(contentType)
-                .param("data", json(new GetRequest("2"))))
+                .param("id","2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("A Song of Ice and Fire")))
                 .andExpect(jsonPath("$.books[0]", is(11)))

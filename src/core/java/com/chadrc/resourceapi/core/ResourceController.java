@@ -4,12 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -61,20 +66,12 @@ public class ResourceController {
 
     @RequestMapping(path = {"/{resourceName}", "/{resourceName}/*"})
     @SuppressWarnings("unchecked")
-    public ResponseEntity<Object> resource(@PathVariable String resourceName,
-                                           @RequestParam(required = false) String data,
-                                           @RequestBody(required = false) String  body,
-                                           HttpServletRequest servletRequest) {
+    public ResponseEntity<Object> resource(@PathVariable String resourceName, HttpServletRequest servletRequest) {
         RequestMethod method;
         try {
             method = RequestMethod.valueOf(servletRequest.getMethod());
         } catch (IllegalArgumentException | NullPointerException exception) {
             return ResponseEntity.status(405).build();
-        }
-
-        String requestObject = body;
-        if (method == RequestMethod.GET || method == RequestMethod.HEAD) {
-            requestObject = data;
         }
 
         Map<String, ServiceInfo> serviceInfoPaths = serviceInfoMap.get(method);
@@ -108,18 +105,34 @@ public class ResourceController {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            Object requestData = null;
-            if (!StringUtils.isEmpty(requestObject)) {
-                requestData = mapper.readValue(requestObject, serviceInfo.requestClass);
+            Constructor requestConstructor = null;
+            for (Constructor constructor : serviceInfo.requestClass.getConstructors()) {
+                if (constructor.getParameterCount() == 0) {
+                    requestConstructor = constructor;
+                }
             }
+            if (requestConstructor == null) {
+                throw new RequestTypeMustHaveConstructor();
+            }
+            Object requestData = null;
+            if (servletRequest.getContentLength() >= 0) {
+                if (!StringUtils.isEmpty(servletRequest.getContentType())
+                        && servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+                    requestData = mapper.readValue(servletRequest.getInputStream(), serviceInfo.requestClass);
+                }
+            }
+
+            if (requestData == null) {
+                requestData = requestConstructor.newInstance();
+            }
+
+            ServletRequestDataBinder dataBinder = new ExtendedServletRequestDataBinder(requestData);
+            dataBinder.bind(servletRequest);
             Result result = serviceInfo.resourceService.fulfill(resourceOptions.getResource(resourceName), requestData);
             if (result == null) {
                 throw new ServiceMustReturnResultException();
             }
             return ResponseEntity.ok(result.getResult());
-        } catch (IOException exception) {
-            log.error("Could not deserialize request data.", exception);
-            return ResponseEntity.badRequest().build();
         } catch (ResourceServiceThrowable throwable) {
             return ResponseEntity.status(throwable.getStatus()).body(throwable.getErrorObject());
         } catch (Exception exception) {
