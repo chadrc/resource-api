@@ -36,7 +36,7 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
 
     @Before
     @Override
-    public void setup() {
+    public void setup() throws Throwable {
         super.setup();
         books.clear();
         bookRepository.delete(bookRepository.findAll());

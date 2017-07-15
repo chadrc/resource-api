@@ -22,7 +22,7 @@ public class CustomBasePathTestConfig {
     }
 
     @Bean
-    public List<ResourceService> getResourceServices() {
+    public List<ResourceService> getResourceServices() throws Throwable {
         return new ArrayList<ResourceService>() {{
             add(new MockGetResourceService());
         }};

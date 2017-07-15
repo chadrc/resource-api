@@ -45,6 +45,10 @@ public class MockGetResourceService implements ResourceService<GetRequest> {
         add(new Saga("A Song of Ice and Fire", Arrays.asList(11, 12, 13, 14, 15, 16, 17)));
     }};
 
+    public MockGetResourceService() throws Throwable {
+
+    }
+
     @Override
     public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         if (request == null || request.getId() == null) {

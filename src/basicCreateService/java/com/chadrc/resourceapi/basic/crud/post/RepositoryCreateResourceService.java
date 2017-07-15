@@ -6,16 +6,20 @@ import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 
 @RequestMapping(method = RequestMethod.POST)
 public class RepositoryCreateResourceService implements ResourceService<CreateRequest> {
+
+    private static Logger log = Logger.getLogger(RepositoryCreateResourceService.class);
 
     private ResourceRepositorySet resourceRepositorySet;
 
@@ -46,8 +50,14 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                 Object obj = selectedConstructor.newInstance(collectArgValues(request.getParamValues()));
                 resourceRepository.save(obj);
                 return Resource.result(new CreateResult(obj));
+            } catch (InvocationTargetException invokeException) {
+                if (invokeException.getCause() instanceof ResourceServiceThrowable) {
+                    throw (ResourceServiceThrowable) invokeException.getCause();
+                } else {
+                    log.error("Failed to create resource.", invokeException);
+                }
             } catch (Exception e) {
-//                log.error("Failed to create resource.", e);
+                log.error("Failed to create resource.", e);
             }
         } else {
             throw Resource.badRequest();

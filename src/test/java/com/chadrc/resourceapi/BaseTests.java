@@ -45,7 +45,7 @@ public abstract class BaseTests {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws Throwable {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 

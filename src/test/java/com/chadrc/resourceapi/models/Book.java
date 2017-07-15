@@ -1,9 +1,12 @@
 package com.chadrc.resourceapi.models;
 
+import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceModel;
+import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class Book implements ResourceModel {
@@ -17,7 +20,10 @@ public class Book implements ResourceModel {
 
     }
 
-    public Book(String title, String author) {
+    public Book(String title, String author) throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(title) || StringUtils.isEmpty(author)) {
+            throw Resource.badRequest();
+        }
         this.id = new ObjectId();
         this.title = title;
         this.author = author;

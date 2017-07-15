@@ -21,7 +21,7 @@ public class AllMethodsMvcTestsConfig {
     }
 
     @Bean
-    public List<ResourceService> getResourceServices() {
+    public List<ResourceService> getResourceServices() throws Throwable {
         return new ArrayList<ResourceService>() {{
             add(new MockDeleteResourceService());
             add(new MockGetResourceService());

@@ -27,7 +27,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
 
     @Before
     @Override
-    public void setup() {
+    public void setup() throws Throwable {
         super.setup();
         bookRepository.delete(bookRepository.findAll());
     }
@@ -67,6 +67,17 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<Object>() {{
                     add(100);
+                }}))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void errorDuringConstructorYields400() throws Exception {
+        mockMvc.perform(post("/book")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<Object>() {{
+                    add("");
+                    add("");
                 }}))))
                 .andExpect(status().isBadRequest());
     }
