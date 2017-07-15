@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud;
+package com.chadrc.resourceapi.basic.crud.get;
 
 public class GetRequest {
     private String id;

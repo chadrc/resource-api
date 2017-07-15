@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud;
+package com.chadrc.resourceapi.basic.crud.get;
 
 import com.chadrc.resourceapi.models.Book;
 import org.bson.types.ObjectId;

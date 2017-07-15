@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud;
+package com.chadrc.resourceapi.basic.crud.get;
 
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;

@@ -1,14 +1,12 @@
-package com.chadrc.resourceapi.basic.crud;
+package com.chadrc.resourceapi.basic.crud.get;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.models.Book;
-import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
