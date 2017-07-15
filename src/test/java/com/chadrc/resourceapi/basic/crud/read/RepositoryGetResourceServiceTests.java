@@ -76,6 +76,24 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void getBookPage() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("page", "0")
+                .param("count", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].title", is("Book 1")))
+                .andExpect(jsonPath("$.data.[0].author", is("Test Author")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 2")))
+                .andExpect(jsonPath("$.data.[1].author", is("Test Author")))
+                .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
+                .andExpect(jsonPath("$.data.[2].author", is("Test Author")))
+                .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
+                .andExpect(jsonPath("$.data.[3].author", is("Fake Author")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 5")))
+                .andExpect(jsonPath("$.data.[4].author", is("Fake Author")));
+    }
+
+    @Test
     public void getSagaRecord() throws Exception {
         mockMvc.perform(get("/saga")
                 .param("id", sagas.get(0).getId()))
@@ -84,7 +102,7 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void nullIdYields400() throws Exception {
+    public void noParamsYields400() throws Exception {
         mockMvc.perform(get("/book"))
                 .andExpect(status().isBadRequest());
     }

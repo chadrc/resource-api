@@ -1,11 +1,15 @@
 package com.chadrc.resourceapi.basic.crud.read;
 
+import com.chadrc.resourceapi.basic.CRUDResult;
+import com.chadrc.resourceapi.basic.ResourceRepository;
 import com.chadrc.resourceapi.basic.ResourceRepositorySet;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,12 +27,32 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
     @Override
     public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         if (StringUtils.isEmpty(request.getId())) {
-            throw Resource.badRequest();
+            return getPage(resourceType, request);
+        } else {
+            return getOne(resourceType, request);
         }
+    }
+
+    private Result getOne(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         Object resource = resourceRepositorySet.getRepository(resourceType).findOne(request.getId());
         if (resource == null) {
             throw Resource.notFound();
         }
         return Resource.result(resource);
+    }
+
+    private Result getPage(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
+        ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
+        Integer page = request.getPage();
+        if (page == null) {
+            page = 0;
+        }
+        Integer count = request.getCount();
+        if (count == null) {
+            count = 10;
+        }
+        PageRequest pageRequest = new PageRequest(page, count);
+        Page p = resourceRepository.findAll(pageRequest);
+        return Resource.result(new CRUDResult(p.getContent()));
     }
 }
