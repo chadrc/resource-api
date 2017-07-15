@@ -76,24 +76,24 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
         mockMvc.perform(get("/book")
                 .param("id", books.get(0).getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title", is("Book 1")))
-                .andExpect(jsonPath("$.author", is("Test Author")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 1")))
+                .andExpect(jsonPath("$.data.records[0].author", is("Alpha")));
     }
 
     @Test
-    public void getDefaultBookpage() throws Exception {
+    public void getDefaultBookPage() throws Exception {
         mockMvc.perform(get("/book"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 1")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 2")))
-                .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 5")))
-                .andExpect(jsonPath("$.data.[5].title", is("Book 6")))
-                .andExpect(jsonPath("$.data.[6].title", is("Book 7")))
-                .andExpect(jsonPath("$.data.[7].title", is("Book 8")))
-                .andExpect(jsonPath("$.data.[8].title", is("Book 9")))
-                .andExpect(jsonPath("$.data.[9].title", is("Book 10")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 1")))
+                .andExpect(jsonPath("$.data.records[1].title", is("Book 2")))
+                .andExpect(jsonPath("$.data.records[2].title", is("Book 3")))
+                .andExpect(jsonPath("$.data.records[3].title", is("Book 4")))
+                .andExpect(jsonPath("$.data.records[4].title", is("Book 5")))
+                .andExpect(jsonPath("$.data.records[5].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.records[6].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.records[7].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.records[8].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.records[9].title", is("Book 10")));
     }
 
     @Test
@@ -102,11 +102,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("page", "0")
                 .param("count", "5"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 1")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 2")))
-                .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 1")))
+                .andExpect(jsonPath("$.data.records[1].title", is("Book 2")))
+                .andExpect(jsonPath("$.data.records[2].title", is("Book 3")))
+                .andExpect(jsonPath("$.data.records[3].title", is("Book 4")))
+                .andExpect(jsonPath("$.data.records[4].title", is("Book 5")));
     }
 
     @Test
@@ -115,11 +115,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("page", "1")
                 .param("count", "5"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 6")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 7")))
-                .andExpect(jsonPath("$.data.[2].title", is("Book 8")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 9")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 10")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.records[1].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.records[2].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.records[3].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.records[4].title", is("Book 10")));
     }
 
     @Test
@@ -130,11 +130,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("sort[0].field", "title")
                 .param("sort[0].direction", "DESC"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 9")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 8")))
-                .andExpect(jsonPath("$.data.[2].title", is("Book 7")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 6")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.records[1].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.records[2].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.records[3].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.records[4].title", is("Book 5")));
     }
 
     @Test
@@ -147,11 +147,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("sort[1].field", "title")
                 .param("sort[1].direction", "ASC"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 11")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 12")))
-                .andExpect(jsonPath("$.data.[2].title", is("Book 13")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 14")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 15")));
+                .andExpect(jsonPath("$.data.records[0].title", is("Book 11")))
+                .andExpect(jsonPath("$.data.records[1].title", is("Book 12")))
+                .andExpect(jsonPath("$.data.records[2].title", is("Book 13")))
+                .andExpect(jsonPath("$.data.records[3].title", is("Book 14")))
+                .andExpect(jsonPath("$.data.records[4].title", is("Book 15")));
     }
 
     @Test
@@ -159,13 +159,7 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
         mockMvc.perform(get("/saga")
                 .param("id", sagas.get(0).getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("Saga 1")));
-    }
-
-    @Test
-    public void noParamsYields400() throws Exception {
-        mockMvc.perform(get("/book"))
-                .andExpect(status().isBadRequest());
+                .andExpect(jsonPath("$.data.records[0].name", is("Saga 1")));
     }
 
     @Test

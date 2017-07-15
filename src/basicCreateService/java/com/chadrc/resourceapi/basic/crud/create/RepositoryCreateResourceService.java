@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.basic.crud.create;
 
+import com.chadrc.resourceapi.basic.CRUDResult;
 import com.chadrc.resourceapi.basic.ResourceRepository;
 import com.chadrc.resourceapi.basic.ResourceRepositorySet;
 import com.chadrc.resourceapi.core.Resource;
@@ -49,7 +50,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             try {
                 Object obj = selectedConstructor.newInstance(collectArgValues(request.getParamValues()));
                 resourceRepository.save(obj);
-                return Resource.result(new CreateResult(obj));
+                return Resource.result(new CRUDResult(obj));
             } catch (InvocationTargetException invokeException) {
                 if (invokeException.getCause() instanceof ResourceServiceThrowable) {
                     throw (ResourceServiceThrowable) invokeException.getCause();

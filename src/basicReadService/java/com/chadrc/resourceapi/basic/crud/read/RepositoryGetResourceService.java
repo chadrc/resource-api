@@ -30,22 +30,26 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
 
     @Override
     public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
+        Object result;
         if (StringUtils.isEmpty(request.getId())) {
-            return getPage(resourceType, request);
+            result = getPage(resourceType, request);
         } else {
-            return getOne(resourceType, request);
+            result = getOne(resourceType, request);
         }
+        return Resource.result(new CRUDResult(new GetResult(result)));
     }
 
-    private Result getOne(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
+    private Object getOne(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         Object resource = resourceRepositorySet.getRepository(resourceType).findOne(request.getId());
         if (resource == null) {
             throw Resource.notFound();
         }
-        return Resource.result(resource);
+        return new ArrayList<Object>() {{
+            add(resource);
+        }};
     }
 
-    private Result getPage(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
+    private Object getPage(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
         Integer page = request.getPage();
         if (page == null) {
@@ -58,7 +62,7 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
         if (request.getSort() == null || request.getSort().isEmpty()) {
             PageRequest pageRequest = new PageRequest(page, count);
             Page p = resourceRepository.findAll(pageRequest);
-            return Resource.result(new CRUDResult(p.getContent()));
+            return p.getContent();
         }
         List<Sort.Order> orderList = new ArrayList<>();
         for (GetSort getSort : request.getSort()) {
@@ -67,10 +71,11 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
         Sort sort = new Sort(orderList);
         PageRequest pageRequest = new PageRequest(page, count, sort);
         Page p = resourceRepository.findAll(pageRequest);
-        return Resource.result(new CRUDResult(p.getContent()));
+        return p.getContent();
     }
 
     private Sort.Direction convertDirection(SortDirection sortDirection) {
         return sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
     }
 }
+

@@ -57,8 +57,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                     add("Author");
                 }}))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.created.title", Matchers.is("Created Book")))
-                .andExpect(jsonPath("$.created.author", Matchers.is("Author")));
+                .andExpect(jsonPath("$.data.title", Matchers.is("Created Book")))
+                .andExpect(jsonPath("$.data.author", Matchers.is("Author")));
     }
 
     @Test
