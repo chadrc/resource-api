@@ -8,6 +8,7 @@ import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -28,6 +29,9 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
 
     @Override
     public Result fulfill(Class resourceType, PatchRequest request) throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(request.getId())) {
+            throw Resource.badRequest();
+        }
         ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
         Object resource = resourceRepository.findOne(request.getId());
         if (resource == null) {
