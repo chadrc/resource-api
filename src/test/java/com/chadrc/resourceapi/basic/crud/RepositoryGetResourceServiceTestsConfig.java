@@ -9,9 +9,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @ComponentScan(basePackages = {"com.chadrc.resourceapi"})
 @EnableWebMvc
 @WebAppConfiguration
