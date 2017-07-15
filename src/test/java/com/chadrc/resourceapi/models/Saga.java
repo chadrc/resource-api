@@ -1,6 +1,8 @@
 package com.chadrc.resourceapi.models;
 
 import com.chadrc.resourceapi.core.ResourceModel;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -8,6 +10,9 @@ import java.util.List;
 
 @Component
 public class Saga implements ResourceModel {
+
+    @Id
+    private ObjectId id;
     private String name = "";
     private List<Integer> books = new ArrayList<>();
 
@@ -16,8 +21,13 @@ public class Saga implements ResourceModel {
     }
 
     public Saga(String name, List<Integer> books) {
+        this.id = new ObjectId();
         this.name = name;
         this.books = books;
+    }
+
+    public String getId() {
+        return id.toString();
     }
 
     public String getName() {

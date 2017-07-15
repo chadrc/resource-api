@@ -2,7 +2,9 @@ package com.chadrc.resourceapi.basic.crud.get;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
+import com.chadrc.resourceapi.basic.SagaRepository;
 import com.chadrc.resourceapi.models.Book;
+import com.chadrc.resourceapi.models.Saga;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +28,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private SagaRepository sagaRepository;
+
     private List<Book> books = new ArrayList<>();
+    private List<Saga> sagas = new ArrayList<>();
 
     @Before
     @Override
@@ -34,6 +40,7 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
         super.setup();
         books.clear();
         bookRepository.delete(bookRepository.findAll());
+        sagaRepository.delete(sagaRepository.findAll());
 
         books = Arrays.asList(
                 bookRepository.insert(new Book("Book 1", "Test Author")),
@@ -45,7 +52,13 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 bookRepository.insert(new Book("Book 7", "Fake Author")),
                 bookRepository.insert(new Book("Book 8", "Fake Author")),
                 bookRepository.insert(new Book("Book 9", "Fake Author")),
-                bookRepository.insert(new Book("Book 10", "Fake Author")));
+                bookRepository.insert(new Book("Book 10", "Fake Author"))
+        );
+
+        sagas = Arrays.asList(
+                sagaRepository.insert(new Saga("Saga 1", Arrays.asList(0, 1, 2))),
+                sagaRepository.insert(new Saga("Saga 2", Arrays.asList(3, 4, 5)))
+        );
     }
 
     @Test
@@ -60,6 +73,14 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title", is("Book 1")))
                 .andExpect(jsonPath("$.author", is("Test Author")));
+    }
+
+    @Test
+    public void getSagaRecord() throws Exception {
+        mockMvc.perform(get("/saga")
+                .param("id", sagas.get(0).getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Saga 1")));
     }
 
     @Test
