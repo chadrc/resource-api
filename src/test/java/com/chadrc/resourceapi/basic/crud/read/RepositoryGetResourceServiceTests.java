@@ -145,13 +145,13 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("sort[0].field", "author")
                 .param("sort[0].direction", "DESC")
                 .param("sort[1].field", "title")
-                .param("sort[1].direction", "DESC"))
+                .param("sort[1].direction", "ASC"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.[0].title", is("Book 15")))
-                .andExpect(jsonPath("$.data.[1].title", is("Book 14")))
+                .andExpect(jsonPath("$.data.[0].title", is("Book 11")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 12")))
                 .andExpect(jsonPath("$.data.[2].title", is("Book 13")))
-                .andExpect(jsonPath("$.data.[3].title", is("Book 12")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 11")));
+                .andExpect(jsonPath("$.data.[3].title", is("Book 14")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 15")));
     }
 
     @Test
