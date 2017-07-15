@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.get;
+package com.chadrc.resourceapi.basic.crud.post;
 
 import com.chadrc.resourceapi.core.ResourceService;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @WebAppConfiguration
 @DataMongoTest
 @EnableMongoRepositories("com.chadrc.resourceapi")
-public class RepositoryGetResourceServiceTestsConfig {
+public class RepositoryCreateResourceServiceTestsConfig {
 
     @Bean
     public HttpMessageConverter getHttpMessageConverter() {
@@ -23,7 +23,7 @@ public class RepositoryGetResourceServiceTestsConfig {
     }
 
     @Bean
-    public ResourceService getRepositoryGetResourceService() {
-        return new RepositoryGetResourceService();
+    public ResourceService getRepositoryCreateResourceService() {
+        return new RepositoryCreateResourceService();
     }
 }

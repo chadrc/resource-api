@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.basic.crud.get;
 
+import com.chadrc.resourceapi.basic.ResourceRepository;
 import com.chadrc.resourceapi.core.GetResourceService;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;

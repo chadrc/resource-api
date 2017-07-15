@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.basic.crud.get;
 
 import com.chadrc.resourceapi.BaseTests;
+import com.chadrc.resourceapi.basic.BookRepository;
 import com.chadrc.resourceapi.models.Book;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,5 @@
 package com.chadrc.resourceapi.basic;
 
-import com.chadrc.resourceapi.basic.crud.get.ResourceRepository;
 import com.chadrc.resourceapi.models.Book;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
