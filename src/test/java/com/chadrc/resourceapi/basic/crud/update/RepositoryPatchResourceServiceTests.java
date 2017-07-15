@@ -66,4 +66,15 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .content(json(new PatchRequest(bookToUpdate.getId(), updates))))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void errorInUpdateYields400() throws Exception {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("title", "");
+
+        mockMvc.perform(patch("/book")
+                .contentType(contentType)
+                .content(json(new PatchRequest(bookToUpdate.getId(), updates))))
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @RequestMapping(method = RequestMethod.PATCH)
@@ -54,6 +55,11 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
 
             resourceRepository.save(resource);
             return Resource.emptyResult();
+        } catch (InvocationTargetException invocationException) {
+            if (invocationException.getCause() instanceof ResourceServiceThrowable) {
+                throw (ResourceServiceThrowable) invocationException.getCause();
+            }
+            log.error("Failed to invoke setter:", invocationException);
         } catch (Exception e) {
             log.error("Failed to invoke setter:", e);
         }

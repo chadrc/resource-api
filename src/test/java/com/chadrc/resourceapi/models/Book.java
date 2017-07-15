@@ -41,7 +41,10 @@ public class Book implements ResourceModel {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title) throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(title)) {
+            throw Resource.badRequest();
+        }
         this.title = title;
     }
 
