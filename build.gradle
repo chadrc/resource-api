@@ -41,6 +41,10 @@ sourceSets {
     basicUpdateService {
 
     }
+
+    basicDeleteService {
+
+    }
 }
 
 dependencies {
@@ -69,6 +73,11 @@ dependencies {
     basicUpdateServiceCompile(sourceSets.basic.output)
     basicUpdateServiceCompile(sourceSets.core.output)
 
+    basicDeleteServiceCompile('org.springframework.boot:spring-boot-starter-web')
+    basicDeleteServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicDeleteServiceCompile(sourceSets.basic.output)
+    basicDeleteServiceCompile(sourceSets.core.output)
+
 	testCompile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('com.jayway.jsonpath:json-path')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -81,4 +90,5 @@ dependencies {
 	testCompile(sourceSets.basicGetService.output)
     testCompile(sourceSets.basicCreateService.output)
     testCompile(sourceSets.basicUpdateService.output)
+    testCompile(sourceSets.basicDeleteService.output)
 }
