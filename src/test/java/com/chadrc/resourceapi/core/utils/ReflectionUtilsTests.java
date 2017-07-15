@@ -7,15 +7,9 @@ import java.lang.reflect.Type;
 import static org.junit.Assert.assertEquals;
 
 interface GenericInterface<T> {
-
 }
 
 interface DirectExtender extends GenericInterface<String> {
-
-}
-
-interface GenericExtender<T> extends GenericInterface<T> {
-
 }
 
 public class ReflectionUtilsTests {
@@ -40,8 +34,4 @@ class DirectImplementor implements GenericInterface<Integer> {
 }
 
 class IndirectImplementor implements DirectExtender {
-}
-
-class ExtenderImplementor implements GenericExtender<String> {
-
 }
