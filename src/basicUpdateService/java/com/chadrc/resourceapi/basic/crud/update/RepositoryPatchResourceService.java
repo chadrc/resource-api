@@ -47,6 +47,8 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
 
                 if (setterMethod != null) {
                     setterMethod.invoke(resource, value);
+                } else {
+                    throw Resource.badRequest();
                 }
             }
 

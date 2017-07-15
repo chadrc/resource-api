@@ -55,4 +55,15 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals("Updated Title", book.getTitle());
         assertEquals("Updated Author", book.getAuthor());
     }
+
+    @Test
+    public void updateUnknownFieldYields400() throws Exception {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("notAField", "Value");
+
+        mockMvc.perform(patch("/book")
+                .contentType(contentType)
+                .content(json(new PatchRequest(bookToUpdate.getId(), updates))))
+                .andExpect(status().isBadRequest());
+    }
 }
