@@ -49,6 +49,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             } catch (Exception e) {
 //                log.error("Failed to create resource.", e);
             }
+        } else {
+            throw Resource.badRequest();
         }
 
         return null;

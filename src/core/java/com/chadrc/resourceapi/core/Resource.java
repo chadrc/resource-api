@@ -16,6 +16,10 @@ public final class Resource {
         return new Result(null);
     }
 
+    public static ResourceServiceThrowable badRequest() {
+        return new ResourceServiceThrowable(400);
+    }
+
     public static ResourceServiceThrowable notFound() {
         return new ResourceServiceThrowable(404);
     }
