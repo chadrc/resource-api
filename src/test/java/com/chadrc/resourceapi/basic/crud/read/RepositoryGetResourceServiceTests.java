@@ -46,13 +46,18 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 bookRepository.insert(new Book("Book 1", "Test Author")),
                 bookRepository.insert(new Book("Book 2", "Test Author")),
                 bookRepository.insert(new Book("Book 3", "Test Author")),
-                bookRepository.insert(new Book("Book 4", "Fake Author")),
-                bookRepository.insert(new Book("Book 5", "Fake Author")),
-                bookRepository.insert(new Book("Book 6", "Fake Author")),
-                bookRepository.insert(new Book("Book 7", "Fake Author")),
-                bookRepository.insert(new Book("Book 8", "Fake Author")),
-                bookRepository.insert(new Book("Book 9", "Fake Author")),
-                bookRepository.insert(new Book("Book 10", "Fake Author"))
+                bookRepository.insert(new Book("Book 4", "Test Author")),
+                bookRepository.insert(new Book("Book 5", "Test Author")),
+                bookRepository.insert(new Book("Book 6", "Test Author")),
+                bookRepository.insert(new Book("Book 7", "Test Author")),
+                bookRepository.insert(new Book("Book 8", "Test Author")),
+                bookRepository.insert(new Book("Book 9", "Test Author")),
+                bookRepository.insert(new Book("Book 10", "Test Author")),
+                bookRepository.insert(new Book("Book 11", "Test Author")),
+                bookRepository.insert(new Book("Book 12", "Test Author")),
+                bookRepository.insert(new Book("Book 13", "Test Author")),
+                bookRepository.insert(new Book("Book 14", "Test Author")),
+                bookRepository.insert(new Book("Book 15", "Test Author"))
         );
 
         sagas = Arrays.asList(
@@ -82,15 +87,25 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .param("count", "5"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.[0].title", is("Book 1")))
-                .andExpect(jsonPath("$.data.[0].author", is("Test Author")))
                 .andExpect(jsonPath("$.data.[1].title", is("Book 2")))
-                .andExpect(jsonPath("$.data.[1].author", is("Test Author")))
                 .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
-                .andExpect(jsonPath("$.data.[2].author", is("Test Author")))
                 .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
-                .andExpect(jsonPath("$.data.[3].author", is("Fake Author")))
-                .andExpect(jsonPath("$.data.[4].title", is("Book 5")))
-                .andExpect(jsonPath("$.data.[4].author", is("Fake Author")));
+                .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
+    }
+
+    @Test
+    public void getBookPageSorted() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("page", "0")
+                .param("count", "5")
+                .param("sort.field", "title")
+                .param("sort.direction", "DESC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.[2].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.[3].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
     }
 
     @Test

@@ -4,6 +4,7 @@ public class GetRequest {
     private String id;
     private Integer page;
     private Integer count;
+    private Sort sort;
 
     public GetRequest() {
 
@@ -40,5 +41,13 @@ public class GetRequest {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Sort getSort() {
+        return sort;
+    }
+
+    public void setSort(Sort sort) {
+        this.sort = sort;
     }
 }

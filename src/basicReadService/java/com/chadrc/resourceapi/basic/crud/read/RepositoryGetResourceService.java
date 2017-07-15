@@ -10,6 +10,7 @@ import com.chadrc.resourceapi.core.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,8 +52,18 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
         if (count == null) {
             count = 10;
         }
-        PageRequest pageRequest = new PageRequest(page, count);
+        if (request.getSort() == null) {
+            PageRequest pageRequest = new PageRequest(page, count);
+            Page p = resourceRepository.findAll(pageRequest);
+            return Resource.result(new CRUDResult(p.getContent()));
+        }
+        Sort sort = new Sort(new Sort.Order(convertDirection(request.getSort().getDirection()), request.getSort().getField()));
+        PageRequest pageRequest = new PageRequest(page, count, sort);
         Page p = resourceRepository.findAll(pageRequest);
         return Resource.result(new CRUDResult(p.getContent()));
+    }
+
+    private Sort.Direction convertDirection(SortDirection sortDirection) {
+        return sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
     }
 }
