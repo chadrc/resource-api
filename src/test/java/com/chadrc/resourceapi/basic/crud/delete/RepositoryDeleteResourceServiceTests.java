@@ -44,4 +44,10 @@ public class RepositoryDeleteResourceServiceTests extends BaseTests {
         List<Book> books = bookRepository.findAll();
         assertEquals(0, books.size());
     }
+
+    @Test
+    public void nullIdYields400() throws Throwable {
+        mockMvc.perform(delete("/book"))
+                .andExpect(status().isBadRequest());
+    }
 }

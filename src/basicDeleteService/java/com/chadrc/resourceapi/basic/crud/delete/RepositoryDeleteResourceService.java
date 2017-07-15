@@ -8,6 +8,7 @@ import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +26,9 @@ public class RepositoryDeleteResourceService implements ResourceService<DeleteRe
 
     @Override
     public Result fulfill(Class resourceType, DeleteRequest request) throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(request.getId())) {
+            throw Resource.badRequest();
+        }
         ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
         resourceRepository.delete(request.getId());
         return Resource.emptyResult();
