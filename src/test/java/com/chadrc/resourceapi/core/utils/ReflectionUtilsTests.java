@@ -30,11 +30,6 @@ public class ReflectionUtilsTests {
         assertFoundTypeIsClass(new IndirectImplementor(), String.class);
     }
 
-    @Test
-    public void genericTypeOfExtenderImplementor() {
-        assertFoundTypeIsClass(new ExtenderImplementor(), String.class);
-    }
-
     private void assertFoundTypeIsClass(Object obj, Class assertClass) {
         Type[] types = ReflectionUtils.getTypeArgsForTypeFromObject(GenericInterface.class, obj);
         assertEquals(assertClass, types[0]);
