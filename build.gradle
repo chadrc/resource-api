@@ -38,6 +38,9 @@ sourceSets {
     basicCreateService {
 
     }
+    basicUpdateService {
+
+    }
 }
 
 dependencies {
@@ -61,6 +64,11 @@ dependencies {
     basicCreateServiceCompile(sourceSets.basic.output)
     basicCreateServiceCompile(sourceSets.core.output)
 
+    basicUpdateServiceCompile('org.springframework.boot:spring-boot-starter-web')
+    basicUpdateServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicUpdateServiceCompile(sourceSets.basic.output)
+    basicUpdateServiceCompile(sourceSets.core.output)
+
 	testCompile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('com.jayway.jsonpath:json-path')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -72,4 +80,5 @@ dependencies {
     testCompile(sourceSets.basic.output)
 	testCompile(sourceSets.basicGetService.output)
     testCompile(sourceSets.basicCreateService.output)
+    testCompile(sourceSets.basicUpdateService.output)
 }
