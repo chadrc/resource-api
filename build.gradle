@@ -29,9 +29,15 @@ sourceSets {
 	core {
 
 	}
+    basic {
+
+    }
 	basicGetService {
 
 	}
+    basicCreateService {
+
+    }
 }
 
 dependencies {
@@ -41,9 +47,19 @@ dependencies {
 
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
+    basicCompile('org.springframework.boot:spring-boot-starter-web')
+    basicCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicCompile(sourceSets.core.output)
+
     basicGetServiceCompile('org.springframework.boot:spring-boot-starter-web')
-	basicGetServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicGetServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicGetServiceCompile(sourceSets.basic.output)
 	basicGetServiceCompile(sourceSets.core.output)
+
+    basicCreateServiceCompile('org.springframework.boot:spring-boot-starter-web')
+    basicCreateServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicCreateServiceCompile(sourceSets.basic.output)
+    basicCreateServiceCompile(sourceSets.core.output)
 
 	testCompile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('com.jayway.jsonpath:json-path')
@@ -53,5 +69,7 @@ dependencies {
     testCompile('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
 
 	testCompile(sourceSets.core.output)
+    testCompile(sourceSets.basic.output)
 	testCompile(sourceSets.basicGetService.output)
+    testCompile(sourceSets.basicCreateService.output)
 }
