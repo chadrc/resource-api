@@ -13,7 +13,7 @@ import java.util.Map;
 public class ResourceRepositorySet {
     private Map<Class, ResourceRepository> resourceRepositoriesByClass = new HashMap<>();
 
-    @Autowired
+    @Autowired(required = false)
     public void setResourceRepositories(List<ResourceRepository> resourceRepositories) {
         for (ResourceRepository resourceRepository : resourceRepositories) {
             Type[] typeArgs = ReflectionUtils.getTypeArgsForTypeFromObject(ResourceRepository.class, resourceRepository);

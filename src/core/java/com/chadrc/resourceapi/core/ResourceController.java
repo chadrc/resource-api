@@ -1,5 +1,7 @@
 package com.chadrc.resourceapi.core;
 
+import com.chadrc.resourceapi.core.utils.ReflectionUtils;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +9,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ExtendedServletRequestDataBinder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +29,7 @@ public class ResourceController {
     private static Logger log = Logger.getLogger(ResourceController.class);
 
     private ResourceOptions resourceOptions;
-    private Map<RequestMethod, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
+    private Map<String, Map<String, ServiceInfo>> serviceInfoMap = new HashMap<>();
     @Value("${baseResourceUri}")
     private String baseResourceUri;
 
@@ -37,18 +39,25 @@ public class ResourceController {
     }
 
     @Autowired
-    public void setResourceServiceMap(List<ResourceService> resourceServices, List<ResourceOptionsProvider> resourceOptionsProviders) {
+    public void setResourceServiceMap(List<ResourceService> resourceServices) {
         for (ResourceService resourceService : resourceServices) {
             Class c = resourceService.getClass();
-            Type onlyInterface = c.getGenericInterfaces()[0];
-            Class requestClass = (Class) ((ParameterizedType) onlyInterface).getActualTypeArguments()[0];
-            ServiceInfo serviceInfo = new ServiceInfo(resourceService, resourceService.getRequestMethod(), requestClass);
+            Type[] typeArgs = ReflectionUtils.getTypeArgsForTypeFromObject(ResourceService.class, resourceService);
+            Class requestClass = (Class) typeArgs[0];
             RequestMapping requestMapping = (RequestMapping) c.getAnnotation(RequestMapping.class);
+            ResourceMethod resourceMethod = (ResourceMethod) c.getAnnotation(ResourceMethod.class);
+            String requestMethod;
+            if (resourceMethod == null) {
+                requestMethod = requestMapping.method()[0].toString();
+            } else {
+                requestMethod = resourceMethod.value();
+            }
+            ServiceInfo serviceInfo = new ServiceInfo(resourceService, requestMethod, requestClass);
             Map<String, ServiceInfo> serviceInfoPathMap = serviceInfoMap.computeIfAbsent(
-                    resourceService.getRequestMethod(), k -> new HashMap<>()
+                    requestMethod, k -> new HashMap<>()
             );
             String[] paths;
-            if (requestMapping == null) {
+            if (requestMapping == null || requestMapping.path().length == 0) {
                 paths = new String[]{"/"};
             } else {
                 paths = requestMapping.path();
@@ -67,17 +76,17 @@ public class ResourceController {
     @RequestMapping(path = {"/{resourceName}", "/{resourceName}/*"})
     @SuppressWarnings("unchecked")
     public ResponseEntity<Object> resource(@PathVariable String resourceName, HttpServletRequest servletRequest) {
-        RequestMethod method;
+        String method;
         try {
-            method = RequestMethod.valueOf(servletRequest.getMethod());
+            method = servletRequest.getMethod();
         } catch (IllegalArgumentException | NullPointerException exception) {
             return ResponseEntity.status(405).build();
         }
 
         Map<String, ServiceInfo> serviceInfoPaths = serviceInfoMap.get(method);
         if (serviceInfoPaths == null) {
-            if (method == RequestMethod.HEAD) {
-                serviceInfoPaths = serviceInfoMap.get(RequestMethod.GET);
+            if (method.equals(RequestMethod.HEAD.toString())) {
+                serviceInfoPaths = serviceInfoMap.get(RequestMethod.GET.toString());
                 if (serviceInfoPaths == null) {
                     return ResponseEntity.status(405).build();
                 }
@@ -117,7 +126,8 @@ public class ResourceController {
             Object requestData = null;
             if (servletRequest.getContentLength() >= 0) {
                 if (!StringUtils.isEmpty(servletRequest.getContentType())
-                        && servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
+                        && (servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)
+                        || servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE))) {
                     requestData = mapper.readValue(servletRequest.getInputStream(), serviceInfo.requestClass);
                 }
             }
@@ -133,6 +143,8 @@ public class ResourceController {
                 throw new ServiceMustReturnResultException();
             }
             return ResponseEntity.ok(result.getResult());
+        } catch (JsonParseException parseException) {
+            return ResponseEntity.badRequest().build();
         } catch (ResourceServiceThrowable throwable) {
             return ResponseEntity.status(throwable.getStatus()).body(throwable.getErrorObject());
         } catch (Exception exception) {
@@ -143,11 +155,11 @@ public class ResourceController {
 
     private class ServiceInfo {
         ResourceService resourceService;
-        RequestMethod httpMethod;
+        String httpMethod;
         Class requestClass;
         RequestMapping requestMapping;
 
-        ServiceInfo(ResourceService resourceService, RequestMethod httpMethod, Class requestClass) {
+        ServiceInfo(ResourceService resourceService, String httpMethod, Class requestClass) {
             this.resourceService = resourceService;
             this.httpMethod = httpMethod;
             this.requestClass = requestClass;

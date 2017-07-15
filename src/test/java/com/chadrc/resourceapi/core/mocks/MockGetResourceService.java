@@ -1,12 +1,20 @@
 package com.chadrc.resourceapi.core.mocks;
 
-import com.chadrc.resourceapi.core.*;
+import com.chadrc.resourceapi.core.Resource;
+import com.chadrc.resourceapi.core.ResourceService;
+import com.chadrc.resourceapi.core.ResourceServiceThrowable;
+import com.chadrc.resourceapi.core.Result;
 import com.chadrc.resourceapi.models.Book;
 import com.chadrc.resourceapi.models.Saga;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class MockGetResourceService implements GetResourceService<GetRequest> {
+@RequestMapping(method = RequestMethod.GET)
+public class MockGetResourceService implements ResourceService<GetRequest> {
 
     private List<Book> books = new ArrayList<Book>() {{
         add(new Book("Harry Potter and the Philosopher's Stone", "J.K. Rowling"));
