@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.get;
+package com.chadrc.resourceapi.basic.crud.read;
 
 import com.chadrc.resourceapi.basic.ResourceRepositorySet;
 import com.chadrc.resourceapi.core.Resource;

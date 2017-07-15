@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.post;
+package com.chadrc.resourceapi.basic.crud.create;
 
 import java.util.ArrayList;
 import java.util.List;

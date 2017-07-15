@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.get;
+package com.chadrc.resourceapi.basic.crud.read;
 
 import com.chadrc.resourceapi.core.ResourceService;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;

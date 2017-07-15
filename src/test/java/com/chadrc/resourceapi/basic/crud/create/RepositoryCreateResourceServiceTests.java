@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.post;
+package com.chadrc.resourceapi.basic.crud.create;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
