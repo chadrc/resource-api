@@ -30,6 +30,9 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
     public Result fulfill(Class resourceType, PatchRequest request) throws ResourceServiceThrowable {
         ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
         Object resource = resourceRepository.findOne(request.getId());
+        if (resource == null) {
+            throw Resource.badRequest();
+        }
         Method[] methods = resourceType.getMethods();
         try {
             for (String fieldName : request.getFields().keySet()) {

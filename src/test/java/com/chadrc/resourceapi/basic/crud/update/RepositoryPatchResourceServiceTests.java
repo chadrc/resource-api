@@ -57,6 +57,17 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void nonExistentResourceYields400() throws Exception {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("title", "Value");
+
+        mockMvc.perform(patch("/book")
+                .contentType(contentType)
+                .content(json(new PatchRequest("UnknownId", updates))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void updateUnknownFieldYields400() throws Exception {
         Map<String, Object> updates = new HashMap<>();
         updates.put("notAField", "Value");
