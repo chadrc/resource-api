@@ -2,12 +2,19 @@ package com.chadrc.resourceapi.basic.crud.post;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
+import com.chadrc.resourceapi.models.Book;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RepositoryCreateResourceServiceTestsConfig.class)
@@ -25,5 +32,16 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     @Test
     public void contextLoads() {
 
+    }
+
+    @Test
+    public void createDefaultBook() throws Exception {
+        mockMvc.perform(post("/book")
+                .contentType(contentType)
+                .content(json(new CreateRequest())))
+                .andExpect(status().isOk());
+
+        List<Book> books = bookRepository.findAll();
+        assertEquals(1, books.size());
     }
 }
