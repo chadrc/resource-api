@@ -1,10 +1,12 @@
 package com.chadrc.resourceapi.basic.crud.read;
 
+import java.util.List;
+
 public class GetRequest {
     private String id;
     private Integer page;
     private Integer count;
-    private Sort sort;
+    private List<GetSort> sort;
 
     public GetRequest() {
 
@@ -43,11 +45,11 @@ public class GetRequest {
         this.count = count;
     }
 
-    public Sort getSort() {
+    public List<GetSort> getSort() {
         return sort;
     }
 
-    public void setSort(Sort sort) {
+    public void setSort(List<GetSort> sort) {
         this.sort = sort;
     }
 }

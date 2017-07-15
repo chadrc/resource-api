@@ -43,21 +43,21 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
         sagaRepository.delete(sagaRepository.findAll());
 
         books = Arrays.asList(
-                bookRepository.insert(new Book("Book 1", "Test Author")),
-                bookRepository.insert(new Book("Book 2", "Test Author")),
-                bookRepository.insert(new Book("Book 3", "Test Author")),
-                bookRepository.insert(new Book("Book 4", "Test Author")),
-                bookRepository.insert(new Book("Book 5", "Test Author")),
-                bookRepository.insert(new Book("Book 6", "Test Author")),
-                bookRepository.insert(new Book("Book 7", "Test Author")),
-                bookRepository.insert(new Book("Book 8", "Test Author")),
-                bookRepository.insert(new Book("Book 9", "Test Author")),
-                bookRepository.insert(new Book("Book 10", "Test Author")),
-                bookRepository.insert(new Book("Book 11", "Test Author")),
-                bookRepository.insert(new Book("Book 12", "Test Author")),
-                bookRepository.insert(new Book("Book 13", "Test Author")),
-                bookRepository.insert(new Book("Book 14", "Test Author")),
-                bookRepository.insert(new Book("Book 15", "Test Author"))
+                bookRepository.insert(new Book("Book 1", "Alpha")),
+                bookRepository.insert(new Book("Book 2", "Alpha")),
+                bookRepository.insert(new Book("Book 3", "Alpha")),
+                bookRepository.insert(new Book("Book 4", "Alpha")),
+                bookRepository.insert(new Book("Book 5", "Alpha")),
+                bookRepository.insert(new Book("Book 6", "Bravo")),
+                bookRepository.insert(new Book("Book 7", "Bravo")),
+                bookRepository.insert(new Book("Book 8", "Bravo")),
+                bookRepository.insert(new Book("Book 9", "Bravo")),
+                bookRepository.insert(new Book("Book 10", "Bravo")),
+                bookRepository.insert(new Book("Book 11", "Charlie")),
+                bookRepository.insert(new Book("Book 12", "Charlie")),
+                bookRepository.insert(new Book("Book 13", "Charlie")),
+                bookRepository.insert(new Book("Book 14", "Charlie")),
+                bookRepository.insert(new Book("Book 15", "Charlie"))
         );
 
         sagas = Arrays.asList(
@@ -98,14 +98,31 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
         mockMvc.perform(get("/book")
                 .param("page", "0")
                 .param("count", "5")
-                .param("sort.field", "title")
-                .param("sort.direction", "DESC"))
+                .param("sort[0].field", "title")
+                .param("sort[0].direction", "DESC"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.[0].title", is("Book 9")))
                 .andExpect(jsonPath("$.data.[1].title", is("Book 8")))
                 .andExpect(jsonPath("$.data.[2].title", is("Book 7")))
                 .andExpect(jsonPath("$.data.[3].title", is("Book 6")))
                 .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
+    }
+
+    @Test
+    public void getBookPageMultiSorted() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("page", "0")
+                .param("count", "5")
+                .param("sort[0].field", "author")
+                .param("sort[0].direction", "DESC")
+                .param("sort[1].field", "title")
+                .param("sort[1].direction", "DESC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].title", is("Book 15")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 14")))
+                .andExpect(jsonPath("$.data.[2].title", is("Book 13")))
+                .andExpect(jsonPath("$.data.[3].title", is("Book 12")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 11")));
     }
 
     @Test

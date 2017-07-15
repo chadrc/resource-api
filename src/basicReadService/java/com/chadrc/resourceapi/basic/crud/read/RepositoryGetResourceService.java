@@ -15,6 +15,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequestMapping(method = RequestMethod.GET)
 public class RepositoryGetResourceService implements ResourceService<GetRequest> {
 
@@ -52,12 +55,16 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
         if (count == null) {
             count = 10;
         }
-        if (request.getSort() == null) {
+        if (request.getSort() == null || request.getSort().isEmpty()) {
             PageRequest pageRequest = new PageRequest(page, count);
             Page p = resourceRepository.findAll(pageRequest);
             return Resource.result(new CRUDResult(p.getContent()));
         }
-        Sort sort = new Sort(new Sort.Order(convertDirection(request.getSort().getDirection()), request.getSort().getField()));
+        List<Sort.Order> orderList = new ArrayList<>();
+        for (GetSort getSort : request.getSort()) {
+            orderList.add(new Sort.Order(convertDirection(getSort.getDirection()), getSort.getField()));
+        }
+        Sort sort = new Sort(orderList);
         PageRequest pageRequest = new PageRequest(page, count, sort);
         Page p = resourceRepository.findAll(pageRequest);
         return Resource.result(new CRUDResult(p.getContent()));

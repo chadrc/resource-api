@@ -1,6 +1,6 @@
 package com.chadrc.resourceapi.basic.crud.read;
 
-public class Sort {
+public class GetSort {
     private String field;
     private SortDirection direction = SortDirection.ASC;
 
