@@ -6,6 +6,7 @@ import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,6 +22,9 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
 
     @Override
     public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(request.getId())) {
+            throw Resource.badRequest();
+        }
         Object resource = resourceRepositorySet.getRepository(resourceType).findOne(request.getId());
         if (resource == null) {
             throw Resource.notFound();

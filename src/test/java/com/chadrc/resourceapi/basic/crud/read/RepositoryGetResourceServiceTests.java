@@ -84,6 +84,12 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void nullIdYields400() throws Exception {
+        mockMvc.perform(get("/book"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void unknownIdYields404() throws Exception {
         mockMvc.perform(get("/book")
                 .param("id", "593d7bd9f3383a00015a0506"))
