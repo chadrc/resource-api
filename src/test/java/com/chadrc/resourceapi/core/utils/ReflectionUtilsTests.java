@@ -7,10 +7,14 @@ import java.lang.reflect.Type;
 import static org.junit.Assert.assertEquals;
 
 interface GenericInterface<T> {
-    Class<? extends T> getType();
+
 }
 
-interface GenericExtender extends GenericInterface<String> {
+interface DirectExtender extends GenericInterface<String> {
+
+}
+
+interface GenericExtender<T> extends GenericInterface<T> {
 
 }
 
@@ -18,29 +22,31 @@ public class ReflectionUtilsTests {
 
     @Test
     public void genericTypeOfDirectImplementor() {
-        DirectImplementor implementor = new DirectImplementor();
-        Type[] types = ReflectionUtils.getTypeArgsForTypeFromObject(GenericInterface.class, implementor);
-        assertEquals(types[0], Integer.class);
+        assertFoundTypeIsClass(new DirectImplementor(), Integer.class);
     }
 
     @Test
     public void genericTypeOfIndirectImplementor() {
-        IndirectImplementor implementor = new IndirectImplementor();
-        Type[] types = ReflectionUtils.getTypeArgsForTypeFromObject(GenericInterface.class, implementor);
-        assertEquals(types[0], String.class);
+        assertFoundTypeIsClass(new IndirectImplementor(), String.class);
+    }
+
+    @Test
+    public void genericTypeOfExtenderImplementor() {
+        assertFoundTypeIsClass(new ExtenderImplementor(), String.class);
+    }
+
+    private void assertFoundTypeIsClass(Object obj, Class assertClass) {
+        Type[] types = ReflectionUtils.getTypeArgsForTypeFromObject(GenericInterface.class, obj);
+        assertEquals(assertClass, types[0]);
     }
 }
 
 class DirectImplementor implements GenericInterface<Integer> {
-    @Override
-    public Class<? extends Integer> getType() {
-        return Integer.class;
-    }
 }
 
-class IndirectImplementor implements GenericExtender {
-    @Override
-    public Class<? extends String> getType() {
-        return String.class;
-    }
+class IndirectImplementor implements DirectExtender {
+}
+
+class ExtenderImplementor implements GenericExtender<String> {
+
 }

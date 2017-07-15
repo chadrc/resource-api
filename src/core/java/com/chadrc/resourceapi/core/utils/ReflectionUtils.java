@@ -21,6 +21,11 @@ public abstract class ReflectionUtils {
                 ParameterizedType parameterizedType = (ParameterizedType) inter;
                 if (parameterizedType.getRawType() == searchClass) {
                     return inter;
+                } else {
+                    Type inherited = findInterfaceOnObject(searchClass, (Class) parameterizedType.getRawType());
+                    if (inherited != null) {
+                        return inherited;
+                    }
                 }
             } else if (inter instanceof Class) {
                 Type inherited = findInterfaceOnObject(searchClass, (Class) inter);
