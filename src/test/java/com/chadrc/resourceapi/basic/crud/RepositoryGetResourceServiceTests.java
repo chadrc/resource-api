@@ -62,4 +62,11 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .andExpect(jsonPath("$.title", is("Book 1")))
                 .andExpect(jsonPath("$.author", is("Test Author")));
     }
+
+    @Test
+    public void unknownIdYields404() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("id", "593d7bd9f3383a00015a0506"))
+                .andExpect(status().isNotFound());
+    }
 }

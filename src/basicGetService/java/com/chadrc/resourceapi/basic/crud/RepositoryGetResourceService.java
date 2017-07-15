@@ -19,6 +19,10 @@ public class RepositoryGetResourceService implements GetResourceService<GetReque
 
     @Override
     public Result fulfill(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
-        return Resource.result(resourceRepositories.get(0).findOne(request.getId()));
+        Object resource = resourceRepositories.get(0).findOne(request.getId());
+        if (resource == null) {
+            throw Resource.notFound();
+        }
+        return Resource.result(resource);
     }
 }
