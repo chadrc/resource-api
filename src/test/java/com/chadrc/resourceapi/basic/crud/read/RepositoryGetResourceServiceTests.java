@@ -81,6 +81,22 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void getDefaultBookpage() throws Exception {
+        mockMvc.perform(get("/book"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].title", is("Book 1")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 2")))
+                .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
+                .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 5")))
+                .andExpect(jsonPath("$.data.[5].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.[6].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.[7].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.[8].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.[9].title", is("Book 10")));
+    }
+
+    @Test
     public void getBookPage() throws Exception {
         mockMvc.perform(get("/book")
                 .param("page", "0")
@@ -91,6 +107,19 @@ public class RepositoryGetResourceServiceTests extends BaseTests {
                 .andExpect(jsonPath("$.data.[2].title", is("Book 3")))
                 .andExpect(jsonPath("$.data.[3].title", is("Book 4")))
                 .andExpect(jsonPath("$.data.[4].title", is("Book 5")));
+    }
+
+    @Test
+    public void getSecondBookPage() throws Exception {
+        mockMvc.perform(get("/book")
+                .param("page", "1")
+                .param("count", "5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.[0].title", is("Book 6")))
+                .andExpect(jsonPath("$.data.[1].title", is("Book 7")))
+                .andExpect(jsonPath("$.data.[2].title", is("Book 8")))
+                .andExpect(jsonPath("$.data.[3].title", is("Book 9")))
+                .andExpect(jsonPath("$.data.[4].title", is("Book 10")));
     }
 
     @Test
