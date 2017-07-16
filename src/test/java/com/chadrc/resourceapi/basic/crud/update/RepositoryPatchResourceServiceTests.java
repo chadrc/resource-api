@@ -197,16 +197,19 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals(1, issues.size());
     }
 
-//    @Test
-//    public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
-//        mockMvc.perform(patch("/issue")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("newspaper", ""));
-//                }}))))
-//                .andExpect(status().isBadRequest());
-//    }
-//
+    @Test
+    public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
+        Issue newIssue = issueRepository.insert(new Issue());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("issuable", new RequestParameter("newspaper", ""));
+
+        mockMvc.perform(patch("/issue")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newIssue.getId(), updates))))
+                .andExpect(status().isBadRequest());
+    }
+
 //    @Test
 //    public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
 //        mockMvc.perform(patch("/issue")
