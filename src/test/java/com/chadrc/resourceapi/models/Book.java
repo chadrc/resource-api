@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.models;
 
+import com.chadrc.resourceapi.basic.crud.update.NoUpdate;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceModel;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
@@ -35,6 +36,11 @@ public class Book implements ResourceModel {
 
     public ObjectId objectId() {
         return id;
+    }
+
+    @NoUpdate
+    public void setId(String id) {
+        this.id = new ObjectId(id);
     }
 
     public String getTitle() {

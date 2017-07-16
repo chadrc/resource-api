@@ -65,7 +65,17 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .contentType(contentType)
                 .content(json(new PatchRequest(null, updates))))
                 .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void updateFieldMarkedNoUpdateYields400() throws Exception {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("id", "myId");
+
+        mockMvc.perform(patch("/book")
+                .contentType(contentType)
+                .content(json(new PatchRequest(bookToUpdate.getId(), updates))))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

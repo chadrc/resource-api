@@ -45,6 +45,7 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
                 Method setterMethod = null;
                 for (Method method : methods) {
                     if (method.getDeclaringClass() != Object.class
+                            && method.getAnnotation(NoUpdate.class) == null
                             && method.getName().startsWith("set")
                             && method.getName().substring(3).equals(transformed)
                             && method.getParameterCount() == 1
