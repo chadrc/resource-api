@@ -12,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Type;
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 @RequestMapping(method = RequestMethod.POST)
@@ -36,9 +35,11 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         Constructor[] constructors = resourceType.getConstructors();
         Constructor<?> selectedConstructor = null;
         for (Constructor<?> constructor : constructors) {
-            Type[] paramTypes = constructor.getParameterTypes();
-            Annotation[][] paramAnnotations = constructor.getParameterAnnotations();
-            if (typesMatchFieldValues(paramTypes, request.getParamValues(), paramAnnotations)) {
+            if (constructor.getAnnotation(NoCreate.class) != null) {
+                continue;
+            }
+            Parameter[] parameters = constructor.getParameters();
+            if (typesMatchFieldValues(parameters, request.getParamValues())) {
                 selectedConstructor = constructor;
                 break;
             }
@@ -65,49 +66,44 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         return null;
     }
 
-    private Object[] collectArgValues(List<Object> fieldValues) {
+    private Object[] collectArgValues(List<CreateParameter> fieldValues) {
         Object[] args = new Object[fieldValues.size()];
         for (int i = 0; i < fieldValues.size(); i++) {
-            args[i] = fieldValues.get(i);
+            args[i] = fieldValues.get(i).getValue();
         }
         return args;
     }
 
-    private boolean typesMatchFieldValues(Type[] types, List<Object> fieldValues, Annotation[][] annotations) throws ResourceServiceThrowable {
-        if (types.length != fieldValues.size()) {
+    private boolean typesMatchFieldValues(Parameter[] parameters, List<CreateParameter> fieldValues) throws ResourceServiceThrowable {
+        if (parameters.length != fieldValues.size()) {
             return false;
         }
-        for (int i = 0; i < types.length; i++) {
-            Type type = types[i];
-            Annotation[] typeAnnotations = annotations[i];
-            Object value = fieldValues.get(i);
-            if (containsAnnotation(typeAnnotations, FromId.class)
-                    && type instanceof Class
-                    && value instanceof String) {
-                ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) type);
-                if (typeRepository != null) {
-                    String id = (String) value;
-                    Object resource = typeRepository.findOne(id);
-                    if (resource == null && containsAnnotation(typeAnnotations, MustExist.class)) {
-                        throw Resource.badRequest();
+        for (int i = 0; i < parameters.length; i++) {
+            Parameter parameter = parameters[i];
+            CreateParameter createParameter = fieldValues.get(i);
+            Object value = createParameter.getValue();
+            if (parameter.getAnnotation(FromId.class) != null
+                    && parameter.getType() != null
+                    && value instanceof String
+                    && fieldValues.get(i).getName().endsWith("Id")) {
+                String argName = fieldValues.get(i).getName().replace("Id", "");
+                if (parameter.getName().equals(argName)) {
+                    ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
+                    if (typeRepository != null) {
+                        String id = (String) value;
+                        Object resource = typeRepository.findOne(id);
+                        if (resource == null && parameter.getAnnotation(MustExist.class) != null) {
+                            throw Resource.badRequest();
+                        }
+                        createParameter.setValue(resource);
                     }
-                    fieldValues.set(i, resource);
                 }
             }
 
-            if (types[i] != fieldValues.get(i).getClass()) {
+            if (createParameter.getValue() != null && parameters[i].getType() != createParameter.getValue().getClass()) {
                 return false;
             }
         }
         return true;
-    }
-
-    private boolean containsAnnotation(Annotation[] annotations, Class<? extends Annotation> check) {
-        for (Annotation annotation : annotations) {
-            if (annotation.annotationType() == check) {
-                return true;
-            }
-        }
-        return false;
     }
 }

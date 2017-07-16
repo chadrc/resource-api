@@ -26,7 +26,7 @@ public class Issue implements ResourceModel {
     }
 
     public Issue(@FromId Magazine magazine) {
-        this.issuableId = magazine.objectId();
+        this.issuableId = magazine == null ? new ObjectId() : magazine.objectId();
         issueDate = Calendar.getInstance();
     }
 

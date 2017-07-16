@@ -44,7 +44,10 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     @Override
     public void setup() throws Throwable {
         super.setup();
-        bookRepository.delete(bookRepository.findAll());
+        bookRepository.deleteAll();
+        magazineRepository.deleteAll();
+        issueRepository.deleteAll();
+        newspaperRepository.deleteAll();
     }
 
     @Test
@@ -67,9 +70,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createBookWithTitleAndAuthor() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add("Created Book");
-                    add("Author");
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("title", "Created Book"));
+                    add(new CreateParameter("author", "Author"));
                 }}))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", Matchers.is("Created Book")))
@@ -80,8 +83,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void nonExistentConstructorYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add(100);
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("notAParam", 100));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -90,8 +93,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createOnConstructorWithNoCreateYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add("Title");
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("title", "Title"));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -100,9 +103,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void errorDuringConstructorYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add("");
-                    add("");
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("title", ""));
+                    add(new CreateParameter("author", ""));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -112,8 +115,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         Magazine magazine = magazineRepository.insert(new Magazine("My Magazine"));
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add(magazine.getId());
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("magazineId", magazine.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -129,8 +132,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         Newspaper newspaper = newspaperRepository.insert(new Newspaper("My Newspaper"));
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add(newspaper.getId());
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("newspaperId", newspaper.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -142,11 +145,24 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createIssueWithEmptyMagazineIdYields400() throws Exception {
+    public void createIssueWithEmptyMagazineId() throws Exception {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<Object>() {{
-                    add("");
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("magazineId", ""));
+                }}))))
+                .andExpect(status().isOk());
+
+        List<Issue> issues = issueRepository.findAll();
+        assertEquals(1, issues.size());
+    }
+
+    @Test
+    public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
+        mockMvc.perform(post("/issue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("newspaperId", ""));
                 }}))))
                 .andExpect(status().isBadRequest());
     }

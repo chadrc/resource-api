@@ -48,10 +48,6 @@ sourceSets {
 }
 
 dependencies {
-    exampleCompile('org.springframework.boot:spring-boot-starter-data-mongodb')
-    exampleCompile('org.springframework.boot:spring-boot-starter-web')
-    exampleCompile(sourceSets.main.output)
-
 	coreCompile('org.springframework.boot:spring-boot-starter-web')
 
     basicCompile('org.springframework.boot:spring-boot-starter-web')
