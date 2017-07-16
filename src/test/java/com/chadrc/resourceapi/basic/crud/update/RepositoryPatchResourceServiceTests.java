@@ -210,16 +210,19 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
-//        mockMvc.perform(patch("/issue")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("catalog", "catalogId"));
-//                }}))))
-//                .andExpect(status().isBadRequest());
-//    }
-//
+    @Test
+    public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
+        Issue newIssue = issueRepository.insert(new Issue());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("issuable", new RequestParameter("catalog", "catalogId"));
+
+        mockMvc.perform(patch("/issue")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newIssue.getId(), updates))))
+                .andExpect(status().isBadRequest());
+    }
+
 //    @Test
 //    public void createCustomerWithAddress() throws Exception {
 //        mockMvc.perform(patch("/customer")
