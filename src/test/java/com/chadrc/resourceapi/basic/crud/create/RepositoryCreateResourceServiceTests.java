@@ -37,6 +37,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private BookOrderRepository bookOrderRepository;
+
     @Before
     @Override
     public void setup() throws Throwable {
@@ -45,6 +48,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         magazineRepository.deleteAll();
         issueRepository.deleteAll();
         newspaperRepository.deleteAll();
+        customerRepository.deleteAll();
+        bookOrderRepository.deleteAll();
     }
 
     @Test
@@ -113,7 +118,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("magazineId", magazine.getId()));
+                    add(new CreateParameter("magazine", magazine.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -130,7 +135,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("newspaperId", newspaper.getId()));
+                    add(new CreateParameter("newspaper", newspaper.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -146,7 +151,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("magazineId", ""));
+                    add(new CreateParameter("magazine", ""));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -159,7 +164,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("newspaperId", ""));
+                    add(new CreateParameter("newspaper", ""));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -169,7 +174,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("catalogId", "catalogId"));
+                    add(new CreateParameter("catalog", "catalogId"));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -214,5 +219,29 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                     add(new CreateParameter("magazine", new Magazine("My Magazine")));
                 }}))))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createBookOrderWithFromIdList() throws Throwable {
+        Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
+        Book book2 = bookRepository.insert(new Book("Book 2", "Author"));
+
+        mockMvc.perform(post("/bookorder")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("books", new ArrayList<String>() {{
+                        add(book1.getId());
+                        add(book2.getId());
+                    }}));
+                }}))))
+                .andExpect(status().isOk());
+
+        List<BookOrder> bookOrders = bookOrderRepository.findAll();
+        assertEquals(1, bookOrders.size());
+
+        BookOrder bookOrder = bookOrders.get(0);
+        assertEquals(2, bookOrder.getBookIds().size());
+        assertEquals(book1.objectId(), bookOrder.getBookIds().get(0));
+        assertEquals(book2.objectId(), bookOrder.getBookIds().get(1));
     }
 }

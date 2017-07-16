@@ -13,9 +13,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,21 +85,38 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             Object value = createParameter.getValue();
             FromId fromId = parameter.getAnnotation(FromId.class);
             if (fromId != null
+                    && parameter.getName().equals(createParameter.getName())
+                    && createParameter.getValue() != null
                     && parameter.getType() != null
-                    && value instanceof String
-                    && createParameter.getName().endsWith("Id")) {
-                String argName = createParameter.getName().replace("Id", "");
-                if (parameter.getName().equals(argName)) {
+                    && (value instanceof String
+                    || (List.class.isAssignableFrom(parameter.getType())
+                    && List.class.isAssignableFrom(createParameter.getValue().getClass())))) {
+                Object resource = null;
+                if (value instanceof String) {
                     ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
                     if (typeRepository != null) {
                         String id = (String) value;
-                        Object resource = typeRepository.findOne(id);
+                        resource = typeRepository.findOne(id);
                         if (resource == null && fromId.mustExist()) {
                             throw Resource.badRequest();
                         }
-                        createParameter.setValue(resource);
+                    } else {
+                        throw Resource.badRequest();
+                    }
+                } else {
+                    Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+                    ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) listType);
+                    if (typeRepository != null) {
+                        List idList = (List) value;
+                        Iterable resources = typeRepository.findAll(idList);
+                        List resourceList = new ArrayList();
+                        resources.forEach(obj -> resourceList.add(obj));
+                        resource = resourceList;
+                    } else {
+                        throw Resource.badRequest();
                     }
                 }
+                createParameter.setValue(resource);
             } else if (fromId == null
                     && parameter.getName().equals(createParameter.getName())
                     && createParameter.getValue() != null
@@ -114,7 +130,9 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                 createParameter.setValue(obj);
             }
 
-            if (createParameter.getValue() != null && parameters[i].getType() != createParameter.getValue().getClass()) {
+            if (createParameter.getValue() != null
+                    && parameter.getType() != createParameter.getValue().getClass()
+                    && !(parameter.getType() == List.class && List.class.isAssignableFrom(createParameter.getValue().getClass()))) {
                 return false;
             }
         }
