@@ -69,8 +69,8 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void updateBookSuccess() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("title", new RequestParameter("title", "Updated Title"));
-        updates.put("author", new RequestParameter("Author", "Updated Author"));
+        updates.put("title", new RequestParameter("Updated Title"));
+        updates.put("author", new RequestParameter("Updated Author"));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
@@ -86,7 +86,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void nullIdYields400() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("title", new RequestParameter("title", "Value"));
+        updates.put("title", new RequestParameter("Value"));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
@@ -97,7 +97,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void updateFieldMarkedNoUpdateYields400() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("id", new RequestParameter("id", "myId"));
+        updates.put("id", new RequestParameter("myId"));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
@@ -108,7 +108,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void nonExistentResourceYields400() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("title", new RequestParameter("title", "Title"));
+        updates.put("title", new RequestParameter("Title"));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
@@ -119,7 +119,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void updateUnknownFieldYields400() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("notAField", new RequestParameter("notAField", "Value"));
+        updates.put("notAField", new RequestParameter("Value"));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)
@@ -130,7 +130,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     @Test
     public void errorInUpdateYields400() throws Exception {
         Map<String, RequestParameter> updates = new HashMap<>();
-        updates.put("title", new RequestParameter("title", ""));
+        updates.put("title", new RequestParameter(""));
 
         mockMvc.perform(patch("/book")
                 .contentType(contentType)

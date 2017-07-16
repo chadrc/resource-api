@@ -8,6 +8,10 @@ public class RequestParameter {
 
     }
 
+    public RequestParameter(Object value) {
+        this.value = value;
+    }
+
     public RequestParameter(String name, Object value) {
         this.name = name;
         this.value = value;
