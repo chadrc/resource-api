@@ -2,11 +2,13 @@ package com.chadrc.resourceapi.basic.crud.create;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
-import com.chadrc.resourceapi.basic.MagazineIssueRepository;
+import com.chadrc.resourceapi.basic.IssueRepository;
 import com.chadrc.resourceapi.basic.MagazineRepository;
+import com.chadrc.resourceapi.basic.NewspaperRepository;
 import com.chadrc.resourceapi.models.Book;
+import com.chadrc.resourceapi.models.Issue;
 import com.chadrc.resourceapi.models.Magazine;
-import com.chadrc.resourceapi.models.MagazineIssue;
+import com.chadrc.resourceapi.models.Newspaper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +35,10 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     private MagazineRepository magazineRepository;
 
     @Autowired
-    private MagazineIssueRepository magazineIssueRepository;
+    private IssueRepository issueRepository;
+
+    @Autowired
+    private NewspaperRepository newspaperRepository;
 
     @Before
     @Override
@@ -103,19 +108,46 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createMagazineIssueWithMagazine() throws Exception {
+    public void createIssueWithMagazine() throws Exception {
         Magazine magazine = magazineRepository.insert(new Magazine("My Magazine"));
-        mockMvc.perform(post("/magazineissue")
+        mockMvc.perform(post("/issue")
                 .contentType(contentType)
                 .content(json(new CreateRequest(new ArrayList<Object>() {{
                     add(magazine.getId());
                 }}))))
                 .andExpect(status().isOk());
 
-        List<MagazineIssue> magazineIssues = magazineIssueRepository.findAll();
-        assertEquals(1, magazineIssues.size());
+        List<Issue> issues = issueRepository.findAll();
+        assertEquals(1, issues.size());
 
-        MagazineIssue issue = magazineIssues.get(0);
-        assertEquals(magazine.getId(), issue.getMagazineId());
+        Issue issue = issues.get(0);
+        assertEquals(magazine.getId(), issue.getIssuableId());
+    }
+
+    @Test
+    public void createIssueWithNewspaper() throws Exception {
+        Newspaper newspaper = newspaperRepository.insert(new Newspaper("My Newspaper"));
+        mockMvc.perform(post("/issue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<Object>() {{
+                    add(newspaper.getId());
+                }}))))
+                .andExpect(status().isOk());
+
+        List<Issue> issues = issueRepository.findAll();
+        assertEquals(1, issues.size());
+
+        Issue issue = issues.get(0);
+        assertEquals(newspaper.getId(), issue.getIssuableId());
+    }
+
+    @Test
+    public void createIssueWithEmptyMagazineIdYields400() throws Exception {
+        mockMvc.perform(post("/issue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<Object>() {{
+                    add("");
+                }}))))
+                .andExpect(status().isBadRequest());
     }
 }

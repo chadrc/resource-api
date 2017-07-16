@@ -73,7 +73,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         return args;
     }
 
-    private boolean typesMatchFieldValues(Type[] types, List<Object> fieldValues, Annotation[][] annotations) {
+    private boolean typesMatchFieldValues(Type[] types, List<Object> fieldValues, Annotation[][] annotations) throws ResourceServiceThrowable {
         if (types.length != fieldValues.size()) {
             return false;
         }
@@ -88,6 +88,9 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                 if (typeRepository != null) {
                     String id = (String) value;
                     Object resource = typeRepository.findOne(id);
+                    if (resource == null && containsAnnotation(typeAnnotations, MustExist.class)) {
+                        throw Resource.badRequest();
+                    }
                     fieldValues.set(i, resource);
                 }
             }

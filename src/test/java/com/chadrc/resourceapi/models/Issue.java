@@ -1,6 +1,7 @@
 package com.chadrc.resourceapi.models;
 
 import com.chadrc.resourceapi.basic.crud.create.FromId;
+import com.chadrc.resourceapi.basic.crud.create.MustExist;
 import com.chadrc.resourceapi.basic.crud.create.NoCreate;
 import com.chadrc.resourceapi.core.ResourceModel;
 import org.bson.types.ObjectId;
@@ -10,22 +11,27 @@ import org.springframework.stereotype.Component;
 import java.util.Calendar;
 
 @Component
-public class MagazineIssue implements ResourceModel {
+public class Issue implements ResourceModel {
 
     @Id
     private ObjectId id;
 
-    private ObjectId magazineId;
+    private ObjectId issuableId;
 
     private Calendar issueDate;
 
     @NoCreate
-    public MagazineIssue() {
+    public Issue() {
 
     }
 
-    public MagazineIssue(@FromId Magazine magazine) {
-        this.magazineId = magazine.objectId();
+    public Issue(@FromId Magazine magazine) {
+        this.issuableId = magazine.objectId();
+        issueDate = Calendar.getInstance();
+    }
+
+    public Issue(@FromId @MustExist Newspaper newspaper) {
+        this.issuableId = newspaper.objectId();
         issueDate = Calendar.getInstance();
     }
 
@@ -37,8 +43,8 @@ public class MagazineIssue implements ResourceModel {
         return this.id;
     }
 
-    public String getMagazineId() {
-        return this.magazineId.toString();
+    public String getIssuableId() {
+        return this.issuableId.toString();
     }
 
     public Calendar getIssueDate() {
