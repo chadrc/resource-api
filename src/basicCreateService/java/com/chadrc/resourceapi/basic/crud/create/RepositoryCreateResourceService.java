@@ -36,7 +36,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         Constructor<?> selectedConstructor = null;
         for (Constructor<?> constructor : constructors) {
             Type[] paramTypes = constructor.getParameterTypes();
-            if (paramTypes.length != request.getParamValues().size()) {
+            if (paramTypes.length != request.getParamValues().size()
+                    || constructor.getAnnotation(NoCreate.class) != null) {
                 continue;
             }
 

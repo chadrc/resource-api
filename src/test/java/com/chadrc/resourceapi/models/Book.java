@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.models;
 
+import com.chadrc.resourceapi.basic.crud.create.NoCreate;
 import com.chadrc.resourceapi.basic.crud.update.NoUpdate;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceModel;
@@ -19,6 +20,11 @@ public class Book implements ResourceModel {
 
     public Book() {
 
+    }
+
+    @NoCreate
+    public Book(String title) {
+        this.title = title;
     }
 
     public Book(String title, String author) throws ResourceServiceThrowable {

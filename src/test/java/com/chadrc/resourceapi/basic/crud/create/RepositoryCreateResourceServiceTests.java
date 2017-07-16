@@ -72,6 +72,16 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void createOnConstructorWithNoCreateYields400() throws Exception {
+        mockMvc.perform(post("/book")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<Object>() {{
+                    add("Title");
+                }}))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void errorDuringConstructorYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
