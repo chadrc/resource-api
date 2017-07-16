@@ -7,6 +7,7 @@ import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -120,9 +121,27 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             } else if (fromId == null
                     && parameter.getName().equals(createParameter.getName())
                     && createParameter.getValue() != null
-                    && Map.class.isAssignableFrom(createParameter.getValue().getClass())
-                    && !Map.class.isAssignableFrom(parameter.getType())) {
-                Object obj = Jackson2ObjectMapperBuilder.json().build().convertValue(createParameter.getValue(), parameter.getType());
+                    && ((Map.class.isAssignableFrom(createParameter.getValue().getClass())
+                    && !Map.class.isAssignableFrom(parameter.getType()))
+
+                    || (List.class.isAssignableFrom(createParameter.getValue().getClass())
+                    && List.class.isAssignableFrom(parameter.getType())))) {
+                Object obj;
+                ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
+                if (Map.class.isAssignableFrom(parameter.getType())) {
+                    obj = mapper.convertValue(createParameter.getValue(), parameter.getType());
+                } else {
+                    List list = (List) createParameter.getValue();
+                    List newList = new ArrayList();
+                    Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+                    if (!(listType instanceof Class)) {
+                        throw Resource.badRequest();
+                    }
+                    for (Object item : list) {
+                        newList.add(mapper.convertValue(item, (Class) listType));
+                    }
+                    obj = newList;
+                }
                 if (obj == null) {
                     throw Resource.badRequest();
                 }

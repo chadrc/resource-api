@@ -40,6 +40,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     @Autowired
     private BookOrderRepository bookOrderRepository;
 
+    @Autowired
+    private MailingListRepository mailingListRepository;
+
     @Before
     @Override
     public void setup() throws Throwable {
@@ -50,6 +53,7 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         newspaperRepository.deleteAll();
         customerRepository.deleteAll();
         bookOrderRepository.deleteAll();
+        mailingListRepository.deleteAll();
     }
 
     @Test
@@ -262,5 +266,26 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
 
         Magazine magazine = magazines.get(0);
         assertEquals(2, magazine.getCategories().size());
+    }
+
+    @Test
+    public void createMailingList() throws Throwable {
+        mockMvc.perform(post("/mailinglist")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("addresses", new ArrayList<Address>() {{
+                        add(new Address("Boston", "MA", "123 Main Street", "09876"));
+                        add(new Address("New York", "NY", "987 Main Street", "12345"));
+                    }}));
+                }}))))
+                .andExpect(status().isOk());
+
+        List<MailingList> mailingLists = mailingListRepository.findAll();
+        assertEquals(1, mailingLists.size());
+
+        MailingList mailingList = mailingLists.get(0);
+        assertEquals(2, mailingList.getAddresses().size());
+        assertEquals("Boston", mailingList.getAddresses().get(0).getCity());
+        assertEquals("New York", mailingList.getAddresses().get(1).getCity());
     }
 }
