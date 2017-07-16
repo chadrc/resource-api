@@ -166,4 +166,14 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                 }}))))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
+        mockMvc.perform(post("/issue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("catalogId", "catalogId"));
+                }}))))
+                .andExpect(status().isBadRequest());
+    }
 }

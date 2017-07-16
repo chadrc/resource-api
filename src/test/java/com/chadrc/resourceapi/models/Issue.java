@@ -34,6 +34,10 @@ public class Issue implements ResourceModel {
         issueDate = Calendar.getInstance();
     }
 
+    public Issue(@FromId Catalog catalog) {
+
+    }
+
     public String getId() {
         return this.id.toString();
     }
