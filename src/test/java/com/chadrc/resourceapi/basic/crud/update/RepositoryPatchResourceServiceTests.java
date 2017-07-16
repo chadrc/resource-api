@@ -140,7 +140,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createIssueWithMagazine() throws Exception {
+    public void updateIssueWithMagazine() throws Exception {
         Magazine magazine = magazineRepository.insert(new Magazine("My Magazine"));
         Magazine magazine2 = magazineRepository.insert(new Magazine("Second Magazine"));
         Issue newIssue = issueRepository.insert(new Issue(magazine));
@@ -161,7 +161,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createIssueWithNewspaper() throws Exception {
+    public void updateIssueWithNewspaper() throws Exception {
         Newspaper newspaper = newspaperRepository.insert(new Newspaper("My Newspaper"));
         Newspaper newspaper2 = newspaperRepository.insert(new Newspaper("My Second Newspaper"));
         Issue newIssue = issueRepository.insert(new Issue(newspaper));
@@ -181,19 +181,22 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals(newspaper2.getId(), issue.getIssuableId());
     }
 
-//    @Test
-//    public void createIssueWithEmptyMagazineId() throws Exception {
-//        mockMvc.perform(patch("/issue")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("magazine", ""));
-//                }}))))
-//                .andExpect(status().isOk());
-//
-//        List<Issue> issues = issueRepository.findAll();
-//        assertEquals(1, issues.size());
-//    }
-//
+    @Test
+    public void updateIssueWithEmptyMagazineId() throws Exception {
+        Issue newIssue = issueRepository.insert(new Issue());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("issuable", new RequestParameter("magazine", ""));
+
+        mockMvc.perform(patch("/issue")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newIssue.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<Issue> issues = issueRepository.findAll();
+        assertEquals(1, issues.size());
+    }
+
 //    @Test
 //    public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
 //        mockMvc.perform(patch("/issue")

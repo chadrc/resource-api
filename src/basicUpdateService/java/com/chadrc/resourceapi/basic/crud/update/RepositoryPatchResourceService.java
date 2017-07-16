@@ -60,7 +60,8 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
                             continue;
                         }
                         value = Utils.convertParamValue(parameter, value, resourceRepositorySet);
-                        if (method.getParameterTypes()[0] == value.getClass()) {
+                        if (value == null
+                                || method.getParameterTypes()[0] == value.getClass()) {
                             setterMethod = method;
                         }
                     }

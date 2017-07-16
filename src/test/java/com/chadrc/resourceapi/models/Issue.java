@@ -21,7 +21,7 @@ public class Issue implements ResourceModel {
 
     @NoCreate
     public Issue() {
-
+        this.id = new ObjectId();
     }
 
     public Issue(@FromId(mustExist = false) Magazine magazine) {
@@ -38,8 +38,10 @@ public class Issue implements ResourceModel {
 
     }
 
-    public void setIssuable(@FromId Magazine magazine) {
-        this.issuableId = magazine.objectId();
+    public void setIssuable(@FromId(mustExist = false) Magazine magazine) {
+        if (magazine != null) {
+            this.issuableId = magazine.objectId();
+        }
     }
 
     public void setIssuable(@FromId Newspaper newspaper) {
