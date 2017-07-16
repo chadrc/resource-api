@@ -1,4 +1,4 @@
-package com.chadrc.resourceapi.basic.crud.create;
+package com.chadrc.resourceapi.basic;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

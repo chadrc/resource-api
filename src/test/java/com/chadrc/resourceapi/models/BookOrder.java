@@ -1,6 +1,6 @@
 package com.chadrc.resourceapi.models;
 
-import com.chadrc.resourceapi.basic.crud.create.FromId;
+import com.chadrc.resourceapi.basic.FromId;
 import com.chadrc.resourceapi.basic.crud.create.NoCreate;
 import com.chadrc.resourceapi.core.ResourceModel;
 import org.bson.types.ObjectId;
