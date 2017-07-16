@@ -101,7 +101,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                         createParameter.setValue(resource);
                     }
                 }
-            } else if (parameter.getName().equals(createParameter.getName())
+            } else if (fromId == null
+                    && parameter.getName().equals(createParameter.getName())
                     && createParameter.getValue() != null
                     && Map.class.isAssignableFrom(createParameter.getValue().getClass())
                     && !Map.class.isAssignableFrom(parameter.getType())) {

@@ -205,4 +205,14 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                 }}))))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void createWithObjectOnFromIdYields400() throws Exception {
+        mockMvc.perform(post("/issue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("magazine", new Magazine("My Magazine")));
+                }}))))
+                .andExpect(status().isBadRequest());
+    }
 }

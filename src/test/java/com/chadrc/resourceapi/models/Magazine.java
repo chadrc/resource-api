@@ -20,7 +20,8 @@ public class Magazine implements ResourceModel {
     }
 
     public Magazine(String title) {
-
+        this.id = new ObjectId();
+        this.title = title;
     }
 
     public String getId() {
