@@ -244,7 +244,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createCustomWithNullAddressIsOk() throws Exception {
+    public void updateCustomWithNullAddressIsOk() throws Exception {
         Customer newCustomer = customerRepository.insert(new Customer("Muffin Man", new Address("Boston", "MA", "Drury Lane", "12345")));
 
         Map<String, RequestParameter> updates = new HashMap<>();
@@ -256,16 +256,19 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    public void createWithObjectOnFromIdYields400() throws Exception {
-//        mockMvc.perform(patch("/issue")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("magazine", new Magazine("My Magazine")));
-//                }}))))
-//                .andExpect(status().isBadRequest());
-//    }
-//
+    @Test
+    public void updateWithObjectOnFromIdYields400() throws Exception {
+        Issue newIssue = issueRepository.insert(new Issue());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("issuable", new RequestParameter("magazine", new Magazine("My Magazine")));
+
+        mockMvc.perform(patch("/issue")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newIssue.getId(), updates))))
+                .andExpect(status().isBadRequest());
+    }
+
 //    @Test
 //    public void createBookOrderWithFromIdList() throws Throwable {
 //        Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
