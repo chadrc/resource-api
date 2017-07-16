@@ -1,16 +1,18 @@
 package com.chadrc.resourceapi.basic.crud.update;
 
+import com.chadrc.resourceapi.basic.RequestParameter;
+
 import java.util.Map;
 
 public class PatchRequest {
     private String id;
-    private Map<String, Object> fields;
+    private Map<String, RequestParameter> fields;
 
     public PatchRequest() {
 
     }
 
-    public PatchRequest(String id, Map<String, Object> fields) {
+    public PatchRequest(String id, Map<String, RequestParameter> fields) {
         this.id = id;
         this.fields = fields;
     }
@@ -23,11 +25,11 @@ public class PatchRequest {
         this.id = id;
     }
 
-    public Map<String, Object> getFields() {
+    public Map<String, RequestParameter> getFields() {
         return fields;
     }
 
-    public void setFields(Map<String, Object> fields) {
+    public void setFields(Map<String, RequestParameter> fields) {
         this.fields = fields;
     }
 }

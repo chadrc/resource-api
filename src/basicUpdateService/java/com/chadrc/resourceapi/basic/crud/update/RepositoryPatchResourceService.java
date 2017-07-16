@@ -1,7 +1,9 @@
 package com.chadrc.resourceapi.basic.crud.update;
 
+import com.chadrc.resourceapi.basic.RequestParameter;
 import com.chadrc.resourceapi.basic.ResourceRepository;
 import com.chadrc.resourceapi.basic.ResourceRepositorySet;
+import com.chadrc.resourceapi.basic.Utils;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 @RequestMapping(method = RequestMethod.PATCH)
 public class RepositoryPatchResourceService implements ResourceService<PatchRequest> {
@@ -41,7 +44,8 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
         Method[] methods = resourceType.getMethods();
         try {
             for (String fieldName : request.getFields().keySet()) {
-                Object value = request.getFields().get(fieldName);
+                RequestParameter requestParameter = request.getFields().get(fieldName);
+                Object value = requestParameter.getValue();
                 String transformed = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
                 Method setterMethod = null;
                 for (Method method : methods) {
@@ -49,9 +53,12 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
                             && method.getAnnotation(NoUpdate.class) == null
                             && method.getName().startsWith("set")
                             && method.getName().substring(3).equals(transformed)
-                            && method.getParameterCount() == 1
-                            && method.getParameterTypes()[0] == value.getClass()) {
-                        setterMethod = method;
+                            && method.getParameterCount() == 1) {
+                        Parameter parameter = method.getParameters()[0];
+                        value = Utils.convertParamValue(parameter, requestParameter.getName(), value, resourceRepositorySet);
+                        if (method.getParameterTypes()[0] == value.getClass()) {
+                            setterMethod = method;
+                        }
                     }
                 }
 
