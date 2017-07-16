@@ -42,6 +42,10 @@ public class Issue implements ResourceModel {
         this.issuableId = magazine.objectId();
     }
 
+    public void setIssuable(@FromId Newspaper newspaper) {
+        this.issuableId = newspaper.objectId();
+    }
+
     public String getId() {
         return this.id.toString();
     }

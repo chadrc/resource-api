@@ -5,6 +5,7 @@ import com.chadrc.resourceapi.basic.*;
 import com.chadrc.resourceapi.models.Book;
 import com.chadrc.resourceapi.models.Issue;
 import com.chadrc.resourceapi.models.Magazine;
+import com.chadrc.resourceapi.models.Newspaper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -158,4 +159,164 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         Issue issue = issues.get(0);
         assertEquals(magazine2.getId(), issue.getIssuableId());
     }
+
+    @Test
+    public void createIssueWithNewspaper() throws Exception {
+        Newspaper newspaper = newspaperRepository.insert(new Newspaper("My Newspaper"));
+        Newspaper newspaper2 = newspaperRepository.insert(new Newspaper("My Second Newspaper"));
+        Issue newIssue = issueRepository.insert(new Issue(newspaper));
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("issuable", new RequestParameter("newspaper", newspaper2.getId()));
+
+        mockMvc.perform(patch("/issue")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newIssue.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<Issue> issues = issueRepository.findAll();
+        assertEquals(1, issues.size());
+
+        Issue issue = issues.get(0);
+        assertEquals(newspaper2.getId(), issue.getIssuableId());
+    }
+
+//    @Test
+//    public void createIssueWithEmptyMagazineId() throws Exception {
+//        mockMvc.perform(patch("/issue")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("magazine", ""));
+//                }}))))
+//                .andExpect(status().isOk());
+//
+//        List<Issue> issues = issueRepository.findAll();
+//        assertEquals(1, issues.size());
+//    }
+//
+//    @Test
+//    public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
+//        mockMvc.perform(patch("/issue")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("newspaper", ""));
+//                }}))))
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
+//        mockMvc.perform(patch("/issue")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("catalog", "catalogId"));
+//                }}))))
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void createCustomerWithAddress() throws Exception {
+//        mockMvc.perform(patch("/customer")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("name", "Muffin Man"));
+//                    add(new RequestParameter("address", new Address("Boston", "MA", "Drury Lane", "12345")));
+//                }}))))
+//                .andExpect(status().isOk());
+//
+//        List<Customer> customers = customerRepository.findAll();
+//        assertEquals(1, customers.size());
+//
+//        Customer customer = customers.get(0);
+//        assertEquals("Muffin Man", customer.getName());
+//        assertEquals("Boston", customer.getAddress().getCity());
+//        assertEquals("MA", customer.getAddress().getState());
+//        assertEquals("Drury Lane", customer.getAddress().getAddress());
+//        assertEquals("12345", customer.getAddress().getZip());
+//    }
+//
+//    @Test
+//    public void createCustomWithNullAddressIsOk() throws Exception {
+//        mockMvc.perform(patch("/customer")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("name", "Muffin Man"));
+//                    add(new RequestParameter("address", null));
+//                }}))))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @Test
+//    public void createWithObjectOnFromIdYields400() throws Exception {
+//        mockMvc.perform(patch("/issue")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("magazine", new Magazine("My Magazine")));
+//                }}))))
+//                .andExpect(status().isBadRequest());
+//    }
+//
+//    @Test
+//    public void createBookOrderWithFromIdList() throws Throwable {
+//        Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
+//        Book book2 = bookRepository.insert(new Book("Book 2", "Author"));
+//
+//        mockMvc.perform(patch("/bookorder")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("books", new ArrayList<String>() {{
+//                        add(book1.getId());
+//                        add(book2.getId());
+//                    }}));
+//                }}))))
+//                .andExpect(status().isOk());
+//
+//        List<BookOrder> bookOrders = bookOrderRepository.findAll();
+//        assertEquals(1, bookOrders.size());
+//
+//        BookOrder bookOrder = bookOrders.get(0);
+//        assertEquals(2, bookOrder.getBookIds().size());
+//        assertEquals(book1.objectId(), bookOrder.getBookIds().get(0));
+//        assertEquals(book2.objectId(), bookOrder.getBookIds().get(1));
+//    }
+//
+//    @Test
+//    public void createMagazineWithCategories() throws Throwable {
+//        mockMvc.perform(patch("/magazine")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("categories", new ArrayList<String>() {{
+//                        add("Food");
+//                        add("Home");
+//                    }}));
+//                }}))))
+//                .andExpect(status().isOk());
+//
+//        List<Magazine> magazines = magazineRepository.findAll();
+//        assertEquals(1, magazines.size());
+//
+//        Magazine magazine = magazines.get(0);
+//        assertEquals(2, magazine.getCategories().size());
+//    }
+//
+//    @Test
+//    public void createMailingList() throws Throwable {
+//        mockMvc.perform(patch("/mailinglist")
+//                .contentType(contentType)
+//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+//                    add(new RequestParameter("addresses", new ArrayList<Address>() {{
+//                        add(new Address("Boston", "MA", "123 Main Street", "09876"));
+//                        add(new Address("New York", "NY", "987 Main Street", "12345"));
+//                    }}));
+//                }}))))
+//                .andExpect(status().isOk());
+//
+//        List<MailingList> mailingLists = mailingListRepository.findAll();
+//        assertEquals(1, mailingLists.size());
+//
+//        MailingList mailingList = mailingLists.get(0);
+//        assertEquals(2, mailingList.getAddresses().size());
+//        assertEquals("Boston", mailingList.getAddresses().get(0).getCity());
+//        assertEquals("New York", mailingList.getAddresses().get(1).getCity());
+//    }
 }
