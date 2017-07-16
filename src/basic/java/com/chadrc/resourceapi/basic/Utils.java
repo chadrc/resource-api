@@ -18,20 +18,20 @@ public abstract class Utils {
 
 
     @SuppressWarnings("unchecked")
-    public static Object convertParamValue(Parameter parameter, String paramName, Object paramValue, Object value, ResourceRepositorySet resourceRepositorySet) throws ResourceServiceThrowable {
+    public static Object convertParamValue(Parameter parameter, String paramName, Object paramValue, ResourceRepositorySet resourceRepositorySet) throws ResourceServiceThrowable {
         FromId fromId = parameter.getAnnotation(FromId.class);
         if (fromId != null
                 && parameter.getName().equals(paramName)
                 && paramValue != null
                 && parameter.getType() != null
-                && (value instanceof String
+                && (paramValue instanceof String
                 || (List.class.isAssignableFrom(parameter.getType())
                 && List.class.isAssignableFrom(paramValue.getClass())))) {
             Object resource;
-            if (value instanceof String) {
+            if (paramValue instanceof String) {
                 ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
                 if (typeRepository != null) {
-                    String id = (String) value;
+                    String id = (String) paramValue;
                     resource = typeRepository.findOne(id);
                     if (resource == null && fromId.mustExist()) {
                         throw Resource.badRequest();
@@ -43,7 +43,7 @@ public abstract class Utils {
                 Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
                 ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) listType);
                 if (typeRepository != null) {
-                    List idList = (List) value;
+                    List idList = (List) paramValue;
                     Iterable resources = typeRepository.findAll(idList);
                     List resourceList = new ArrayList();
                     resources.forEach(resourceList::add);
