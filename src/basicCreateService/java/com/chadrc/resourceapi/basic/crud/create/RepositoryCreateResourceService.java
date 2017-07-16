@@ -83,8 +83,12 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
             CreateParameter createParameter = fieldValues.get(i);
-            Object value = createParameter.getValue();
-            Object convertedValue = Utils.convertParamValue(parameter, createParameter.getName(), createParameter.getValue(), resourceRepositorySet);
+
+            if (!parameter.getName().equals(createParameter.getName())) {
+                return false;
+            }
+
+            Object convertedValue = Utils.convertParamValue(parameter, createParameter.getValue(), resourceRepositorySet);
             createParameter.setValue(convertedValue);
 
             if (createParameter.getValue() != null

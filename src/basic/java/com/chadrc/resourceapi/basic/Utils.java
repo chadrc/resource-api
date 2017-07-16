@@ -18,10 +18,9 @@ public abstract class Utils {
 
 
     @SuppressWarnings("unchecked")
-    public static Object convertParamValue(Parameter parameter, String paramName, Object paramValue, ResourceRepositorySet resourceRepositorySet) throws ResourceServiceThrowable {
+    public static Object convertParamValue(Parameter parameter, Object paramValue, ResourceRepositorySet resourceRepositorySet) throws ResourceServiceThrowable {
         FromId fromId = parameter.getAnnotation(FromId.class);
         if (fromId != null
-                && parameter.getName().equals(paramName)
                 && paramValue != null
                 && parameter.getType() != null
                 && (paramValue instanceof String
@@ -55,7 +54,6 @@ public abstract class Utils {
 
             return resource;
         } else if (fromId == null
-                && parameter.getName().equals(paramName)
                 && paramValue != null
                 && ((Map.class.isAssignableFrom(paramValue.getClass())
                 && !Map.class.isAssignableFrom(parameter.getType()))
