@@ -2,12 +2,12 @@ package com.chadrc.resourceapi.core;
 
 import com.chadrc.resourceapi.core.utils.ReflectionUtils;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -112,7 +112,6 @@ public class ResourceController {
             return ResponseEntity.notFound().build();
         }
 
-        ObjectMapper mapper = new ObjectMapper();
         try {
             Constructor requestConstructor = null;
             for (Constructor constructor : serviceInfo.requestClass.getConstructors()) {
@@ -128,7 +127,7 @@ public class ResourceController {
                 if (!StringUtils.isEmpty(servletRequest.getContentType())
                         && (servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)
                         || servletRequest.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE))) {
-                    requestData = mapper.readValue(servletRequest.getInputStream(), serviceInfo.requestClass);
+                    requestData = Jackson2ObjectMapperBuilder.json().build().readValue(servletRequest.getInputStream(), serviceInfo.requestClass);
                 }
             }
 
