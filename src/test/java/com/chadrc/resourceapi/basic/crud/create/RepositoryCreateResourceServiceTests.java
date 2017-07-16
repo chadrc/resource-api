@@ -1,14 +1,8 @@
 package com.chadrc.resourceapi.basic.crud.create;
 
 import com.chadrc.resourceapi.BaseTests;
-import com.chadrc.resourceapi.basic.BookRepository;
-import com.chadrc.resourceapi.basic.IssueRepository;
-import com.chadrc.resourceapi.basic.MagazineRepository;
-import com.chadrc.resourceapi.basic.NewspaperRepository;
-import com.chadrc.resourceapi.models.Book;
-import com.chadrc.resourceapi.models.Issue;
-import com.chadrc.resourceapi.models.Magazine;
-import com.chadrc.resourceapi.models.Newspaper;
+import com.chadrc.resourceapi.basic.*;
+import com.chadrc.resourceapi.models.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +33,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
 
     @Autowired
     private NewspaperRepository newspaperRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Before
     @Override
@@ -175,5 +172,26 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                     add(new CreateParameter("catalogId", "catalogId"));
                 }}))))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createCustomerWithAddress() throws Exception {
+        mockMvc.perform(post("/customer")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("name", "Muffin Man"));
+                    add(new CreateParameter("address", new Address("Boston", "MA", "Drury Lane", "12345")));
+                }}))))
+                .andExpect(status().isOk());
+
+        List<Customer> customers = customerRepository.findAll();
+        assertEquals(1, customers.size());
+
+        Customer customer = customers.get(0);
+        assertEquals("Muffin Man", customer.getName());
+        assertEquals("Boston", customer.getAddress().getCity());
+        assertEquals("MA", customer.getAddress().getState());
+        assertEquals("Drury Lane", customer.getAddress().getAddress());
+        assertEquals("12345", customer.getAddress().getZip());
     }
 }

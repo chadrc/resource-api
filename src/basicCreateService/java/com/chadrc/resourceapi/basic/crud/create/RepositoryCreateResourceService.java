@@ -9,6 +9,7 @@ import com.chadrc.resourceapi.core.ResourceServiceThrowable;
 import com.chadrc.resourceapi.core.Result;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -16,6 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping(method = RequestMethod.POST)
 public class RepositoryCreateResourceService implements ResourceService<CreateRequest> {
@@ -86,8 +88,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             if (fromId != null
                     && parameter.getType() != null
                     && value instanceof String
-                    && fieldValues.get(i).getName().endsWith("Id")) {
-                String argName = fieldValues.get(i).getName().replace("Id", "");
+                    && createParameter.getName().endsWith("Id")) {
+                String argName = createParameter.getName().replace("Id", "");
                 if (parameter.getName().equals(argName)) {
                     ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
                     if (typeRepository != null) {
@@ -99,6 +101,15 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                         createParameter.setValue(resource);
                     }
                 }
+            } else if (parameter.getName().equals(createParameter.getName())
+                    && Map.class.isAssignableFrom(createParameter.getValue().getClass())
+                    && !Map.class.isAssignableFrom(parameter.getType())) {
+                Object obj = Jackson2ObjectMapperBuilder.json().build().convertValue(createParameter.getValue(), parameter.getType());
+                if (obj == null) {
+                    throw Resource.badRequest();
+                }
+
+                createParameter.setValue(obj);
             }
 
             if (createParameter.getValue() != null && parameters[i].getType() != createParameter.getValue().getClass()) {
