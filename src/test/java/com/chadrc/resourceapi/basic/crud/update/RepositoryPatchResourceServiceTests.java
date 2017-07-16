@@ -2,10 +2,7 @@ package com.chadrc.resourceapi.basic.crud.update;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.*;
-import com.chadrc.resourceapi.models.Book;
-import com.chadrc.resourceapi.models.Issue;
-import com.chadrc.resourceapi.models.Magazine;
-import com.chadrc.resourceapi.models.Newspaper;
+import com.chadrc.resourceapi.models.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -223,27 +220,29 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void createCustomerWithAddress() throws Exception {
-//        mockMvc.perform(patch("/customer")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("name", "Muffin Man"));
-//                    add(new RequestParameter("address", new Address("Boston", "MA", "Drury Lane", "12345")));
-//                }}))))
-//                .andExpect(status().isOk());
-//
-//        List<Customer> customers = customerRepository.findAll();
-//        assertEquals(1, customers.size());
-//
-//        Customer customer = customers.get(0);
-//        assertEquals("Muffin Man", customer.getName());
-//        assertEquals("Boston", customer.getAddress().getCity());
-//        assertEquals("MA", customer.getAddress().getState());
-//        assertEquals("Drury Lane", customer.getAddress().getAddress());
-//        assertEquals("12345", customer.getAddress().getZip());
-//    }
-//
+    @Test
+    public void updateCustomerAddress() throws Exception {
+        Customer newCustomer = customerRepository.insert(new Customer("Muffin Man", new Address("Boston", "MA", "Drury Lane", "12345")));
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("address", new RequestParameter(new Address("Boston", "MA", "Far Away Drive", "12345")));
+
+        mockMvc.perform(patch("/customer")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newCustomer.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<Customer> customers = customerRepository.findAll();
+        assertEquals(1, customers.size());
+
+        Customer customer = customers.get(0);
+        assertEquals("Muffin Man", customer.getName());
+        assertEquals("Boston", customer.getAddress().getCity());
+        assertEquals("MA", customer.getAddress().getState());
+        assertEquals("Far Away Drive", customer.getAddress().getAddress());
+        assertEquals("12345", customer.getAddress().getZip());
+    }
+
 //    @Test
 //    public void createCustomWithNullAddressIsOk() throws Exception {
 //        mockMvc.perform(patch("/customer")
