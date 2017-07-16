@@ -1,9 +1,6 @@
 package com.chadrc.resourceapi.basic.crud.create;
 
-import com.chadrc.resourceapi.basic.CRUDResult;
-import com.chadrc.resourceapi.basic.ResourceRepository;
-import com.chadrc.resourceapi.basic.ResourceRepositorySet;
-import com.chadrc.resourceapi.basic.Utils;
+import com.chadrc.resourceapi.basic.*;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
@@ -67,7 +64,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         return null;
     }
 
-    private Object[] collectArgValues(List<CreateParameter> fieldValues) {
+    private Object[] collectArgValues(List<RequestParameter> fieldValues) {
         Object[] args = new Object[fieldValues.size()];
         for (int i = 0; i < fieldValues.size(); i++) {
             args[i] = fieldValues.get(i).getValue();
@@ -76,13 +73,13 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
     }
 
     @SuppressWarnings("unchecked")
-    private boolean typesMatchFieldValues(Parameter[] parameters, List<CreateParameter> fieldValues) throws ResourceServiceThrowable {
+    private boolean typesMatchFieldValues(Parameter[] parameters, List<RequestParameter> fieldValues) throws ResourceServiceThrowable {
         if (parameters.length != fieldValues.size()) {
             return false;
         }
         for (int i = 0; i < parameters.length; i++) {
             Parameter parameter = parameters[i];
-            CreateParameter createParameter = fieldValues.get(i);
+            RequestParameter createParameter = fieldValues.get(i);
 
             if (!parameter.getName().equals(createParameter.getName())) {
                 return false;

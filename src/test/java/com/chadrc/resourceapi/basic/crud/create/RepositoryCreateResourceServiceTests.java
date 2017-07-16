@@ -76,9 +76,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createBookWithTitleAndAuthor() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("title", "Created Book"));
-                    add(new CreateParameter("author", "Author"));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("title", "Created Book"));
+                    add(new RequestParameter("author", "Author"));
                 }}))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", Matchers.is("Created Book")))
@@ -89,8 +89,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void nonExistentConstructorYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("notAParam", 100));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("notAParam", 100));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -99,8 +99,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createOnConstructorWithNoCreateYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("title", "Title"));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("title", "Title"));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -109,9 +109,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void errorDuringConstructorYields400() throws Exception {
         mockMvc.perform(post("/book")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("title", ""));
-                    add(new CreateParameter("author", ""));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("title", ""));
+                    add(new RequestParameter("author", ""));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -121,8 +121,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         Magazine magazine = magazineRepository.insert(new Magazine("My Magazine"));
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("magazine", magazine.getId()));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("magazine", magazine.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -138,8 +138,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         Newspaper newspaper = newspaperRepository.insert(new Newspaper("My Newspaper"));
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("newspaper", newspaper.getId()));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("newspaper", newspaper.getId()));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -154,8 +154,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createIssueWithEmptyMagazineId() throws Exception {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("magazine", ""));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("magazine", ""));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -167,8 +167,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createIssueWithEmptyNewspaperIdYields400() throws Exception {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("newspaper", ""));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("newspaper", ""));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -177,8 +177,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createIssueWithUnregisteredResourceModelYields400() throws Exception {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("catalog", "catalogId"));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("catalog", "catalogId"));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -187,9 +187,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createCustomerWithAddress() throws Exception {
         mockMvc.perform(post("/customer")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("name", "Muffin Man"));
-                    add(new CreateParameter("address", new Address("Boston", "MA", "Drury Lane", "12345")));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("name", "Muffin Man"));
+                    add(new RequestParameter("address", new Address("Boston", "MA", "Drury Lane", "12345")));
                 }}))))
                 .andExpect(status().isOk());
 
@@ -208,9 +208,9 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createCustomWithNullAddressIsOk() throws Exception {
         mockMvc.perform(post("/customer")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("name", "Muffin Man"));
-                    add(new CreateParameter("address", null));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("name", "Muffin Man"));
+                    add(new RequestParameter("address", null));
                 }}))))
                 .andExpect(status().isOk());
     }
@@ -219,8 +219,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createWithObjectOnFromIdYields400() throws Exception {
         mockMvc.perform(post("/issue")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("magazine", new Magazine("My Magazine")));
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("magazine", new Magazine("My Magazine")));
                 }}))))
                 .andExpect(status().isBadRequest());
     }
@@ -232,8 +232,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
 
         mockMvc.perform(post("/bookorder")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("books", new ArrayList<String>() {{
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("books", new ArrayList<String>() {{
                         add(book1.getId());
                         add(book2.getId());
                     }}));
@@ -253,8 +253,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createMagazineWithCategories() throws Throwable {
         mockMvc.perform(post("/magazine")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("categories", new ArrayList<String>() {{
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("categories", new ArrayList<String>() {{
                         add("Food");
                         add("Home");
                     }}));
@@ -272,8 +272,8 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
     public void createMailingList() throws Throwable {
         mockMvc.perform(post("/mailinglist")
                 .contentType(contentType)
-                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
-                    add(new CreateParameter("addresses", new ArrayList<Address>() {{
+                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("addresses", new ArrayList<Address>() {{
                         add(new Address("Boston", "MA", "123 Main Street", "09876"));
                         add(new Address("New York", "NY", "987 Main Street", "12345"));
                     }}));

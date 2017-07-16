@@ -1,24 +1,26 @@
 package com.chadrc.resourceapi.basic.crud.create;
 
+import com.chadrc.resourceapi.basic.RequestParameter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateRequest {
-    private List<CreateParameter> paramValues = new ArrayList<>();
+    private List<RequestParameter> paramValues = new ArrayList<>();
 
     public CreateRequest() {
 
     }
 
-    public CreateRequest(List<CreateParameter> paramValues) {
+    public CreateRequest(List<RequestParameter> paramValues) {
         this.paramValues = paramValues;
     }
 
-    public List<CreateParameter> getParamValues() {
+    public List<RequestParameter> getParamValues() {
         return paramValues;
     }
 
-    public void setParamValues(List<CreateParameter> paramValues) {
+    public void setParamValues(List<RequestParameter> paramValues) {
         this.paramValues = paramValues;
     }
 }
