@@ -243,17 +243,19 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals("12345", customer.getAddress().getZip());
     }
 
-//    @Test
-//    public void createCustomWithNullAddressIsOk() throws Exception {
-//        mockMvc.perform(patch("/customer")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("name", "Muffin Man"));
-//                    add(new RequestParameter("address", null));
-//                }}))))
-//                .andExpect(status().isOk());
-//    }
-//
+    @Test
+    public void createCustomWithNullAddressIsOk() throws Exception {
+        Customer newCustomer = customerRepository.insert(new Customer("Muffin Man", new Address("Boston", "MA", "Drury Lane", "12345")));
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("address", new RequestParameter(null));
+
+        mockMvc.perform(patch("/customer")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newCustomer.getId(), updates))))
+                .andExpect(status().isOk());
+    }
+
 //    @Test
 //    public void createWithObjectOnFromIdYields400() throws Exception {
 //        mockMvc.perform(patch("/issue")
