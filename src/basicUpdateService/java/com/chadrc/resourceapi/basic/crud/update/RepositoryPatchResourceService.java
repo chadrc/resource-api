@@ -28,6 +28,7 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result fulfill(Class resourceType, PatchRequest request) throws ResourceServiceThrowable {
         if (StringUtils.isEmpty(request.getId())) {
             throw Resource.badRequest();

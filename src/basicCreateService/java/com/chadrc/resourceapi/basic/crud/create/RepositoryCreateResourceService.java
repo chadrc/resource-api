@@ -76,6 +76,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         return args;
     }
 
+    @SuppressWarnings("unchecked")
     private boolean typesMatchFieldValues(Parameter[] parameters, List<CreateParameter> fieldValues) throws ResourceServiceThrowable {
         if (parameters.length != fieldValues.size()) {
             return false;
@@ -111,7 +112,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                         List idList = (List) value;
                         Iterable resources = typeRepository.findAll(idList);
                         List resourceList = new ArrayList();
-                        resources.forEach(obj -> resourceList.add(obj));
+                        resources.forEach(resourceList::add);
                         resource = resourceList;
                     } else {
                         throw Resource.badRequest();

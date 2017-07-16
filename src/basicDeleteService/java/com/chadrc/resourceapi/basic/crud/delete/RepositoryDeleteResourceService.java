@@ -25,6 +25,7 @@ public class RepositoryDeleteResourceService implements ResourceService<DeleteRe
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result fulfill(Class resourceType, DeleteRequest request) throws ResourceServiceThrowable {
         if (StringUtils.isEmpty(request.getId())) {
             throw Resource.badRequest();

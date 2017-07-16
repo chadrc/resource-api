@@ -39,6 +39,7 @@ public class RepositoryGetResourceService implements ResourceService<GetRequest>
         return Resource.result(new CRUDResult(new GetResult(result)));
     }
 
+    @SuppressWarnings("unchecked")
     private Object getOne(Class resourceType, GetRequest request) throws ResourceServiceThrowable {
         Object resource = resourceRepositorySet.getRepository(resourceType).findOne(request.getId());
         if (resource == null) {
