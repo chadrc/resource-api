@@ -102,6 +102,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                     }
                 }
             } else if (parameter.getName().equals(createParameter.getName())
+                    && createParameter.getValue() != null
                     && Map.class.isAssignableFrom(createParameter.getValue().getClass())
                     && !Map.class.isAssignableFrom(parameter.getType())) {
                 Object obj = Jackson2ObjectMapperBuilder.json().build().convertValue(createParameter.getValue(), parameter.getType());

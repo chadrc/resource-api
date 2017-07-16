@@ -194,4 +194,15 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
         assertEquals("Drury Lane", customer.getAddress().getAddress());
         assertEquals("12345", customer.getAddress().getZip());
     }
+
+    @Test
+    public void createCustomWithNullAddressIsOk() throws Exception {
+        mockMvc.perform(post("/customer")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<CreateParameter>() {{
+                    add(new CreateParameter("name", "Muffin Man"));
+                    add(new CreateParameter("address", null));
+                }}))))
+                .andExpect(status().isOk());
+    }
 }
