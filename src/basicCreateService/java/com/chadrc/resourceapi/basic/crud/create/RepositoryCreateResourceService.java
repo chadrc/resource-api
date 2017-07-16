@@ -91,7 +91,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                     && (value instanceof String
                     || (List.class.isAssignableFrom(parameter.getType())
                     && List.class.isAssignableFrom(createParameter.getValue().getClass())))) {
-                Object resource = null;
+                Object resource;
                 if (value instanceof String) {
                     ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
                     if (typeRepository != null) {
