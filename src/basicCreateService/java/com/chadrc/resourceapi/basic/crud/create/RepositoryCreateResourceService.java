@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -36,12 +37,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         Constructor<?> selectedConstructor = null;
         for (Constructor<?> constructor : constructors) {
             Type[] paramTypes = constructor.getParameterTypes();
-            if (paramTypes.length != request.getParamValues().size()
-                    || constructor.getAnnotation(NoCreate.class) != null) {
-                continue;
-            }
-
-            if (typesMatchFieldValues(paramTypes, request.getParamValues())) {
+            Annotation[][] paramAnnotations = constructor.getParameterAnnotations();
+            if (typesMatchFieldValues(paramTypes, request.getParamValues(), paramAnnotations)) {
                 selectedConstructor = constructor;
                 break;
             }
@@ -76,12 +73,38 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         return args;
     }
 
-    private boolean typesMatchFieldValues(Type[] types, List<Object> fieldValues) {
+    private boolean typesMatchFieldValues(Type[] types, List<Object> fieldValues, Annotation[][] annotations) {
+        if (types.length != fieldValues.size()) {
+            return false;
+        }
         for (int i = 0; i < types.length; i++) {
+            Type type = types[i];
+            Annotation[] typeAnnotations = annotations[i];
+            Object value = fieldValues.get(i);
+            if (containsAnnotation(typeAnnotations, FromId.class)
+                    && type instanceof Class
+                    && value instanceof String) {
+                ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) type);
+                if (typeRepository != null) {
+                    String id = (String) value;
+                    Object resource = typeRepository.findOne(id);
+                    fieldValues.set(i, resource);
+                }
+            }
+
             if (types[i] != fieldValues.get(i).getClass()) {
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean containsAnnotation(Annotation[] annotations, Class<? extends Annotation> check) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType() == check) {
+                return true;
+            }
+        }
+        return false;
     }
 }

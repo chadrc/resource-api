@@ -2,7 +2,11 @@ package com.chadrc.resourceapi.basic.crud.create;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
+import com.chadrc.resourceapi.basic.MagazineIssueRepository;
+import com.chadrc.resourceapi.basic.MagazineRepository;
 import com.chadrc.resourceapi.models.Book;
+import com.chadrc.resourceapi.models.Magazine;
+import com.chadrc.resourceapi.models.MagazineIssue;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RepositoryCreateResourceServiceTests extends BaseTests {
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private MagazineRepository magazineRepository;
+
+    @Autowired
+    private MagazineIssueRepository magazineIssueRepository;
 
     @Before
     @Override
@@ -90,5 +100,22 @@ public class RepositoryCreateResourceServiceTests extends BaseTests {
                     add("");
                 }}))))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void createMagazineIssueWithMagazine() throws Exception {
+        Magazine magazine = magazineRepository.insert(new Magazine("My Magazine"));
+        mockMvc.perform(post("/magazineissue")
+                .contentType(contentType)
+                .content(json(new CreateRequest(new ArrayList<Object>() {{
+                    add(magazine.getId());
+                }}))))
+                .andExpect(status().isOk());
+
+        List<MagazineIssue> magazineIssues = magazineIssueRepository.findAll();
+        assertEquals(1, magazineIssues.size());
+
+        MagazineIssue issue = magazineIssues.get(0);
+        assertEquals(magazine.getId(), issue.getMagazineId());
     }
 }
