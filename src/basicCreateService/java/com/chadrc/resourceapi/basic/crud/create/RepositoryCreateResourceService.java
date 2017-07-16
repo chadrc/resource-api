@@ -85,70 +85,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             Parameter parameter = parameters[i];
             CreateParameter createParameter = fieldValues.get(i);
             Object value = createParameter.getValue();
-            FromId fromId = parameter.getAnnotation(FromId.class);
-            if (fromId != null
-                    && parameter.getName().equals(createParameter.getName())
-                    && createParameter.getValue() != null
-                    && parameter.getType() != null
-                    && (value instanceof String
-                    || (List.class.isAssignableFrom(parameter.getType())
-                    && List.class.isAssignableFrom(createParameter.getValue().getClass())))) {
-                Object resource;
-                if (value instanceof String) {
-                    ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
-                    if (typeRepository != null) {
-                        String id = (String) value;
-                        resource = typeRepository.findOne(id);
-                        if (resource == null && fromId.mustExist()) {
-                            throw Resource.badRequest();
-                        }
-                    } else {
-                        throw Resource.badRequest();
-                    }
-                } else {
-                    Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
-                    ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) listType);
-                    if (typeRepository != null) {
-                        List idList = (List) value;
-                        Iterable resources = typeRepository.findAll(idList);
-                        List resourceList = new ArrayList();
-                        resources.forEach(resourceList::add);
-                        resource = resourceList;
-                    } else {
-                        throw Resource.badRequest();
-                    }
-                }
-                createParameter.setValue(resource);
-            } else if (fromId == null
-                    && parameter.getName().equals(createParameter.getName())
-                    && createParameter.getValue() != null
-                    && ((Map.class.isAssignableFrom(createParameter.getValue().getClass())
-                    && !Map.class.isAssignableFrom(parameter.getType()))
-
-                    || (List.class.isAssignableFrom(createParameter.getValue().getClass())
-                    && List.class.isAssignableFrom(parameter.getType())))) {
-                Object obj;
-                ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
-                if (Map.class.isAssignableFrom(createParameter.getValue().getClass())) {
-                    obj = mapper.convertValue(createParameter.getValue(), parameter.getType());
-                } else {
-                    List list = (List) createParameter.getValue();
-                    List newList = new ArrayList();
-                    Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
-                    if (!(listType instanceof Class)) {
-                        throw Resource.badRequest();
-                    }
-                    for (Object item : list) {
-                        newList.add(mapper.convertValue(item, (Class) listType));
-                    }
-                    obj = newList;
-                }
-                if (obj == null) {
-                    throw Resource.badRequest();
-                }
-
-                createParameter.setValue(obj);
-            }
+            Object convertedValue = convertParamValue(parameter, createParameter.getName(), createParameter.getValue(), value);
+            createParameter.setValue(convertedValue);
 
             if (createParameter.getValue() != null
                     && parameter.getType() != createParameter.getValue().getClass()
@@ -157,5 +95,75 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             }
         }
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object convertParamValue(Parameter parameter, String paramName, Object paramValue, Object value) throws ResourceServiceThrowable {
+        FromId fromId = parameter.getAnnotation(FromId.class);
+        if (fromId != null
+                && parameter.getName().equals(paramName)
+                && paramValue != null
+                && parameter.getType() != null
+                && (value instanceof String
+                || (List.class.isAssignableFrom(parameter.getType())
+                && List.class.isAssignableFrom(paramValue.getClass())))) {
+            Object resource;
+            if (value instanceof String) {
+                ResourceRepository typeRepository = resourceRepositorySet.getRepository(parameter.getType());
+                if (typeRepository != null) {
+                    String id = (String) value;
+                    resource = typeRepository.findOne(id);
+                    if (resource == null && fromId.mustExist()) {
+                        throw Resource.badRequest();
+                    }
+                } else {
+                    throw Resource.badRequest();
+                }
+            } else {
+                Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+                ResourceRepository typeRepository = resourceRepositorySet.getRepository((Class) listType);
+                if (typeRepository != null) {
+                    List idList = (List) value;
+                    Iterable resources = typeRepository.findAll(idList);
+                    List resourceList = new ArrayList();
+                    resources.forEach(resourceList::add);
+                    resource = resourceList;
+                } else {
+                    throw Resource.badRequest();
+                }
+            }
+
+            return resource;
+        } else if (fromId == null
+                && parameter.getName().equals(paramName)
+                && paramValue != null
+                && ((Map.class.isAssignableFrom(paramValue.getClass())
+                && !Map.class.isAssignableFrom(parameter.getType()))
+                || (List.class.isAssignableFrom(paramValue.getClass())
+                && List.class.isAssignableFrom(parameter.getType())))) {
+            Object obj;
+            ObjectMapper mapper = Jackson2ObjectMapperBuilder.json().build();
+            if (Map.class.isAssignableFrom(paramValue.getClass())) {
+                obj = mapper.convertValue(paramValue, parameter.getType());
+            } else {
+                List list = (List) paramValue;
+                List newList = new ArrayList();
+                Type listType = ((ParameterizedType) parameter.getParameterizedType()).getActualTypeArguments()[0];
+                if (!(listType instanceof Class)) {
+                    throw Resource.badRequest();
+                }
+                for (Object item : list) {
+                    newList.add(mapper.convertValue(item, (Class) listType));
+                }
+                obj = newList;
+            }
+            if (obj == null) {
+                throw Resource.badRequest();
+            }
+
+            return obj;
+        }
+
+        return paramValue;
     }
 }
