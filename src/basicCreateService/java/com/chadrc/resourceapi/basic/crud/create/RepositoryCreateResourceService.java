@@ -82,7 +82,8 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
             Parameter parameter = parameters[i];
             CreateParameter createParameter = fieldValues.get(i);
             Object value = createParameter.getValue();
-            if (parameter.getAnnotation(FromId.class) != null
+            FromId fromId = parameter.getAnnotation(FromId.class);
+            if (fromId != null
                     && parameter.getType() != null
                     && value instanceof String
                     && fieldValues.get(i).getName().endsWith("Id")) {
@@ -92,7 +93,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                     if (typeRepository != null) {
                         String id = (String) value;
                         Object resource = typeRepository.findOne(id);
-                        if (resource == null && parameter.getAnnotation(MustExist.class) != null) {
+                        if (resource == null && fromId.mustExist()) {
                             throw Resource.badRequest();
                         }
                         createParameter.setValue(resource);

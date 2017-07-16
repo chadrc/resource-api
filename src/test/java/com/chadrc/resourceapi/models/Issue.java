@@ -1,7 +1,6 @@
 package com.chadrc.resourceapi.models;
 
 import com.chadrc.resourceapi.basic.crud.create.FromId;
-import com.chadrc.resourceapi.basic.crud.create.MustExist;
 import com.chadrc.resourceapi.basic.crud.create.NoCreate;
 import com.chadrc.resourceapi.core.ResourceModel;
 import org.bson.types.ObjectId;
@@ -25,12 +24,12 @@ public class Issue implements ResourceModel {
 
     }
 
-    public Issue(@FromId Magazine magazine) {
+    public Issue(@FromId(mustExist = false) Magazine magazine) {
         this.issuableId = magazine == null ? new ObjectId() : magazine.objectId();
         issueDate = Calendar.getInstance();
     }
 
-    public Issue(@FromId @MustExist Newspaper newspaper) {
+    public Issue(@FromId Newspaper newspaper) {
         this.issuableId = newspaper.objectId();
         issueDate = Calendar.getInstance();
     }
