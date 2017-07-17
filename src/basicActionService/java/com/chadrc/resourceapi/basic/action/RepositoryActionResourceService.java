@@ -58,7 +58,10 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
             Object result = selectedMethod.invoke(target);
             return Resource.result(new CRUDResult(result));
         } catch (InvocationTargetException invokeException) {
-            //
+            if (invokeException.getCause() instanceof ResourceServiceThrowable) {
+                throw (ResourceServiceThrowable) invokeException.getCause();
+            }
+            log.error("Failed to call action:" + request.getName(), invokeException);
         } catch (Exception e) {
             log.error("Failed to call action: " + request.getName(), e);
         }

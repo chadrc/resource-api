@@ -70,7 +70,10 @@ public class Book implements ResourceModel {
     }
 
     @Action
-    public Book capitalizeTitle() {
+    public Book capitalizeTitle() throws ResourceServiceThrowable {
+        if (StringUtils.isEmpty(this.title)) {
+            throw Resource.badRequest();
+        }
         this.title = this.title.toUpperCase();
         return this;
     }

@@ -70,4 +70,14 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", Matchers.is("Tolkien")));
     }
+
+    @Test
+    public void errorDuringActionYields400() throws Throwable {
+        Book book = bookRepository.insert(new Book());
+
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest(book.getId(), "capitalizeTitle"))))
+                .andExpect(status().isBadRequest());
+    }
 }
