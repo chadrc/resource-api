@@ -1,6 +1,9 @@
 package com.chadrc.resourceapi.basic.crud.create;
 
-import com.chadrc.resourceapi.basic.*;
+import com.chadrc.resourceapi.basic.CRUDResult;
+import com.chadrc.resourceapi.basic.ResourceRepository;
+import com.chadrc.resourceapi.basic.ResourceRepositorySet;
+import com.chadrc.resourceapi.basic.Utils;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Parameter;
-import java.util.List;
 
 @RequestMapping(method = RequestMethod.POST)
 public class RepositoryCreateResourceService implements ResourceService<CreateRequest> {
@@ -37,7 +39,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
                 continue;
             }
             Parameter[] parameters = constructor.getParameters();
-            if (typesMatchFieldValues(parameters, request.getParamValues())) {
+            if (Utils.parametersMatchRequest(parameters, request.getParamValues(), resourceRepositorySet)) {
                 selectedConstructor = constructor;
                 break;
             }
@@ -45,7 +47,7 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
 
         if (selectedConstructor != null) {
             try {
-                Object obj = selectedConstructor.newInstance(collectArgValues(request.getParamValues()));
+                Object obj = selectedConstructor.newInstance(Utils.extractValueArray(request.getParamValues()));
                 resourceRepository.save(obj);
                 return Resource.result(new CRUDResult(obj));
             } catch (InvocationTargetException invokeException) {
@@ -62,38 +64,5 @@ public class RepositoryCreateResourceService implements ResourceService<CreateRe
         }
 
         return null;
-    }
-
-    private Object[] collectArgValues(List<RequestParameter> fieldValues) {
-        Object[] args = new Object[fieldValues.size()];
-        for (int i = 0; i < fieldValues.size(); i++) {
-            args[i] = fieldValues.get(i).getValue();
-        }
-        return args;
-    }
-
-    @SuppressWarnings("unchecked")
-    private boolean typesMatchFieldValues(Parameter[] parameters, List<RequestParameter> fieldValues) throws ResourceServiceThrowable {
-        if (parameters.length != fieldValues.size()) {
-            return false;
-        }
-        for (int i = 0; i < parameters.length; i++) {
-            Parameter parameter = parameters[i];
-            RequestParameter createParameter = fieldValues.get(i);
-
-            if (!parameter.getName().equals(createParameter.getName())) {
-                return false;
-            }
-
-            Object convertedValue = Utils.convertParamValue(parameter, createParameter.getValue(), resourceRepositorySet);
-            createParameter.setValue(convertedValue);
-
-            if (createParameter.getValue() != null
-                    && parameter.getType() != createParameter.getValue().getClass()
-                    && !(parameter.getType() == List.class && List.class.isAssignableFrom(createParameter.getValue().getClass()))) {
-                return false;
-            }
-        }
-        return true;
     }
 }
