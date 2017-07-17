@@ -66,7 +66,7 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void mostPopularAuthorAction() throws Throwable {
+    public void actionWithoutResourceSucceeds() throws Throwable {
         mockMvc.perform(post("/book/action")
                 .contentType(contentType)
                 .content(json(new ActionRequest("mostPopularAuthor"))))
@@ -85,7 +85,7 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void authorExistsAction() throws Throwable {
+    public void actionCanTakeParameters() throws Throwable {
         mockMvc.perform(post("/book/action")
                 .contentType(contentType)
                 .content(json(new ActionRequest("authorExists", new ArrayList<RequestParameter>() {{
