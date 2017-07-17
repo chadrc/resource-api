@@ -8,6 +8,10 @@ public class ActionRequest {
 
     }
 
+    public ActionRequest(String name) {
+        this.name = name;
+    }
+
     public ActionRequest(String id, String name) {
         this.id = id;
         this.name = name;

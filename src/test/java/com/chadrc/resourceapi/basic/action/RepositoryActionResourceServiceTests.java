@@ -53,4 +53,13 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
                 .content(json(new ActionRequest(book.getId(), "capitalizeAuthor"))))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void authorExistsAction() throws Throwable {
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest("mostPopularAuthor"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", Matchers.is("Tolkien")));
+    }
 }

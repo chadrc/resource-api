@@ -74,4 +74,9 @@ public class Book implements ResourceModel {
         this.title = this.title.toUpperCase();
         return this;
     }
+
+    @Action
+    public static String mostPopularAuthor() {
+        return "Tolkien";
+    }
 }
