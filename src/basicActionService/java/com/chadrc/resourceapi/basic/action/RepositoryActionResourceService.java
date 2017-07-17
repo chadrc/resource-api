@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 @RequestMapping(path = "/action", method = RequestMethod.POST)
 public class RepositoryActionResourceService implements ResourceService<ActionRequest> {
@@ -51,6 +52,8 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
                 if (target == null) {
                     throw Resource.notFound();
                 }
+            } else if (!Modifier.isStatic(selectedMethod.getModifiers())) {
+                throw Resource.badRequest();
             }
             Object result = selectedMethod.invoke(target);
             return Resource.result(new CRUDResult(result));

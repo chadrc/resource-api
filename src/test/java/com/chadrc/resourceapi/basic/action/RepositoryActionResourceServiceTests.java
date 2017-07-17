@@ -45,6 +45,14 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
     }
 
     @Test
+    public void capitalizeTitleWithNullIdYields400() throws Throwable {
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest("capitalizeTitle"))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void unknownActionYields400() throws Throwable {
         Book book = bookRepository.insert(new Book("My Title"));
 
