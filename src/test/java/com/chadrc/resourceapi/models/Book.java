@@ -1,5 +1,6 @@
 package com.chadrc.resourceapi.models;
 
+import com.chadrc.resourceapi.basic.action.Action;
 import com.chadrc.resourceapi.basic.crud.create.NoCreate;
 import com.chadrc.resourceapi.basic.crud.update.NoUpdate;
 import com.chadrc.resourceapi.core.Resource;
@@ -66,5 +67,11 @@ public class Book implements ResourceModel {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Action
+    public Book capitalizeTitle() {
+        this.title = this.title.toUpperCase();
+        return this;
     }
 }
