@@ -296,26 +296,29 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals(book1.objectId(), bookOrder.getBookIds().get(0));
         assertEquals(book2.objectId(), bookOrder.getBookIds().get(1));
     }
-//
-//    @Test
-//    public void createMagazineWithCategories() throws Throwable {
-//        mockMvc.perform(patch("/magazine")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("categories", new ArrayList<String>() {{
-//                        add("Food");
-//                        add("Home");
-//                    }}));
-//                }}))))
-//                .andExpect(status().isOk());
-//
-//        List<Magazine> magazines = magazineRepository.findAll();
-//        assertEquals(1, magazines.size());
-//
-//        Magazine magazine = magazines.get(0);
-//        assertEquals(2, magazine.getCategories().size());
-//    }
-//
+
+    @Test
+    public void createMagazineWithCategories() throws Throwable {
+        Magazine newMagazine = magazineRepository.insert(new Magazine());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("categories", new RequestParameter(new ArrayList<String>() {{
+            add("Food");
+            add("Home");
+        }}));
+
+        mockMvc.perform(patch("/magazine")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newMagazine.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<Magazine> magazines = magazineRepository.findAll();
+        assertEquals(1, magazines.size());
+
+        Magazine magazine = magazines.get(0);
+        assertEquals(2, magazine.getCategories().size());
+    }
+
 //    @Test
 //    public void createMailingList() throws Throwable {
 //        mockMvc.perform(patch("/mailinglist")
