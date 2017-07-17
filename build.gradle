@@ -23,28 +23,14 @@ repositories {
 }
 
 sourceSets {
-    example {
-
-    }
-	core {
-
-	}
-    basic {
-
-    }
-	basicReadService {
-
-	}
-    basicCreateService {
-
-    }
-    basicUpdateService {
-
-    }
-
-    basicDeleteService {
-
-    }
+    example {}
+	core {}
+    basic {}
+	basicReadService {}
+    basicCreateService {}
+    basicUpdateService {}
+    basicDeleteService {}
+    basicActionService {}
 }
 
 dependencies {
@@ -74,6 +60,11 @@ dependencies {
     basicDeleteServiceCompile(sourceSets.basic.output)
     basicDeleteServiceCompile(sourceSets.core.output)
 
+    basicActionServiceCompile('org.springframework.boot:spring-boot-starter-web')
+    basicActionServiceCompile('org.springframework.data:spring-data-commons:1.13.4.RELEASE')
+    basicActionServiceCompile(sourceSets.basic.output)
+    basicActionServiceCompile(sourceSets.core.output)
+
 	testCompile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('com.jayway.jsonpath:json-path')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
@@ -87,4 +78,5 @@ dependencies {
     testCompile(sourceSets.basicCreateService.output)
     testCompile(sourceSets.basicUpdateService.output)
     testCompile(sourceSets.basicDeleteService.output)
+    testCompile(sourceSets.basicActionService.output)
 }
