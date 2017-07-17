@@ -35,4 +35,24 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title", Matchers.is("MY TITLE")));
     }
+
+    @Test
+    public void capitalizeTitleOnUnknownBookYields404() throws Throwable {
+        Book book = bookRepository.insert(new Book("My Title"));
+
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest("unknownId", "capitalizeTitle"))))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void unknownActionYields400() throws Throwable {
+        Book book = bookRepository.insert(new Book("My Title"));
+
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest(book.getId(), "capitalizeAuthor"))))
+                .andExpect(status().isBadRequest());
+    }
 }
