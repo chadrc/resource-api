@@ -271,7 +271,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createBookOrderWithFromIdList() throws Throwable {
+    public void updateBookOrderWithFromIdList() throws Throwable {
         BookOrder newBookOrder = bookOrderRepository.insert(new BookOrder());
 
         Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
@@ -298,7 +298,7 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void createMagazineWithCategories() throws Throwable {
+    public void updateMagazineWithCategories() throws Throwable {
         Magazine newMagazine = magazineRepository.insert(new Magazine());
 
         Map<String, RequestParameter> updates = new HashMap<>();
@@ -319,24 +319,27 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
         assertEquals(2, magazine.getCategories().size());
     }
 
-//    @Test
-//    public void createMailingList() throws Throwable {
-//        mockMvc.perform(patch("/mailinglist")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("addresses", new ArrayList<Address>() {{
-//                        add(new Address("Boston", "MA", "123 Main Street", "09876"));
-//                        add(new Address("New York", "NY", "987 Main Street", "12345"));
-//                    }}));
-//                }}))))
-//                .andExpect(status().isOk());
-//
-//        List<MailingList> mailingLists = mailingListRepository.findAll();
-//        assertEquals(1, mailingLists.size());
-//
-//        MailingList mailingList = mailingLists.get(0);
-//        assertEquals(2, mailingList.getAddresses().size());
-//        assertEquals("Boston", mailingList.getAddresses().get(0).getCity());
-//        assertEquals("New York", mailingList.getAddresses().get(1).getCity());
-//    }
+    @Test
+    public void updateMailingList() throws Throwable {
+        MailingList newMailingList = mailingListRepository.insert(new MailingList());
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("addresses", new RequestParameter("addresses", new ArrayList<Address>() {{
+            add(new Address("Boston", "MA", "123 Main Street", "09876"));
+            add(new Address("New York", "NY", "987 Main Street", "12345"));
+        }}));
+
+        mockMvc.perform(patch("/mailinglist")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newMailingList.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<MailingList> mailingLists = mailingListRepository.findAll();
+        assertEquals(1, mailingLists.size());
+
+        MailingList mailingList = mailingLists.get(0);
+        assertEquals(2, mailingList.getAddresses().size());
+        assertEquals("Boston", mailingList.getAddresses().get(0).getCity());
+        assertEquals("New York", mailingList.getAddresses().get(1).getCity());
+    }
 }

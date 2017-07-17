@@ -31,6 +31,10 @@ public class MailingList implements ResourceModel {
         }
     }
 
+    public String getId() {
+        return id.toString();
+    }
+
     public List<Address> getAddresses() {
         return addresses;
     }
