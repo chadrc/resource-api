@@ -3,6 +3,7 @@ package com.chadrc.resourceapi.basic.action;
 import com.chadrc.resourceapi.basic.CRUDResult;
 import com.chadrc.resourceapi.basic.ResourceRepository;
 import com.chadrc.resourceapi.basic.ResourceRepositorySet;
+import com.chadrc.resourceapi.basic.Utils;
 import com.chadrc.resourceapi.core.Resource;
 import com.chadrc.resourceapi.core.ResourceService;
 import com.chadrc.resourceapi.core.ResourceServiceThrowable;
@@ -35,7 +36,8 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
         Method selectedMethod = null;
         for (Method method : resourceType.getMethods()) {
             if (method.getAnnotation(Action.class) != null
-                    && method.getName().equals(request.getName())) {
+                    && method.getName().equals(request.getName())
+                    && Utils.parametersMatchRequest(method.getParameters(), request.getParameters(), resourceRepositorySet)) {
                 selectedMethod = method;
                 break;
             }
@@ -55,7 +57,7 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
             } else if (!Modifier.isStatic(selectedMethod.getModifiers())) {
                 throw Resource.badRequest();
             }
-            Object result = selectedMethod.invoke(target);
+            Object result = selectedMethod.invoke(target, Utils.extractValueArray(request.getParameters()));
             return Resource.result(new CRUDResult(result));
         } catch (InvocationTargetException invokeException) {
             if (invokeException.getCause() instanceof ResourceServiceThrowable) {

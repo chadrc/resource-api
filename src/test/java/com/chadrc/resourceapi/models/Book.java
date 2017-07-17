@@ -82,4 +82,9 @@ public class Book implements ResourceModel {
     public static String mostPopularAuthor() {
         return "Tolkien";
     }
+
+    @Action
+    public static Boolean authorExists(String name) {
+        return "J.K. Rowling".equals(name);
+    }
 }

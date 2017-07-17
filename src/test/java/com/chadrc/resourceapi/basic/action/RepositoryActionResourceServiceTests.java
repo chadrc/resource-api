@@ -2,6 +2,7 @@ package com.chadrc.resourceapi.basic.action;
 
 import com.chadrc.resourceapi.BaseTests;
 import com.chadrc.resourceapi.basic.BookRepository;
+import com.chadrc.resourceapi.basic.RequestParameter;
 import com.chadrc.resourceapi.models.Book;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,7 +66,7 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
     }
 
     @Test
-    public void authorExistsAction() throws Throwable {
+    public void mostPopularAuthorAction() throws Throwable {
         mockMvc.perform(post("/book/action")
                 .contentType(contentType)
                 .content(json(new ActionRequest("mostPopularAuthor"))))
@@ -79,5 +82,16 @@ public class RepositoryActionResourceServiceTests extends BaseTests {
                 .contentType(contentType)
                 .content(json(new ActionRequest(book.getId(), "capitalizeTitle"))))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void authorExistsAction() throws Throwable {
+        mockMvc.perform(post("/book/action")
+                .contentType(contentType)
+                .content(json(new ActionRequest("authorExists", new ArrayList<RequestParameter>() {{
+                    add(new RequestParameter("name", "J.K. Rowling"));
+                }}))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", Matchers.is(true)));
     }
 }

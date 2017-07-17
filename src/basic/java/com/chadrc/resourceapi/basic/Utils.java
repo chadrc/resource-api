@@ -84,4 +84,36 @@ public abstract class Utils {
 
         return paramValue;
     }
+
+    public static boolean parametersMatchRequest(Parameter[] parameters, List<RequestParameter> requestParameters, ResourceRepositorySet resourceRepositorySet) throws ResourceServiceThrowable {
+        if (parameters.length != requestParameters.size()) {
+            return false;
+        }
+        for (int i = 0; i < parameters.length; i++) {
+            Parameter parameter = parameters[i];
+            RequestParameter createParameter = requestParameters.get(i);
+
+            if (!parameter.getName().equals(createParameter.getName())) {
+                return false;
+            }
+
+            Object convertedValue = Utils.convertParamValue(parameter, createParameter.getValue(), resourceRepositorySet);
+            createParameter.setValue(convertedValue);
+
+            if (createParameter.getValue() != null
+                    && parameter.getType() != createParameter.getValue().getClass()
+                    && !(parameter.getType() == List.class && List.class.isAssignableFrom(createParameter.getValue().getClass()))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static Object[] extractValueArray(List<RequestParameter> fieldValues) {
+        Object[] args = new Object[fieldValues.size()];
+        for (int i = 0; i < fieldValues.size(); i++) {
+            args[i] = fieldValues.get(i).getValue();
+        }
+        return args;
+    }
 }
