@@ -40,6 +40,10 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
             }
         }
 
+        if (selectedMethod == null) {
+            throw Resource.badRequest();
+        }
+
         try {
             Object target = null;
             if (request.getId() != null) {
