@@ -28,6 +28,7 @@ public class RepositoryActionResourceService implements ResourceService<ActionRe
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Result fulfill(Class resourceType, ActionRequest request) throws ResourceServiceThrowable {
         ResourceRepository resourceRepository = resourceRepositorySet.getRepository(resourceType);
         Method selectedMethod = null;
