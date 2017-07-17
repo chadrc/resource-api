@@ -19,7 +19,7 @@ public class BookOrder implements ResourceModel {
 
     @NoCreate
     public BookOrder() {
-
+        bookIds = new ArrayList<>();
     }
 
     public BookOrder(@FromId List<Book> books) {
@@ -27,6 +27,10 @@ public class BookOrder implements ResourceModel {
         for (Book book : books) {
             bookIds.add(book.objectId());
         }
+    }
+
+    public String getId() {
+        return id.toString();
     }
 
     public ObjectId getCustomerId() {
@@ -43,5 +47,11 @@ public class BookOrder implements ResourceModel {
 
     public void setBookIds(List<ObjectId> bookIds) {
         this.bookIds = bookIds;
+    }
+
+    public void setBooks(@FromId List<Book> books) {
+        for (Book book : books) {
+            bookIds.add(book.objectId());
+        }
     }
 }

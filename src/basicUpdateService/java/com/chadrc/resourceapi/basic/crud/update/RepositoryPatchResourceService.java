@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.List;
 
 @RequestMapping(method = RequestMethod.PATCH)
 public class RepositoryPatchResourceService implements ResourceService<PatchRequest> {
@@ -61,7 +62,8 @@ public class RepositoryPatchResourceService implements ResourceService<PatchRequ
                         }
                         value = Utils.convertParamValue(parameter, value, resourceRepositorySet);
                         if (value == null
-                                || method.getParameterTypes()[0] == value.getClass()) {
+                                || method.getParameterTypes()[0] == value.getClass()
+                                || (parameter.getType() == List.class && List.class.isAssignableFrom(value.getClass()))) {
                             setterMethod = method;
                         }
                     }

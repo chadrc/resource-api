@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -269,29 +270,32 @@ public class RepositoryPatchResourceServiceTests extends BaseTests {
                 .andExpect(status().isBadRequest());
     }
 
-//    @Test
-//    public void createBookOrderWithFromIdList() throws Throwable {
-//        Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
-//        Book book2 = bookRepository.insert(new Book("Book 2", "Author"));
-//
-//        mockMvc.perform(patch("/bookorder")
-//                .contentType(contentType)
-//                .content(json(new CreateRequest(new ArrayList<RequestParameter>() {{
-//                    add(new RequestParameter("books", new ArrayList<String>() {{
-//                        add(book1.getId());
-//                        add(book2.getId());
-//                    }}));
-//                }}))))
-//                .andExpect(status().isOk());
-//
-//        List<BookOrder> bookOrders = bookOrderRepository.findAll();
-//        assertEquals(1, bookOrders.size());
-//
-//        BookOrder bookOrder = bookOrders.get(0);
-//        assertEquals(2, bookOrder.getBookIds().size());
-//        assertEquals(book1.objectId(), bookOrder.getBookIds().get(0));
-//        assertEquals(book2.objectId(), bookOrder.getBookIds().get(1));
-//    }
+    @Test
+    public void createBookOrderWithFromIdList() throws Throwable {
+        BookOrder newBookOrder = bookOrderRepository.insert(new BookOrder());
+
+        Book book1 = bookRepository.insert(new Book("Book 1", "Author"));
+        Book book2 = bookRepository.insert(new Book("Book 2", "Author"));
+
+        Map<String, RequestParameter> updates = new HashMap<>();
+        updates.put("books", new RequestParameter(new ArrayList<String>() {{
+            add(book1.getId());
+            add(book2.getId());
+        }}));
+
+        mockMvc.perform(patch("/bookorder")
+                .contentType(contentType)
+                .content(json(new PatchRequest(newBookOrder.getId(), updates))))
+                .andExpect(status().isOk());
+
+        List<BookOrder> bookOrders = bookOrderRepository.findAll();
+        assertEquals(1, bookOrders.size());
+
+        BookOrder bookOrder = bookOrders.get(0);
+        assertEquals(2, bookOrder.getBookIds().size());
+        assertEquals(book1.objectId(), bookOrder.getBookIds().get(0));
+        assertEquals(book2.objectId(), bookOrder.getBookIds().get(1));
+    }
 //
 //    @Test
 //    public void createMagazineWithCategories() throws Throwable {
